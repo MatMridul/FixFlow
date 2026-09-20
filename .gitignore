@@ -71,3 +71,5 @@ logs/
 temp/
 tmp/
 .cache/
+.agents/
+graphify-out/
