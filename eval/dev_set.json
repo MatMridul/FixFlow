@@ -1,0 +1,95 @@
+{
+  "_readme": "Resolution-only dev set for scoring N3/N4 in isolation (resolution/screen_graph.py, resolution/binder.py) without needing Dev A's SIIS->steps extraction pipeline, which does not exist yet. Every scenario here is either (a) taken verbatim from an official source (sample_output.json, the brief's Appendix-B worked example) or (b) hand-constructed by the Dev B author against a specific real catalog entry, then verified to actually resolve there. This is NOT the brief's called-for 80-100 scenario, four-domain hand-labelled dev set - that needs real SIIS text run through extraction, which is blocked on Dev A's P0. Scope: Display + a couple of Battery/System entries, screen-resolution correctness only (no step-accuracy or provenance scoring, which are N5/Dev A's territory).",
+  "scenarios": [
+    {
+      "id": "official_backup",
+      "source": "sample_output.json (official)",
+      "steps": [
+        "Navigate to and open Settings.",
+        "Tap on Accounts and backup.",
+        "Select Back up data to secure your personal files."
+      ],
+      "category": "auto",
+      "expected_deeplink_id": "DL-0542",
+      "expected_is_page_level": false
+    },
+    {
+      "id": "official_manual_repair",
+      "source": "sample_output.json (official)",
+      "steps": [
+        "Contact Samsung Support or visit an authorized Samsung Service Center.",
+        "Provide device details regarding the peeling film and green display lines to initiate service."
+      ],
+      "category": "manual",
+      "expected_deeplink_id": null,
+      "expected_is_page_level": null
+    },
+    {
+      "id": "brief_nav_bar_multi_action",
+      "source": "Theme 2 brief Appendix B (official worked example)",
+      "steps": [
+        "Navigate to and open Settings.",
+        "Tap on Display.",
+        "Tap on Navigation bar.",
+        "Select your preferred navigation type between Buttons and Swipe gestures.",
+        "Optionally toggle on Gesture hint to display guidance lines at the bottom of the screen."
+      ],
+      "category": "auto",
+      "expected_deeplink_id": "DL-0169",
+      "expected_is_page_level": true,
+      "note": "The N3 parent-menu test case: two distinct action clauses, correct answer is the shared page, not either clause's individually-strongest single-toggle match."
+    },
+    {
+      "id": "constructed_input_method_toggle",
+      "source": "Dev B constructed, verified against catalog DL-0137",
+      "steps": [
+        "Navigate to and open Settings.",
+        "Tap on Display.",
+        "Tap on Navigation bar.",
+        "Enable the input method button option."
+      ],
+      "category": "auto",
+      "expected_deeplink_id": "DL-0137",
+      "expected_is_page_level": false
+    },
+    {
+      "id": "constructed_time_format",
+      "source": "Dev B constructed, verified against catalog DL-0001",
+      "steps": [
+        "Navigate to and open Settings.",
+        "Tap on General management.",
+        "Tap on Date and time.",
+        "Switch between 12-hour and 24-hour time format."
+      ],
+      "category": "auto",
+      "expected_deeplink_id": "DL-0001",
+      "expected_is_page_level": true,
+      "note": "Page-only feature with no separate toggle deeplink; breadcrumb text ('date and time') never appears in the correct entry's own description."
+    },
+    {
+      "id": "constructed_dark_mode",
+      "source": "Dev B constructed, verified against catalog DL-0078",
+      "steps": [
+        "Navigate to and open Settings.",
+        "Tap on Display.",
+        "Tap on Dark mode settings.",
+        "Adjust the dim wallpaper value for Dark mode."
+      ],
+      "category": "auto",
+      "expected_deeplink_id": "DL-0078",
+      "expected_is_page_level": false
+    },
+    {
+      "id": "constructed_auto_sync",
+      "source": "Dev B constructed, verified against catalog DL-0026",
+      "steps": [
+        "Navigate to and open Settings.",
+        "Tap on Accounts and backup.",
+        "Enable auto sync for your account data."
+      ],
+      "category": "auto",
+      "expected_deeplink_id": "DL-0026",
+      "expected_is_page_level": false
+    }
+  ]
+}
