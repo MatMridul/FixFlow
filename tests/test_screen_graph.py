@@ -121,6 +121,71 @@ def test_merge_same_screen_consecutive_actions():
     assert len(merged[1]["stepGroups"]) == 1  # third stays separate (screen Y)
 
 
+def test_page_only_feature_not_overridden_by_unrelated_leaf(retriever):
+    """Regression: DL-0001 ("Switch Time Format") is a page-level entry
+    with no separate toggle deeplink. An earlier version of the decision
+    logic unconditionally preferred any leaf-level candidate that shared
+    even one word with the action step, which let an unrelated toggle
+    ("Enable Auto Time", scoring 0.33) override the correct page (scoring
+    1.0) just because a leaf existed at all. Score must win, not mere
+    word overlap."""
+    steps = [
+        "Navigate to and open Settings.",
+        "Tap on General management.",
+        "Tap on Date and time.",
+        "Switch between 12-hour and 24-hour time format.",
+    ]
+    result = resolve_screen(retriever, steps)
+    assert result.entry.id == "DL-0001"
+    assert result.is_page_level is True
+
+
+def test_breadcrumb_filter_distrusted_when_it_discards_a_much_stronger_match(retriever):
+    """Same scenario, different angle: the breadcrumb ("Date and time")
+    never appears in DL-0001's own description ("24-hour time format
+    settings page"). A naive hard filter on breadcrumb containment would
+    exclude the correct answer entirely. The retriever must fall back to
+    the unfiltered pool when filtering would discard a much stronger
+    match (score margin > 0.3)."""
+    steps = [
+        "Navigate to and open Settings.",
+        "Tap on General management.",
+        "Tap on Date and time.",
+        "Switch between 12-hour and 24-hour time format.",
+    ]
+    result = resolve_screen(retriever, steps)
+    assert result.entry.id == "DL-0001"
+    assert result.score > 0.9  # confirms we kept the strong unfiltered match, not the ~0.33 filtered one
+
+
+def test_single_action_leaf_still_wins_when_it_genuinely_outscores_the_page(retriever):
+    """Control case for the previous two: single specific action naming a
+    real leaf control must still resolve to the leaf, not get swept into
+    'prefer page' by an overcorrection."""
+    steps = [
+        "Navigate to and open Settings.",
+        "Tap on Accounts and backup.",
+        "Enable auto sync for your account data.",
+    ]
+    result = resolve_screen(retriever, steps)
+    assert result.entry.id == "DL-0026"
+    assert result.is_page_level is False
+
+
+def test_updateurl_leaf_resolves_correctly(retriever):
+    """Coverage for the updateURL originalType (numeric-value entries),
+    distinct from the onURL/offURL boolean-toggle cases covered above."""
+    steps = [
+        "Navigate to and open Settings.",
+        "Tap on Display.",
+        "Tap on Dark mode settings.",
+        "Adjust the dim wallpaper value for Dark mode.",
+    ]
+    result = resolve_screen(retriever, steps)
+    assert result.entry.id == "DL-0078"
+    assert result.is_page_level is False
+
+
 def test_merge_does_not_touch_non_consecutive_same_screen():
     """Two actions on the same screen but separated by a different one
     must NOT be merged — that would scramble safe-first/critical-last

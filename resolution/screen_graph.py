@@ -51,6 +51,7 @@ _NAV_STEP_RE = re.compile(
     r"^(?:navigate to(?: and open)?|tap on|open)\s+(.+?)\.?\s*$", re.IGNORECASE
 )
 _GENERIC_BREADCRUMB_TERMS = {"settings", "settings menu", "the settings app"}
+_FILTER_DISTRUST_MARGIN = 0.3
 
 
 @dataclass
@@ -99,57 +100,64 @@ def resolve_screen(
             if needle in r.entry.description.lower() or needle in r.entry.message.lower()
         ]
         if filtered:
-            on_path = filtered
+            # Trust the filter only if it isn't discarding a much stronger
+            # unfiltered match. Found this failing on a real case: querying
+            # for the "Date and time" screen, DL-0001's own description
+            # never says "date and time" (it's phrased "24-hour time format
+            # settings page"), so the breadcrumb filter wrongly dropped the
+            # correct top-scoring candidate (1.0) in favour of a filtered
+            # candidate scoring 0.33. The filter helps when candidates are
+            # close (the navigation-bar case) but actively hurts when the
+            # true answer just doesn't echo the UI's own nav-menu wording.
+            best_unfiltered = pool[0].score
+            best_filtered = max(r.score for r in filtered)
+            if best_unfiltered - best_filtered > _FILTER_DISTRUST_MARGIN:
+                on_path = pool
+            else:
+                on_path = filtered
         # else: fall back to full pool — path parsing yielded no match (doc's
         # own documented fallback for when the breadcrumb doesn't resolve).
 
     page_level = [r for r in on_path if r.entry.originalType == "onClickURL"]
     leaf_level = [r for r in on_path if r.entry.originalType != "onClickURL"]
 
-    guard_applied = False
-    if len(action_steps) == 1 and leaf_level:
-        # Exactly one specific action -> prefer the best-matching leaf
-        # control over the page, provided one actually stands out on this
-        # step's own text (not just the shared breadcrumb).
-        action_query = action_steps[0]
-        leaf_pool_scores = [
-            (r, _term_overlap(action_query, r.entry)) for r in leaf_level
-        ]
-        # Stable sort on overlap alone: `leaf_level` already carries the
-        # retriever's polarity-aware ordering (retriever.search() promotes
-        # the query-matching Enable/Disable twin to the front of the list,
-        # not by rewriting .score). Breaking ties on raw .score here would
-        # silently undo that promotion, since the promoted item's stored
-        # score doesn't change — only its list position does.
-        leaf_pool_scores.sort(key=lambda pair: -pair[1])
-        best_leaf, overlap = leaf_pool_scores[0]
-        if overlap > 0:
-            return ScreenResolution(
-                "matched", best_leaf.entry, False, breadcrumb, guard_applied, best_leaf.score
-            )
+    # leaf_level/page_level preserve on_path's order, which already carries
+    # the retriever's polarity-aware promotion (search() reorders the list
+    # without rewriting .score) — take [0], never re-sort by raw .score,
+    # or the promotion (Enable/Disable twin fix) gets silently undone.
+    best_leaf = leaf_level[0] if leaf_level else None
+    best_page = _best_page_candidate(page_level, breadcrumb) if page_level else None
 
-    if page_level:
-        guard_applied = len(action_steps) != 1
-        # Among page-level (onClickURL) candidates sharing the breadcrumb,
-        # more than one can legitimately match it (e.g. "View Navigation
-        # bar" and "View Show input method button on navigation bar" both
-        # contain "navigation bar"). Prefer the one closest to the
-        # breadcrumb itself — fewest EXTRA qualifier words beyond it — over
-        # a more specific sub-page, since a multi-part step group targets
-        # the general page, not a narrower one. Confirmed against the
-        # brief's own worked example: DL-0169 ("View Navigation bar", 0
-        # extra words) over DL-0527 ("View Show input method button on
-        # navigation bar", 5 extra words).
-        best_page = min(
-            page_level,
-            key=lambda r: (_extra_words_beyond_breadcrumb(r.entry, breadcrumb), -r.score),
-        )
+    guard_applied = False
+    if len(action_steps) > 1 and best_page is not None:
+        # Multi-part step group (>=2 distinct action clauses) -> the group
+        # is configuring the page as a whole, not one control on it. This
+        # bias is intentionally stronger than a plain score comparison —
+        # it's what fixes the brief's own worked example, where the
+        # correct page (DL-0169) scores LOWER than either single-clause
+        # sub-toggle match (DL-0171, DL-0527) on raw hybrid score alone.
+        guard_applied = True
         return ScreenResolution(
             "matched", best_page.entry, True, breadcrumb, guard_applied, best_page.score
         )
 
-    # No page-level candidate on this path at all — fall back to plain
-    # top-1 hybrid result.
+    if best_leaf is not None and (best_page is None or best_leaf.score >= best_page.score):
+        # Zero or one action clause: trust whichever candidate the
+        # retriever itself scored higher. Do NOT gate this on "does the
+        # leaf share any word with the action step" — that let a page-only
+        # feature (DL-0001, "Switch Time Format", no separate toggle
+        # exists) get overridden by an unrelated but keyword-adjacent leaf
+        # toggle ("Enable Auto Time") every time a plausible leaf existed
+        # at all, regardless of how much stronger the page's own score was.
+        return ScreenResolution(
+            "matched", best_leaf.entry, False, breadcrumb, guard_applied, best_leaf.score
+        )
+
+    if best_page is not None:
+        return ScreenResolution(
+            "matched", best_page.entry, True, breadcrumb, guard_applied, best_page.score
+        )
+
     best = on_path[0]
     return ScreenResolution(
         "matched",
@@ -159,6 +167,28 @@ def resolve_screen(
         False,
         best.score,
     )
+
+
+_PAGE_TIE_MARGIN = 0.05
+
+
+def _best_page_candidate(
+    page_level: list[RetrievalResult], breadcrumb: Optional[str]
+) -> RetrievalResult:
+    """Pick the best page-level (onClickURL) candidate. The extra-words
+    tie-break (fewest qualifier words beyond the breadcrumb — prefers "View
+    Navigation bar" over "View Show input method button on navigation bar")
+    is only trustworthy among candidates that are ALREADY close in raw
+    retrieval score. Found this the hard way: when page_level contains
+    unrelated low-score entries with coincidentally short messages (e.g.
+    "View Format", about screenshots, scoring 0.25 on a "date and time"
+    query), applying the tie-break as the PRIMARY sort key picked that
+    irrelevant short entry over the correct high-score one (DL-0001,
+    score 1.0). Gate the tie-break to near-top-score candidates only.
+    """
+    top_score = max(r.score for r in page_level)
+    near_top = [r for r in page_level if top_score - r.score <= _PAGE_TIE_MARGIN]
+    return min(near_top, key=lambda r: _extra_words_beyond_breadcrumb(r.entry, breadcrumb))
 
 
 def _extra_words_beyond_breadcrumb(entry: CatalogEntry, breadcrumb: Optional[str]) -> int:
@@ -171,15 +201,6 @@ def _extra_words_beyond_breadcrumb(entry: CatalogEntry, breadcrumb: Optional[str
     msg_words = set(re.findall(r"[a-z]+", message.lower()))
     breadcrumb_words = set(re.findall(r"[a-z]+", (breadcrumb or "").lower()))
     return len(msg_words - breadcrumb_words)
-
-
-def _term_overlap(action_text: str, entry: CatalogEntry) -> int:
-    """Count of distinctive (len > 3) words shared between the action step
-    text and the entry's own metadata, beyond generic filler."""
-    stop = {"tap", "open", "turn", "select", "your", "that", "this", "with", "from"}
-    action_words = {w for w in re.findall(r"[a-z]+", action_text.lower()) if len(w) > 3 and w not in stop}
-    entry_words = {w for w in re.findall(r"[a-z]+", entry.searchable_text().lower()) if len(w) > 3 and w not in stop}
-    return len(action_words & entry_words)
 
 
 def merge_same_screen_actions(actions: list[dict]) -> list[dict]:
