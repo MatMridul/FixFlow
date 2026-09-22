@@ -3,6 +3,9 @@ whose stepGroups have step text but empty deeplink fields. This module fills
 `actionableDeeplink` (and as much of `validationDeeplink` as the catalog
 itself supplies).
 
+Matching is delegated to resolution.screen_graph.resolve_screen (N3), which
+applies the parent-menu guard rather than raw top-1 hybrid score.
+
 Rules enforced here (brief §4.1/§4.2, FixFlow_Idea_v3.md findings E/G):
 - `manual` actions never get an actionableDeeplink.
 - A deeplink is only bound when retrieval confidence clears `threshold`.
@@ -29,6 +32,8 @@ from typing import Optional
 from catalog.loader import Catalog
 from catalog.models import CatalogEntry
 from resolution.retriever import HybridRetriever
+from resolution.screen_graph import resolve_screen
+from resolution.validation_inference import infer_validation_ref
 
 DEFAULT_THRESHOLD = 0.12
 
@@ -40,6 +45,8 @@ class BindResult:
     validation_ref: Optional[dict]
     top_score: float
     candidate: Optional[CatalogEntry]  # best guess even when below threshold, for human/LLM review
+    is_page_level: bool = False
+    parent_menu_guard_applied: bool = False
 
 
 def _to_actionable_deeplink(entry: CatalogEntry) -> dict:
@@ -52,18 +59,12 @@ def _to_actionable_deeplink(entry: CatalogEntry) -> dict:
 
 
 def _to_validation_ref(entry: CatalogEntry) -> Optional[dict]:
-    """Copy whatever the catalog supplies verbatim. For the ~24% of entries
-    with a full validation object, this fully satisfies N4 with no
-    derivation. For the rest (deeplink+key only), resultType/condition/value
-    stay None here — Dev A's extraction layer derives them from SIIS text."""
-    if entry.validation is None:
-        return None
-    ref = {"deeplink": entry.validation.deeplink, "key": entry.validation.key}
-    if entry.validation.resultType is not None:
-        ref["resultType"] = entry.validation.resultType
-        ref["condition"] = entry.validation.condition
-        ref["value"] = entry.validation.value
-    return ref
+    """Verbatim copy where the catalog supplies the full object (138/570),
+    catalog-derivable inference by originalType symmetry where safe
+    (offURL, see resolution.validation_inference), and None where filling
+    it in would require reading SIIS text (updateURL) or doesn't apply
+    (onClickURL page-opens)."""
+    return infer_validation_ref(entry)
 
 
 def bind_actionable_deeplink(
@@ -93,9 +94,8 @@ def bind_actionable_deeplink(
             candidate=None,
         )
 
-    query = " ".join(steps)
-    results = retriever.search(query, top_k=1)
-    if not results:
+    resolution = resolve_screen(retriever, steps)
+    if resolution.status != "matched":
         return BindResult(
             status="below_threshold",
             actionable_deeplink=None,
@@ -104,20 +104,21 @@ def bind_actionable_deeplink(
             candidate=None,
         )
 
-    best = results[0]
-    if best.score >= threshold:
+    if resolution.score >= threshold:
         return BindResult(
             status="matched",
-            actionable_deeplink=_to_actionable_deeplink(best.entry),
-            validation_ref=_to_validation_ref(best.entry),
-            top_score=best.score,
-            candidate=best.entry,
+            actionable_deeplink=_to_actionable_deeplink(resolution.entry),
+            validation_ref=_to_validation_ref(resolution.entry),
+            top_score=resolution.score,
+            candidate=resolution.entry,
+            is_page_level=resolution.is_page_level,
+            parent_menu_guard_applied=resolution.parent_menu_guard_applied,
         )
 
     return BindResult(
         status="below_threshold",
         actionable_deeplink=None,
         validation_ref=None,
-        top_score=best.score,
-        candidate=best.entry,
+        top_score=resolution.score,
+        candidate=resolution.entry,
     )
