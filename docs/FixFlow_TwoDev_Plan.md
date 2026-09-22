@@ -1,132 +1,83 @@
-# FixFlow — Two-Developer Implementation Plan
+# FixFlow — Team Implementation Plan: Mridul (Dev A) & Hemish (Dev B) + Jules (CI/Test Worker)
 
-**Samsung PRISM GenAI Hackathon · Theme 02**
-**Companion to `FixFlow_Idea_v2.md`** (the source-of-truth idea doc). This file divides that plan across **two developers** with clean ownership, defined interfaces, and sync points.
+**Samsung PRISM GenAI Hackathon · Theme 02**  
+**Companion to `FixFlow_Idea_v3.md`** (the source-of-truth idea doc). This document outlines the division of work across **Mridul (Dev A)** and **Hemish (Dev B)**, augmented by **Google Jules (Autonomous Cloud AI)** for continuous testing, bug fixing, and CI/CD.
 
-> **Split principle:** FixFlow's pipeline has two halves that meet at the `Goal` contract object. **Dev A owns the input → intelligence half** (enrichment, cache, extraction, scoring). **Dev B owns the catalog → resolution half** (catalog, screen graph, retrieval, deeplink binding). Schema, API, and eval are a shared spine with single-owner files so the two never edit the same code.
-
----
-
-## 1. Ownership Map (who touches which directory)
-
-Repo layout from `FixFlow_Idea_v2.md` §11. Each directory has exactly one owner to prevent merge collisions.
-
-| Directory | Owner | Purpose |
-|---|---|---|
-| `enrichment/` | **A** | clause splitter (N1), intent signature (N2), query normalisation |
-| `cache/` | **A** | gated + compositional cache (N1, N2) |
-| `extraction/` | **A** | LLM prompt, provenance filter (N5) |
-| `validation/` | **A** | schema + text-rule validators, repair loop, calibrated scoring (N5) |
-| `api/` | **A** (lead) | `/v1/troubleshoot`, `/health`, response + `meta` assembly |
-| `catalog/` | **B** | deeplink compiler, Settings Screen Graph (N3) |
-| `resolution/` | **B** | hybrid retrieval, path rerank, validation binding (N4) |
-| `eval/` | **B** (lead) | test-set harness, `metrics.md` generator, ablation tables |
-| `frontend/` | **B** | React UI: conversation, reasoning trace, action cards, simulated device |
-| `Dockerfile` | **B** | containerisation, cold-start handling |
-| `data/` | shared | supplied starter assets — **read-only, never edited** |
-| `schema.py` | shared | contract, copied from `student_kit/` — **never edited** |
-
-**Novelty ownership:** Dev A → **N1, N2, N5**. Dev B → **N3, N4**.
+> **Core Split Principle:** FixFlow's pipeline has two halves that meet at the `Goal` contract object.  
+> * **Mridul (Dev A)** owns the **Input → Intelligence** half (enrichment, cache, extraction, scoring, API lead).  
+> * **Hemish (Dev B)** owns the **Catalog → Resolution** half (catalog, screen graph, retrieval, deeplink binding, eval lead, UI).  
+> * **Jules (Google AI Agent)** acts as the **Autonomous QA/CI Worker** to absorb repetitive tasks (test suites, regression bug fixes, CI/CD pipelines, boilerplate, and linting) so Mridul and Hemish can focus entirely on high-leverage architecture and novelty implementation.
 
 ---
 
-## 2. Day 0 — Joint Foundation (both devs, pair on it)
+## 1. Ownership Map
 
-Do these together before splitting. Forking before this is done breaks everything downstream.
+| Directory / Component | Primary Owner | Purpose | Role of Jules |
+|---|---|---|---|
+| `enrichment/` | **Mridul (Dev A)** | Clause splitter (N1), intent signature (N2), query normalisation | Generates test cases for complex multi-intent query strings |
+| `cache/` | **Mridul (Dev A)** | Gated + compositional cache (N1, N2) | Writes cache hit/miss benchmark tests & near-miss datasets |
+| `extraction/` | **Mridul (Dev A)** | LLM prompt, provenance filter (N5) | Adds mocks & fixture tests for SIIS sentence extraction |
+| `validation/` | **Mridul (Dev A)** | Schema + text-rule validators, repair loop, calibrated scoring (N5) | Implements regex edge-case tests & validator unit tests |
+| `api/` | **Mridul (Dev A)** (Lead) | `/v1/troubleshoot`, `/health`, response + `meta` assembly | Writes FastAPI integration tests (TestClient) |
+| `catalog/` | **Hemish (Dev B)** | Deeplink compiler, Settings Screen Graph (N3) | Generates parsing tests for `deeplinks.json` |
+| `resolution/` | **Hemish (Dev B)** | Hybrid retrieval (BM25+FAISS), path rerank, validation binding (N4) | Adds benchmark scripts for retrieval latency & accuracy |
+| `eval/` | **Hemish (Dev B)** (Lead) | Test-set harness, `metrics.md` generator, ablation tables | Automates test harness execution and metric aggregations |
+| `frontend/` | **Hemish (Dev B)** | React UI: conversation, reasoning trace, action cards, simulated device | Scaffolds UI components & boilerplate layout |
+| `Dockerfile` & `.github/` | **Jules** (Autonomous) | Containerisation, cold-start pre-caching, GitHub Actions CI/CD | Creates, verifies, and maintains GitHub Actions workflows |
+| `data/` | **Shared** | Supplied starter assets — **read-only, never edited** | Read-only access |
+| `schema.py` | **Shared** | Contract, copied from `student_kit/` — **never edited** | Read-only contract adherence verification |
 
-1. **Lock the contract.** Copy `schema.py` from `student_kit/` into the repo. Agree it is frozen.
-2. **Resolve the Day-One open questions** (`FixFlow_Idea_v2.md` §12) — split the data inspection:
-   - **Dev A:** Q6 (graded output shape — minimal vs full envelope) + Q7 (SIIS-to-query topical match rate across all 20 rows).
-   - **Dev B:** Q1 (catalog `validation` fields — confirmed `{deeplink, key}`) + Q2 (are `description`s parseable into nav paths — gates N3).
-   - 30 min each, then share findings in the doc.
-3. **Agree the two interface contracts** (§4 below).
-4. **Stand up API stubs.** `POST /v1/troubleshoot` + `GET /health` returning a hardcoded valid `Goal` payload, so both devs integration-test against a live endpoint from hour one.
-
----
-
-## 3. Per-Developer Tracks (phased, mapped to `FixFlow_Idea_v2.md` §9 tiers)
-
-### Dev A — Input & Intelligence (front half)
-
-| Tier | Tasks | Exit criterion |
-|---|---|---|
-| **P0** | Schema validators (goal syntax · 2–3 word title · Title-Case action · `It will` prefix; **word count is a SOFT target — do not hard-reject, official sample uses 9 & 12 words, finding C**) · URL regex scrubber · repair loop · exact + cosine cache · LLM extraction prompt · response + `meta` assembly | Validators pass on all 5 sample rows; extraction produces schema-valid `Goal`s |
-| **P1** | **N2** intent-signature gate (lexicon mined from `input.txt`, Display-skewed) → **N5** step-SIIS provenance filter + calibrated `score` + `no_match` gate → **N1** compositional multi-intent cache (**depends on N2 — same owner, no cross-dev block**) | Each novelty has a measured delta vs P0 |
-| **P2** | Adversarial near-miss test set (~50 pairs, for N2) · calibration dev-set labels (~80–100 scenarios) · owns `no_match` / `no_siis_context` fallback logic (lives at `meta`/API layer — **no `fallback` field exists in `schema.py`, finding D**) | Fallback returns cleanly; calibration curve plotted |
-
-### Dev B — Catalog & Resolution (back half)
-
-| Tier | Tasks | Exit criterion |
-|---|---|---|
-| **P0** | Catalog compiler (parse `deeplinks.json`; match on `description`/`message`/`qna_description`, **never on the masked URI string**) · BM25 + FAISS hybrid retrieval · safe → critical action ordering · `bixby://dummy_positive` handling · `manual` ⇒ no actionable deeplink | Retrieval returns verbatim catalog URIs; ordering + manual rules enforced |
-| **P1** | **N3** Settings Screen Graph + path-alignment rerank + one-action-one-screen merge (**risk Medium–High — catalog `description` is full-sentence prose, no breadcrumb separators, finding F**) → **N4** `validationDeeplink` binding (copy `{deeplink, key}` verbatim; **derive `resultType`/`condition`/`value` from SIIS text + `originalType`/`control_type`, catalog does not supply them, finding E**) | Parent-menu error rate measured; validation coverage measured |
-| **P2** | Eval harness + `metrics.md` generator + ablation tables · React frontend (conversation · reasoning trace · action cards · simulated device panel) · Docker · `results.jsonl` | Demo script (`FixFlow_Idea_v2.md` §8) runs end to end |
+**Novelty Ownership:**
+* **Mridul (Dev A):** **N1** (Compositional Cache), **N2** (Intent Signature Gate), **N5** (Calibrated Scoring & Provenance)
+* **Hemish (Dev B):** **N3** (Settings Screen Graph & Path Rerank), **N4** (Validation Deeplink Binding)
 
 ---
 
-## 4. Interface Contracts (define Day 0, never break silently)
+## 2. How We Utilize Jules (100 Tasks/Day Quota)
 
-These are the only two places the halves touch. Lock the signatures early.
+Jules takes care of recurring engineering toil via GitHub Issues and PRs so Mridul and Hemish remain focused on core intelligence and architecture:
 
-**Contract 1 — Extraction → Resolution.**
-Dev A hands Dev B a `Goal` object with populated step text but **empty** deeplink fields. Dev B fills `actionableDeeplink` + `validationDeeplink` and returns it. Agree the exact intermediate shape (a `Goal` with `stepGroups[].actionableDeeplink = None`).
-
-**Contract 2 — Resolution → Scoring (the N5 cross-dependency).**
-Dev B exposes, per action, a `retrieval_margin` and a `path_alignment_score`. Dev A consumes them in the calibrator. This is the single entanglement point:
-
-```python
-# Dev A owns: grounding_coverage, validator_pass_rate
-# Dev B owns: retrieval_margin, path_alignment
-def calibrate(retrieval_margin, grounding_coverage,
-              path_alignment, validator_pass_rate) -> float:
-    ...  # returns Goal.score in [0, 1]
-```
+1. **Automated Unit & Integration Test Generation:**
+   * Write comprehensive `pytest` test suites for all modules in `validation/`, `catalog/`, `cache/`, and `resolution/`.
+   * Test edge cases: malformed JSON, empty SIIS responses, missing catalog keys, out-of-order steps.
+2. **Automated Bug Fixing & Edge Case Handling:**
+   * When an eval test fails or a validator rejects an edge case, assign the issue to Jules with the traceback to fix the logic and submit a PR.
+3. **Continuous Integration & Delivery (CI/CD):**
+   * Maintain `.github/workflows/ci.yml` running tests, linting (`ruff`/`black`), type-checking (`mypy`), and verifying schema compliance on every push.
+4. **Boilerplate & Utilities:**
+   * Fast text normalization helpers, data formatting scripts, and Docker optimizations.
 
 ---
 
-## 5. Integration & Sync Points
+## 3. Day 0 — Joint Foundation (Mridul & Hemish)
 
-- **End of P0 (first end-to-end checkpoint):** wire A's extraction + B's resolution through the real API. **Target: all brief gates pass on the 5 sample rows.** If this fails, stop and fix before any P1 work.
-- **End of each P1 novelty:** the owning dev reports a measured ablation delta vs P0. **Rule from `FixFlow_Idea_v2.md` §9: a component with no measurable gain gets cut, even if it's ours.**
-- **P2:** Dev B's eval harness scores the combined A+B output; both devs fill their own rows in the ablation tables (§7 of the idea doc).
-
----
-
-## 6. Load Balance & Contingency
-
-- Dev A is algorithm-heavy early — cache, extraction, and scoring stack up through P1.
-- Dev B carries retrieval + infra + frontend — lighter algorithmic load late, which is why Docker, frontend, and the eval harness sit on B to even the total out.
-- **Contingency:** N1 is last for Dev A and depends on N2. If A slips, Dev B takes the compositional-cache **compose + dedupe** logic (merging cached `Goal`s, deduping shared critical actions) — B already owns Goal-merging patterns from action ordering, so it is a natural handoff.
+1. **Lock the contract:** Copy `schema.py` from `student_kit/` into the repo. Freeze it.
+2. **Resolve Day-One Open Questions:**
+   * **Mridul:** Graded output shape validation (minimal vs full envelope) + SIIS topical match labeling.
+   * **Hemish:** Catalog validation inspection (`{deeplink, key}`) + description navigation path extractability.
+3. **Agree Interface Contracts:**
+   * **Contract 1 (Extraction → Resolution):** Mridul outputs `Goal` with steps and empty deeplinks; Hemish populates `actionableDeeplink` and `validationDeeplink`.
+   * **Contract 2 (Resolution → Scoring):** Hemish provides `retrieval_margin` and `path_alignment`; Mridul consumes them in `calibrate()`.
+4. **Stand up API Stubs:** Create initial `POST /v1/troubleshoot` and `GET /health` endpoints returning a mock valid `Goal` payload.
 
 ---
 
-## 7. Quick Checklists
+## 4. Phased Implementation Plan
 
-### Dev A
-- [ ] Copy + freeze `schema.py`; build Pydantic validators
-- [ ] Text-rule validators (goal/title/description/action) with soft word-count
-- [ ] URL scrubber + repair loop
-- [ ] Exact + cosine semantic cache
-- [ ] LLM extraction prompt (schema-constrained)
-- [ ] Response + `meta` assembly in `api/`
-- [ ] N2 intent-signature gate + near-miss test set
-- [ ] N5 provenance filter + `calibrate()` + `no_match` gate
-- [ ] N1 compositional multi-intent cache
-- [ ] Answer §12 Q6, Q7
+### Mridul (Dev A) — Input & Intelligence
+* **P0:** Schema & text-rule validators (soft word-count target per finding C) · URL regex scrubber · repair loop · exact + cosine cache · LLM extraction prompt · API response + `meta` block.
+* **P1:** **N2** Intent-signature gate (Display-skewed lexicon from `input.txt`) → **N5** Step-SIIS provenance filter + calibrated scoring → **N1** Compositional multi-intent cache.
+* **P2:** Adversarial near-miss test set (~50 pairs) · Calibration dataset · `no_match` & `no_siis_context` fallback handling.
 
-### Dev B
-- [ ] Catalog compiler over `deeplinks.json` (metadata matching, verbatim URI copy)
-- [ ] BM25 + FAISS hybrid retrieval
-- [ ] Safe → critical ordering; `manual` no-deeplink; `dummy_positive`
-- [ ] N3 Settings Screen Graph + path rerank + one-action-one-screen merge
-- [ ] N4 `validationDeeplink` binding + derive result/condition/value
-- [ ] Eval harness + `metrics.md` + ablation tables
-- [ ] React frontend + simulated device panel
-- [ ] Dockerfile + `results.jsonl`
-- [ ] Answer §12 Q1, Q2
+### Hemish (Dev B) — Catalog & Resolution
+* **P0:** Catalog compiler over `deeplinks.json` (metadata matching, verbatim URI copy) · BM25 + FAISS hybrid retrieval · Safe → critical ordering · `manual` no-deeplink · `dummy_positive` handling.
+* **P1:** **N3** Settings Screen Graph + path-alignment reranker + one-action-one-screen merge → **N4** `validationDeeplink` binding (derive result/condition/value from SIIS + control types).
+* **P2:** Eval harness + `metrics.md` generator + ablation tables · React demo frontend with simulated device panel · Dockerfile + `results.jsonl`.
 
 ---
 
-## 8. Source-of-Truth Note
+## 5. Sync Points & Quality Gates
 
-This file inherits the hierarchy in `FixFlow_Idea_v2.md` §13: the official Theme 02 brief and the supplied datasets/`schema.py`/samples win over anything written here. Where this plan cites a "finding," it refers to the real-data inspection in `FixFlow_Idea_v2.md` §1.4. Work division is process direction only — it never overrides the contract.
+* **End of P0:** First end-to-end integration test through live FastAPI. Target: 100% schema validity and baseline rule pass.
+* **End of P1:** Measure individual deltas for all 5 novelties (N1–N5) using Hemish's eval harness. Any component without a measurable gain is pruned.
+* **End of P2:** Full ablation benchmark run, frontend polish, Docker verification, and final submission packaging.
