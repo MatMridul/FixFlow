@@ -12,6 +12,11 @@ from validation.rules import (
     validate_step,
     validate_title,
 )
+from validation.repair import (
+    construct_repair_prompt,
+    programmatic_repair_goal,
+    repair_goal_or_json,
+)
 from validation.schema_validator import ValidationReport, validate_goal, validate_response
 from validation.scrubber import contains_urls, scrub_goal, scrub_urls
 
@@ -33,4 +38,8 @@ __all__ = [
     "contains_urls",
     "scrub_urls",
     "scrub_goal",
+    "construct_repair_prompt",
+    "programmatic_repair_goal",
+    "repair_goal_or_json",
 ]
+

@@ -42,7 +42,7 @@
     - URL Regex Scrubber: Strip all external web URLs (`http://`, `https://`, markdown links) from steps and descriptions.
   - **Acceptance Criteria:** Unit tests verifying all positive/negative validation rules; 0 URL leaks.
 
-- [ ] **Task A.0.3 — Single-Shot JSON Repair Loop**
+- [x] **Task A.0.3 — Single-Shot JSON Repair Loop**
   - **Branch:** `feature/mridul-repair-loop`
   - **Files:** `validation/repair.py`
   - **Spec Scope:**
