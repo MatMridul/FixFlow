@@ -71,6 +71,10 @@ logs/
 temp/
 tmp/
 .cache/
+*.db
+*.sqlite
+*.sqlite3
+
 
 # Internal Agent & Graphify Config
 .agents/

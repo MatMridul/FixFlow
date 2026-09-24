@@ -41,7 +41,8 @@ def extract_fallback_actions_from_siis(content: str) -> List[Action]:
 
         header_line = lines[0]
         # Clean title
-        action_title = re.sub(r'^(#{1,3}\s+|Step\s+\d+:?|\d+\.\s+)', '', header_line).strip()
+        action_title = re.sub(r'^#+\s*', '', header_line).strip()
+        action_title = re.sub(r'^(?:Step\s+\d+:?|\d+[\.\)])\s*', '', action_title, flags=re.IGNORECASE).strip()
         if not action_title or len(action_title.split()) > 6:
             action_title = "Resolve Device Issue"
 

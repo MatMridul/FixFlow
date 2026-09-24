@@ -126,7 +126,7 @@ def validate_action_name(action_name: str) -> ValidationResult:
         if not word:
             continue
         if i == 0 or word.lower() not in minor_words:
-            if not word[0].isupper():
+            if word[0].isalpha() and not word[0].isupper():
                 return ValidationResult(
                     False,
                     "action_name_format",
