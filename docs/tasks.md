@@ -70,7 +70,7 @@
     - Persistent on-disk storage (SQLite / JSON store).
   - **Acceptance Criteria:** P95 latency ≤ 50ms on exact hit, ≤ 150ms on cosine hit; returns cached `Goal`.
 
-- [ ] **Task A.0.6 — FastAPI Orchestrator & Telemetry Wrapper**
+- [x] **Task A.0.6 — FastAPI Orchestrator & Telemetry Wrapper**
   - **Branch:** `feature/mridul-api-orchestrator`
   - **Files:** `api/app.py`, `api/routes.py`
   - **Spec Scope:**
