@@ -60,7 +60,7 @@
     - Temperature = 0.0 for deterministic output.
   - **Acceptance Criteria:** Zero invented steps outside SIIS context; returns intermediate `Goal` matching Contract 1.
 
-- [ ] **Task A.0.5 — Baseline Exact & Cosine Vector Cache**
+- [x] **Task A.0.5 — Baseline Exact & Cosine Vector Cache**
   - **Branch:** `feature/mridul-baseline-cache`
   - **Files:** `cache/semantic_cache.py`, `cache/store.py`
   - **Spec Scope:**
