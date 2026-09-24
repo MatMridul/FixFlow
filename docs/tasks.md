@@ -51,7 +51,7 @@
     - Re-validate repaired output; fall back gracefully if repair fails.
   - **Acceptance Criteria:** Cap repair to max 1 LLM call; recovers from simulated malformed outputs.
 
-- [ ] **Task A.0.4 — Schema-Constrained LLM Extractor**
+- [x] **Task A.0.4 — Schema-Constrained LLM Extractor**
   - **Branch:** `feature/mridul-llm-extractor`
   - **Files:** `extraction/prompt.py`, `extraction/extractor.py`
   - **Spec Scope:**
