@@ -29,7 +29,7 @@
     - Define API response wrapper including `meta` block (`latency_ms`, `cache_hit`, `model`, `cost_usd`, `fallback`).
   - **Acceptance Criteria:** `pydantic.ValidationError` raised on illegal schemas; sample output JSON passes schema validation.
 
-- [ ] **Task A.0.2 — Validation & Text-Rule Engine**
+- [x] **Task A.0.2 — Validation & Text-Rule Engine**
   - **Branch:** `feature/mridul-validation-rules`
   - **Files:** `validation/rules.py`, `validation/schema_validator.py`, `validation/scrubber.py`
   - **Spec Scope:**
