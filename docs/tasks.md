@@ -20,7 +20,7 @@
 
 *Goal: Stand up the core extraction, validation, caching, and API routing pipeline. Exit criteria: 100% schema validity and successful end-to-end execution on sample inputs.*
 
-- [ ] **Task A.0.1 — Schema & Contract Freezing**
+- [x] **Task A.0.1 — Schema & Contract Freezing**
   - **Branch:** `feature/mridul-schema-contracts`
   - **Files:** `schema.py`, `api/models.py`
   - **Spec Scope:**
