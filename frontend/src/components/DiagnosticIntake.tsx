@@ -1,7 +1,9 @@
 import React from "react";
+import { motion } from "framer-motion";
 import { Search, ChevronRight } from "lucide-react";
 import { BENCHMARK_SCENARIOS } from "../services/api";
 import type { MetaPayload } from "../types/engine";
+import { springs, microInteractions } from "../theme/motion";
 
 interface DiagnosticIntakeProps {
   query: string;
@@ -24,7 +26,12 @@ export const DiagnosticIntake: React.FC<DiagnosticIntakeProps> = ({
   };
 
   return (
-    <section className="w-full bg-[#13151A] border border-white/[0.07] rounded-xl p-5 sm:p-6 space-y-4">
+    <motion.section
+      initial={{ opacity: 0, y: 10 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={springs.snappy}
+      className="w-full bg-[#13151A] border border-white/[0.07] rounded-xl p-5 sm:p-6 space-y-4 shadow-sm"
+    >
       {/* Header */}
       <div className="flex items-center justify-between border-b border-white/[0.05] pb-3">
         <div>
@@ -58,10 +65,12 @@ export const DiagnosticIntake: React.FC<DiagnosticIntakeProps> = ({
             disabled={isLoading}
             className="w-full pl-10 pr-24 py-2.5 rounded-lg bg-[#0E1013] border border-white/[0.1] focus:border-[#1E56FF] focus:outline-none focus:ring-1 focus:ring-[#1E56FF] text-white text-xs sm:text-sm font-normal transition-colors"
           />
-          <button
+          <motion.button
+            whileHover={microInteractions.hoverButton}
+            whileTap={microInteractions.tap}
             onClick={() => onSubmit(query.trim())}
             disabled={isLoading || !query.trim()}
-            className="absolute right-1.5 px-3.5 py-1.5 rounded-md bg-[#1E56FF] hover:bg-[#2F68FD] text-white text-xs font-medium active:scale-95 disabled:opacity-40 disabled:pointer-events-none transition-all flex items-center gap-1"
+            className="absolute right-1.5 px-3.5 py-1.5 rounded-md bg-[#1E56FF] hover:bg-[#2F68FD] text-white text-xs font-medium disabled:opacity-40 disabled:pointer-events-none transition-colors flex items-center gap-1 cursor-pointer"
           >
             {isLoading ? (
               <span className="animate-spin text-xs">⟳</span>
@@ -71,7 +80,7 @@ export const DiagnosticIntake: React.FC<DiagnosticIntakeProps> = ({
                 <ChevronRight className="w-3.5 h-3.5" />
               </>
             )}
-          </button>
+          </motion.button>
         </div>
       </div>
 
@@ -84,16 +93,18 @@ export const DiagnosticIntake: React.FC<DiagnosticIntakeProps> = ({
           {BENCHMARK_SCENARIOS.map((scenario) => {
             const isSelected = query.trim().toLowerCase() === scenario.query.trim().toLowerCase();
             return (
-              <button
+              <motion.button
                 key={scenario.id}
+                whileHover={{ y: -1, transition: { duration: 0.12 } }}
+                whileTap={{ scale: 0.98 }}
                 onClick={() => {
                   setQuery(scenario.query);
                   onSubmit(scenario.query, scenario.siis_title, scenario.siis_content);
                 }}
                 disabled={isLoading}
-                className={`p-2.5 rounded-lg border text-left transition-all flex items-center justify-between gap-2 group ${
+                className={`relative p-2.5 rounded-lg border text-left transition-all flex items-center justify-between gap-2 group cursor-pointer ${
                   isSelected
-                    ? "bg-[#1E56FF]/10 border-[#1E56FF]/40 text-white"
+                    ? "bg-[#1E56FF]/10 border-[#1E56FF]/40 text-white shadow-sm"
                     : "bg-[#191C23] border-white/[0.05] hover:bg-[#20242D] hover:border-white/[0.1] text-zinc-300"
                 }`}
               >
@@ -106,11 +117,11 @@ export const DiagnosticIntake: React.FC<DiagnosticIntakeProps> = ({
                   </span>
                 </div>
                 <ChevronRight className="w-3.5 h-3.5 text-zinc-500 group-hover:text-zinc-300 shrink-0 transition-colors" />
-              </button>
+              </motion.button>
             );
           })}
         </div>
       </div>
-    </section>
+    </motion.section>
   );
 };

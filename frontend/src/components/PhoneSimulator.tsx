@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   Wifi,
@@ -23,14 +23,13 @@ import {
   Search,
 } from "lucide-react";
 import type { SimulatedDeviceState, OneUIScreen } from "../types/engine";
+import { springs, transitions } from "../theme/motion";
 
 interface PhoneSimulatorProps {
   deviceState: SimulatedDeviceState;
   setDeviceState: React.Dispatch<React.SetStateAction<SimulatedDeviceState>>;
   onCloseMobile?: () => void;
 }
-
-const screenTransition = { duration: 0.18, ease: [0.16, 1, 0.3, 1] as const };
 
 export const PhoneSimulator: React.FC<PhoneSimulatorProps> = ({
   deviceState,
@@ -40,6 +39,19 @@ export const PhoneSimulator: React.FC<PhoneSimulatorProps> = ({
   const [volumeLevel, setVolumeLevel] = useState<number | null>(null);
   const [isOptimizing, setIsOptimizing] = useState(false);
   const [deviceCareScore, setDeviceCareScore] = useState(94);
+  const [touchPulse, setTouchPulse] = useState(false);
+
+  // Trigger touch pulse cursor when a fix action notice is received
+  useEffect(() => {
+    if (deviceState.lastActionNotice) {
+      const showTimer = setTimeout(() => setTouchPulse(true), 10);
+      const hideTimer = setTimeout(() => setTouchPulse(false), 700);
+      return () => {
+        clearTimeout(showTimer);
+        clearTimeout(hideTimer);
+      };
+    }
+  }, [deviceState.lastActionNotice]);
 
   const navigateTo = (screen: OneUIScreen) => {
     setDeviceState((prev) => ({ ...prev, screen, quickPanelOpen: false }));
@@ -83,6 +95,9 @@ export const PhoneSimulator: React.FC<PhoneSimulatorProps> = ({
 
   const handleOptimizeNow = () => {
     setIsOptimizing(true);
+    // Smooth counter tick
+    setTimeout(() => setDeviceCareScore(96), 250);
+    setTimeout(() => setDeviceCareScore(98), 500);
     setTimeout(() => {
       setIsOptimizing(false);
       setDeviceCareScore(100);
@@ -91,7 +106,7 @@ export const PhoneSimulator: React.FC<PhoneSimulatorProps> = ({
         cacheSizeMb: 0,
         lastActionNotice: "Device fully optimized (100%)",
       }));
-    }, 1000);
+    }, 850);
   };
 
   const handleVolumeKey = (change: number) => {
@@ -140,14 +155,14 @@ export const PhoneSimulator: React.FC<PhoneSimulatorProps> = ({
       {onCloseMobile && (
         <div className="w-full flex items-center justify-between pb-3 lg:hidden">
           <div className="flex items-center gap-2">
-            <span className="w-2 h-2 rounded-full bg-emerald-400" />
+            <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
             <span className="text-xs font-semibold text-zinc-200">
               Galaxy S24 Ultra (One UI 6.1)
             </span>
           </div>
           <button
             onClick={onCloseMobile}
-            className="px-2.5 py-1 rounded-md bg-[#191C23] hover:bg-[#20242D] text-xs font-medium text-white transition-colors"
+            className="px-2.5 py-1 rounded-md bg-[#191C23] hover:bg-[#20242D] text-xs font-medium text-white transition-colors cursor-pointer"
           >
             Close
           </button>
@@ -178,9 +193,22 @@ export const PhoneSimulator: React.FC<PhoneSimulatorProps> = ({
         />
 
         {/* Punch Hole Infinity-O Camera */}
-        <div className="absolute top-4 left-1/2 -translate-x-1/2 w-3.5 h-3.5 rounded-full bg-black z-40 flex items-center justify-center pointer-events-none">
+        <div className="absolute top-3.5 left-1/2 -translate-x-1/2 w-3.5 h-3.5 rounded-full bg-black z-40 flex items-center justify-center pointer-events-none">
           <div className="w-1.5 h-1.5 rounded-full bg-[#0E1117] border border-blue-900/40" />
         </div>
+
+        {/* Simulated Touch Pulse Cursor */}
+        <AnimatePresence>
+          {touchPulse && (
+            <motion.div
+              initial={{ scale: 0.4, opacity: 0.9 }}
+              animate={{ scale: 2.2, opacity: 0 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.65, ease: "easeOut" }}
+              className="absolute top-1/3 left-1/2 -translate-x-1/2 -translate-y-1/2 w-12 h-12 rounded-full border-2 border-[#1E56FF] bg-[#1E56FF]/30 pointer-events-none z-50 shadow-[0_0_20px_#1E56FF]"
+            />
+          )}
+        </AnimatePresence>
 
         {/* Volume Pill Overlay */}
         <AnimatePresence>
@@ -189,13 +217,15 @@ export const PhoneSimulator: React.FC<PhoneSimulatorProps> = ({
               initial={{ opacity: 0, x: -16 }}
               animate={{ opacity: 1, x: 0 }}
               exit={{ opacity: 0, x: -16 }}
-              className="absolute left-5 top-32 z-50 bg-[#13151A]/95 border border-white/10 rounded-xl p-2 backdrop-blur-md shadow-xl flex flex-col items-center gap-1.5"
+              transition={springs.pill}
+              className="absolute left-4 top-28 z-50 bg-[#13151A]/95 border border-white/10 rounded-xl p-2 backdrop-blur-md shadow-xl flex flex-col items-center gap-1.5"
             >
               <Volume2 className="w-3.5 h-3.5 text-[#1E56FF]" />
               <div className="w-1 h-14 bg-zinc-800 rounded-full overflow-hidden flex flex-col justify-end">
-                <div
-                  className="w-full bg-[#1E56FF] rounded-full transition-all"
-                  style={{ height: `${volumeLevel}%` }}
+                <motion.div
+                  className="w-full bg-[#1E56FF] rounded-full"
+                  animate={{ height: `${volumeLevel}%` }}
+                  transition={{ type: "spring", stiffness: 400, damping: 30 }}
                 />
               </div>
               <span className="text-[8px] font-mono text-zinc-300">{volumeLevel}%</span>
@@ -223,9 +253,13 @@ export const PhoneSimulator: React.FC<PhoneSimulatorProps> = ({
                 <span className="text-4xl font-light text-zinc-100 block">12:45</span>
                 <span className="text-xs text-zinc-400">Mon, Sep 26</span>
               </div>
-              <div className="p-3 rounded-full bg-white/5 border border-white/10">
+              <motion.div
+                animate={{ scale: [1, 1.08, 1] }}
+                transition={{ repeat: Infinity, duration: 2 }}
+                className="p-3 rounded-full bg-white/5 border border-white/10"
+              >
                 <Power className="w-4 h-4 text-[#1E56FF]" />
-              </div>
+              </motion.div>
               <span className="text-[11px] text-zinc-500">Tap to unlock</span>
             </div>
           ) : (
@@ -260,10 +294,10 @@ export const PhoneSimulator: React.FC<PhoneSimulatorProps> = ({
               <AnimatePresence>
                 {deviceState.lastActionNotice && (
                   <motion.div
-                    initial={{ opacity: 0, y: -6 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    exit={{ opacity: 0, y: -6 }}
-                    transition={{ duration: 0.15 }}
+                    initial={{ opacity: 0, y: -12, scale: 0.95 }}
+                    animate={{ opacity: 1, y: 0, scale: 1 }}
+                    exit={{ opacity: 0, y: -8, scale: 0.95 }}
+                    transition={springs.pill}
                     className="mx-3 my-1 px-2.5 py-1.5 rounded-lg bg-[#1E56FF] text-white flex items-center gap-2 shadow-md z-30"
                   >
                     <div className="w-4 h-4 rounded-full bg-white text-[#1E56FF] flex items-center justify-center font-bold shrink-0">
@@ -288,7 +322,7 @@ export const PhoneSimulator: React.FC<PhoneSimulatorProps> = ({
                     initial={{ y: "-100%" }}
                     animate={{ y: 0 }}
                     exit={{ y: "-100%" }}
-                    transition={{ duration: 0.2 }}
+                    transition={springs.slide}
                     className="absolute inset-0 z-40 bg-[#0E1013]/95 backdrop-blur-md p-4 flex flex-col justify-between"
                   >
                     <div>
@@ -296,7 +330,7 @@ export const PhoneSimulator: React.FC<PhoneSimulatorProps> = ({
                         <span className="text-xs font-semibold text-white">Quick Settings</span>
                         <button
                           onClick={toggleQuickPanel}
-                          className="text-[11px] text-[#1E56FF] hover:underline font-medium"
+                          className="text-[11px] text-[#1E56FF] hover:underline font-medium cursor-pointer"
                         >
                           Done
                         </button>
@@ -322,9 +356,10 @@ export const PhoneSimulator: React.FC<PhoneSimulatorProps> = ({
 
                       {/* Quick Grid Toggles */}
                       <div className="grid grid-cols-4 gap-1.5 mt-2.5 text-center">
-                        <button
+                        <motion.button
+                          whileTap={{ scale: 0.95 }}
                           onClick={() => toggleDarkMode(!deviceState.darkMode)}
-                          className={`p-2 rounded-lg border flex flex-col items-center gap-1 transition-all ${
+                          className={`p-2 rounded-lg border flex flex-col items-center gap-1 transition-colors cursor-pointer ${
                             deviceState.darkMode
                               ? "bg-[#1E56FF]/20 border-[#1E56FF]/50 text-blue-300"
                               : "bg-white/5 border-white/10 text-zinc-300"
@@ -332,11 +367,12 @@ export const PhoneSimulator: React.FC<PhoneSimulatorProps> = ({
                         >
                           <Moon className="w-3.5 h-3.5" />
                           <span className="text-[8px]">Dark</span>
-                        </button>
+                        </motion.button>
 
-                        <button
+                        <motion.button
+                          whileTap={{ scale: 0.95 }}
                           onClick={togglePowerSaving}
-                          className={`p-2 rounded-lg border flex flex-col items-center gap-1 transition-all ${
+                          className={`p-2 rounded-lg border flex flex-col items-center gap-1 transition-colors cursor-pointer ${
                             deviceState.powerSaving
                               ? "bg-amber-500/20 border-amber-500/50 text-amber-300"
                               : "bg-white/5 border-white/10 text-zinc-300"
@@ -344,11 +380,12 @@ export const PhoneSimulator: React.FC<PhoneSimulatorProps> = ({
                         >
                           <Battery className="w-3.5 h-3.5" />
                           <span className="text-[8px]">Power</span>
-                        </button>
+                        </motion.button>
 
-                        <button
+                        <motion.button
+                          whileTap={{ scale: 0.95 }}
                           onClick={toggleAdaptiveBrightness}
-                          className={`p-2 rounded-lg border flex flex-col items-center gap-1 transition-all ${
+                          className={`p-2 rounded-lg border flex flex-col items-center gap-1 transition-colors cursor-pointer ${
                             deviceState.adaptiveBrightness
                               ? "bg-emerald-500/20 border-emerald-500/50 text-emerald-300"
                               : "bg-white/5 border-white/10 text-zinc-300"
@@ -356,15 +393,16 @@ export const PhoneSimulator: React.FC<PhoneSimulatorProps> = ({
                         >
                           <Sun className="w-3.5 h-3.5" />
                           <span className="text-[8px]">Adaptive</span>
-                        </button>
+                        </motion.button>
 
-                        <button
+                        <motion.button
+                          whileTap={{ scale: 0.95 }}
                           onClick={handleRebootSafeMode}
-                          className="p-2 rounded-lg border border-white/10 bg-white/5 hover:bg-rose-500/20 text-zinc-300 flex flex-col items-center gap-1 transition-all"
+                          className="p-2 rounded-lg border border-white/10 bg-white/5 hover:bg-rose-500/20 text-zinc-300 flex flex-col items-center gap-1 transition-colors cursor-pointer"
                         >
                           <Power className="w-3.5 h-3.5 text-rose-400" />
                           <span className="text-[8px]">Safe</span>
-                        </button>
+                        </motion.button>
                       </div>
 
                       {/* Brightness Slider */}
@@ -395,7 +433,7 @@ export const PhoneSimulator: React.FC<PhoneSimulatorProps> = ({
                     <div className="text-center pt-2">
                       <button
                         onClick={() => navigateTo("settings")}
-                        className="w-full py-1.5 rounded-md bg-[#1E56FF] hover:bg-[#2F68FD] text-white text-xs font-medium transition-all"
+                        className="w-full py-1.5 rounded-md bg-[#1E56FF] hover:bg-[#2F68FD] text-white text-xs font-medium transition-colors cursor-pointer"
                       >
                         All Settings
                       </button>
@@ -411,10 +449,10 @@ export const PhoneSimulator: React.FC<PhoneSimulatorProps> = ({
                   {deviceState.screen === "home" && (
                     <motion.div
                       key="home"
-                      initial={{ opacity: 0 }}
-                      animate={{ opacity: 1 }}
-                      exit={{ opacity: 0 }}
-                      transition={screenTransition}
+                      initial={{ opacity: 0, x: 18 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      exit={{ opacity: 0, x: -18 }}
+                      transition={transitions.screenSlide}
                       className="h-full flex flex-col justify-between py-2"
                     >
                       {/* Clock & Weather Widget */}
@@ -434,87 +472,93 @@ export const PhoneSimulator: React.FC<PhoneSimulatorProps> = ({
                         deviceState.darkMode ? "bg-white/[0.04] border-white/10" : "bg-black/[0.03] border-black/10"
                       }`}>
                         <span className="text-[10px]">Search Galaxy...</span>
-                        <Search className="w-3 h-3 text-zinc-400" />
+                        <Search className="w-3.5 h-3.5 text-zinc-400" />
                       </div>
 
-                      {/* Authentic Galaxy App Grid */}
+                      {/* Authentic Galaxy App Grid with Tap micro-motion */}
                       <div className="grid grid-cols-4 gap-2.5 py-1">
-                        <div className="flex flex-col items-center gap-1">
-                          <div className="w-10 h-10 rounded-xl bg-emerald-500 flex items-center justify-center text-white">
+                        <motion.div whileTap={{ scale: 0.92 }} className="flex flex-col items-center gap-1 cursor-pointer">
+                          <div className="w-10 h-10 rounded-xl bg-emerald-500 flex items-center justify-center text-white shadow-sm">
                             <Phone className="w-4 h-4 fill-white" />
                           </div>
                           <span className="text-[9px] text-zinc-400">Phone</span>
-                        </div>
+                        </motion.div>
 
-                        <div className="flex flex-col items-center gap-1">
-                          <div className="w-10 h-10 rounded-xl bg-blue-500 flex items-center justify-center text-white">
+                        <motion.div whileTap={{ scale: 0.92 }} className="flex flex-col items-center gap-1 cursor-pointer">
+                          <div className="w-10 h-10 rounded-xl bg-blue-500 flex items-center justify-center text-white shadow-sm">
                             <MessageSquare className="w-4 h-4 fill-white" />
                           </div>
                           <span className="text-[9px] text-zinc-400">Messages</span>
-                        </div>
+                        </motion.div>
 
-                        <div className="flex flex-col items-center gap-1">
-                          <div className="w-10 h-10 rounded-xl bg-rose-500 flex items-center justify-center text-white">
+                        <motion.div whileTap={{ scale: 0.92 }} className="flex flex-col items-center gap-1 cursor-pointer">
+                          <div className="w-10 h-10 rounded-xl bg-rose-500 flex items-center justify-center text-white shadow-sm">
                             <Camera className="w-4 h-4" />
                           </div>
                           <span className="text-[9px] text-zinc-400">Camera</span>
-                        </div>
+                        </motion.div>
 
-                        <div className="flex flex-col items-center gap-1">
-                          <div className="w-10 h-10 rounded-xl bg-pink-500 flex items-center justify-center text-white">
+                        <motion.div whileTap={{ scale: 0.92 }} className="flex flex-col items-center gap-1 cursor-pointer">
+                          <div className="w-10 h-10 rounded-xl bg-pink-500 flex items-center justify-center text-white shadow-sm">
                             <Image className="w-4 h-4" />
                           </div>
                           <span className="text-[9px] text-zinc-400">Gallery</span>
-                        </div>
+                        </motion.div>
 
-                        <button
+                        <motion.button
+                          whileTap={{ scale: 0.92 }}
                           onClick={() => navigateTo("settings")}
-                          className="flex flex-col items-center gap-1 group"
+                          className="flex flex-col items-center gap-1 group cursor-pointer"
                         >
-                          <div className="w-10 h-10 rounded-xl bg-zinc-700 group-hover:bg-zinc-600 flex items-center justify-center text-zinc-200 transition-colors">
+                          <div className="w-10 h-10 rounded-xl bg-zinc-700 group-hover:bg-zinc-600 flex items-center justify-center text-zinc-200 transition-colors shadow-sm">
                             <Sliders className="w-4 h-4" />
                           </div>
                           <span className="text-[9px] text-zinc-400 group-hover:text-white">Settings</span>
-                        </button>
+                        </motion.button>
 
-                        <button
+                        <motion.button
+                          whileTap={{ scale: 0.92 }}
                           onClick={() => navigateTo("battery")}
-                          className="flex flex-col items-center gap-1 group"
+                          className="flex flex-col items-center gap-1 group cursor-pointer"
                         >
-                          <div className="w-10 h-10 rounded-xl bg-[#1E56FF] group-hover:bg-[#2F68FD] flex items-center justify-center text-white transition-colors">
+                          <div className="w-10 h-10 rounded-xl bg-[#1E56FF] group-hover:bg-[#2F68FD] flex items-center justify-center text-white transition-colors shadow-sm">
                             <Zap className="w-4 h-4 fill-white" />
                           </div>
                           <span className="text-[9px] text-zinc-400 group-hover:text-white">Battery</span>
-                        </button>
+                        </motion.button>
 
-                        <button
+                        <motion.button
+                          whileTap={{ scale: 0.92 }}
                           onClick={() => navigateTo("display")}
-                          className="flex flex-col items-center gap-1 group"
+                          className="flex flex-col items-center gap-1 group cursor-pointer"
                         >
-                          <div className="w-10 h-10 rounded-xl bg-amber-500 flex items-center justify-center text-white transition-colors">
+                          <div className="w-10 h-10 rounded-xl bg-amber-500 flex items-center justify-center text-white transition-colors shadow-sm">
                             <Sun className="w-4 h-4 fill-white" />
                           </div>
                           <span className="text-[9px] text-zinc-400 group-hover:text-white">Display</span>
-                        </button>
+                        </motion.button>
 
-                        <button
+                        <motion.button
+                          whileTap={{ scale: 0.92 }}
                           onClick={() => navigateTo("storage")}
-                          className="flex flex-col items-center gap-1 group"
+                          className="flex flex-col items-center gap-1 group cursor-pointer"
                         >
-                          <div className="w-10 h-10 rounded-xl bg-purple-600 flex items-center justify-center text-white transition-colors">
+                          <div className="w-10 h-10 rounded-xl bg-purple-600 flex items-center justify-center text-white transition-colors shadow-sm">
                             <Trash2 className="w-4 h-4" />
                           </div>
                           <span className="text-[9px] text-zinc-400 group-hover:text-white">Storage</span>
-                        </button>
+                        </motion.button>
                       </div>
 
-                      <button
+                      <motion.button
+                        whileHover={{ scale: 1.01 }}
+                        whileTap={{ scale: 0.98 }}
                         onClick={() => navigateTo("settings")}
-                        className="w-full py-2 rounded-lg bg-[#1E56FF]/15 hover:bg-[#1E56FF]/25 border border-[#1E56FF]/30 text-[#1E56FF] text-xs font-medium flex items-center justify-center gap-1.5 transition-colors"
+                        className="w-full py-2 rounded-lg bg-[#1E56FF]/15 hover:bg-[#1E56FF]/25 border border-[#1E56FF]/30 text-[#1E56FF] text-xs font-medium flex items-center justify-center gap-1.5 transition-colors cursor-pointer"
                       >
                         <Sliders className="w-3.5 h-3.5" />
                         <span>Open Settings</span>
-                      </button>
+                      </motion.button>
                     </motion.div>
                   )}
 
@@ -522,10 +566,10 @@ export const PhoneSimulator: React.FC<PhoneSimulatorProps> = ({
                   {deviceState.screen === "settings" && (
                     <motion.div
                       key="settings"
-                      initial={{ opacity: 0 }}
-                      animate={{ opacity: 1 }}
-                      exit={{ opacity: 0 }}
-                      transition={screenTransition}
+                      initial={{ opacity: 0, x: 18 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      exit={{ opacity: 0, x: -18 }}
+                      transition={transitions.screenSlide}
                       className="space-y-2.5 pb-4"
                     >
                       <div className="pt-1 pb-0.5">
@@ -548,9 +592,10 @@ export const PhoneSimulator: React.FC<PhoneSimulatorProps> = ({
                       </div>
 
                       <div className="space-y-1">
-                        <button
+                        <motion.button
+                          whileTap={{ scale: 0.98 }}
                           onClick={() => navigateTo("display")}
-                          className={`w-full p-2.5 rounded-xl border flex items-center justify-between text-left transition-colors ${
+                          className={`w-full p-2.5 rounded-xl border flex items-center justify-between text-left transition-colors cursor-pointer ${
                             deviceState.darkMode ? "bg-white/[0.03] hover:bg-white/[0.06] border-white/10" : "bg-black/[0.02] hover:bg-black/[0.05] border-black/10"
                           }`}
                         >
@@ -564,11 +609,12 @@ export const PhoneSimulator: React.FC<PhoneSimulatorProps> = ({
                             </div>
                           </div>
                           <ChevronRight className="w-3.5 h-3.5 text-zinc-400" />
-                        </button>
+                        </motion.button>
 
-                        <button
+                        <motion.button
+                          whileTap={{ scale: 0.98 }}
                           onClick={() => navigateTo("battery")}
-                          className={`w-full p-2.5 rounded-xl border flex items-center justify-between text-left transition-colors ${
+                          className={`w-full p-2.5 rounded-xl border flex items-center justify-between text-left transition-colors cursor-pointer ${
                             deviceState.darkMode ? "bg-white/[0.03] hover:bg-white/[0.06] border-white/10" : "bg-black/[0.02] hover:bg-black/[0.05] border-black/10"
                           }`}
                         >
@@ -582,11 +628,12 @@ export const PhoneSimulator: React.FC<PhoneSimulatorProps> = ({
                             </div>
                           </div>
                           <ChevronRight className="w-3.5 h-3.5 text-zinc-400" />
-                        </button>
+                        </motion.button>
 
-                        <button
+                        <motion.button
+                          whileTap={{ scale: 0.98 }}
                           onClick={() => navigateTo("storage")}
-                          className={`w-full p-2.5 rounded-xl border flex items-center justify-between text-left transition-colors ${
+                          className={`w-full p-2.5 rounded-xl border flex items-center justify-between text-left transition-colors cursor-pointer ${
                             deviceState.darkMode ? "bg-white/[0.03] hover:bg-white/[0.06] border-white/10" : "bg-black/[0.02] hover:bg-black/[0.05] border-black/10"
                           }`}
                         >
@@ -600,7 +647,7 @@ export const PhoneSimulator: React.FC<PhoneSimulatorProps> = ({
                             </div>
                           </div>
                           <ChevronRight className="w-3.5 h-3.5 text-zinc-400" />
-                        </button>
+                        </motion.button>
                       </div>
                     </motion.div>
                   )}
@@ -609,16 +656,16 @@ export const PhoneSimulator: React.FC<PhoneSimulatorProps> = ({
                   {deviceState.screen === "display" && (
                     <motion.div
                       key="display"
-                      initial={{ opacity: 0 }}
-                      animate={{ opacity: 1 }}
-                      exit={{ opacity: 0 }}
-                      transition={screenTransition}
+                      initial={{ opacity: 0, x: 18 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      exit={{ opacity: 0, x: -18 }}
+                      transition={transitions.screenSlide}
                       className="space-y-3 pb-4"
                     >
                       <div className="flex items-center gap-2 pt-1">
                         <button
                           onClick={() => navigateTo("settings")}
-                          className="p-1 rounded-md hover:bg-white/10 text-zinc-400 transition-colors"
+                          className="p-1 rounded-md hover:bg-white/10 text-zinc-400 transition-colors cursor-pointer"
                         >
                           <ArrowLeft className="w-3.5 h-3.5" />
                         </button>
@@ -627,30 +674,48 @@ export const PhoneSimulator: React.FC<PhoneSimulatorProps> = ({
                         </span>
                       </div>
 
-                      {/* Dark / Light Mode Switcher */}
-                      <div className="grid grid-cols-2 gap-2">
+                      {/* Dark / Light Mode Switcher with shared sliding pill */}
+                      <div className="grid grid-cols-2 gap-2 relative">
                         <button
                           onClick={() => toggleDarkMode(false)}
-                          className={`p-2.5 rounded-xl border text-center transition-all ${
+                          className={`relative p-2.5 rounded-xl border text-center transition-colors cursor-pointer ${
                             !deviceState.darkMode
-                              ? "bg-white border-[#1E56FF] ring-1 ring-[#1E56FF] text-zinc-900 shadow-sm"
-                              : "bg-white/[0.04] border-white/10 text-zinc-400"
+                              ? "border-[#1E56FF] text-zinc-900 font-semibold"
+                              : "border-white/10 text-zinc-400 bg-white/[0.04]"
                           }`}
                         >
-                          <Sun className="w-4 h-4 mx-auto mb-1 text-amber-500" />
-                          <span className="text-xs font-medium block">Light</span>
+                          {!deviceState.darkMode && (
+                            <motion.div
+                              layoutId="themePill"
+                              className="absolute inset-0 bg-white rounded-xl shadow-sm"
+                              transition={springs.pill}
+                            />
+                          )}
+                          <span className="relative z-10 flex flex-col items-center">
+                            <Sun className="w-4 h-4 mx-auto mb-1 text-amber-500" />
+                            <span className="text-xs font-medium block">Light</span>
+                          </span>
                         </button>
 
                         <button
                           onClick={() => toggleDarkMode(true)}
-                          className={`p-2.5 rounded-xl border text-center transition-all ${
+                          className={`relative p-2.5 rounded-xl border text-center transition-colors cursor-pointer ${
                             deviceState.darkMode
-                              ? "bg-[#1E56FF]/20 border-[#1E56FF] ring-1 ring-[#1E56FF] text-white shadow-sm"
-                              : "bg-white/[0.04] border-white/10 text-zinc-400"
+                              ? "border-[#1E56FF] text-white font-semibold"
+                              : "border-white/10 text-zinc-400 bg-white/[0.04]"
                           }`}
                         >
-                          <Moon className="w-4 h-4 mx-auto mb-1 text-blue-400" />
-                          <span className="text-xs font-medium block">Dark</span>
+                          {deviceState.darkMode && (
+                            <motion.div
+                              layoutId="themePill"
+                              className="absolute inset-0 bg-[#1E56FF] rounded-xl shadow-sm"
+                              transition={springs.pill}
+                            />
+                          )}
+                          <span className="relative z-10 flex flex-col items-center">
+                            <Moon className="w-4 h-4 mx-auto mb-1 text-blue-200" />
+                            <span className="text-xs font-medium block">Dark</span>
+                          </span>
                         </button>
                       </div>
 
@@ -680,7 +745,7 @@ export const PhoneSimulator: React.FC<PhoneSimulatorProps> = ({
                       {/* Adaptive Brightness Toggle */}
                       <div
                         onClick={toggleAdaptiveBrightness}
-                        className={`p-2.5 rounded-xl border flex items-center justify-between cursor-pointer ${
+                        className={`p-2.5 rounded-xl border flex items-center justify-between cursor-pointer transition-colors ${
                           deviceState.darkMode ? "bg-white/[0.04] border-white/10" : "bg-black/[0.03] border-black/10"
                         }`}
                       >
@@ -693,7 +758,7 @@ export const PhoneSimulator: React.FC<PhoneSimulatorProps> = ({
                             deviceState.adaptiveBrightness ? "bg-[#1E56FF] justify-end" : "bg-zinc-600 justify-start"
                           }`}
                         >
-                          <div className="w-4 h-4 rounded-full bg-white shadow-sm" />
+                          <motion.div layout className="w-4 h-4 rounded-full bg-white shadow-sm" />
                         </div>
                       </div>
                     </motion.div>
@@ -703,16 +768,16 @@ export const PhoneSimulator: React.FC<PhoneSimulatorProps> = ({
                   {deviceState.screen === "battery" && (
                     <motion.div
                       key="battery"
-                      initial={{ opacity: 0 }}
-                      animate={{ opacity: 1 }}
-                      exit={{ opacity: 0 }}
-                      transition={screenTransition}
+                      initial={{ opacity: 0, x: 18 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      exit={{ opacity: 0, x: -18 }}
+                      transition={transitions.screenSlide}
                       className="space-y-3 pb-4"
                     >
                       <div className="flex items-center gap-2 pt-1">
                         <button
                           onClick={() => navigateTo("settings")}
-                          className="p-1 rounded-md hover:bg-white/10 text-zinc-400 transition-colors"
+                          className="p-1 rounded-md hover:bg-white/10 text-zinc-400 transition-colors cursor-pointer"
                         >
                           <ArrowLeft className="w-3.5 h-3.5" />
                         </button>
@@ -721,8 +786,8 @@ export const PhoneSimulator: React.FC<PhoneSimulatorProps> = ({
                         </span>
                       </div>
 
-                      {/* Circular Score Meter */}
-                      <div className={`p-4 rounded-xl border text-center flex flex-col items-center ${
+                      {/* Circular Score Meter with smooth rotating pulse during optimization */}
+                      <div className={`p-4 rounded-xl border text-center flex flex-col items-center relative overflow-hidden ${
                         deviceState.darkMode ? "bg-white/[0.04] border-white/10" : "bg-black/[0.03] border-black/10"
                       }`}>
                         <div className="relative w-20 h-20 flex items-center justify-center">
@@ -735,7 +800,7 @@ export const PhoneSimulator: React.FC<PhoneSimulatorProps> = ({
                               d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"
                             />
                             <path
-                              className="text-emerald-500 transition-all duration-700"
+                              className={`${isOptimizing ? "text-[#1E56FF]" : "text-emerald-500"} transition-all duration-500`}
                               strokeDasharray={`${deviceCareScore}, 100`}
                               strokeWidth="3.5"
                               strokeLinecap="round"
@@ -745,7 +810,14 @@ export const PhoneSimulator: React.FC<PhoneSimulatorProps> = ({
                             />
                           </svg>
                           <div className="absolute flex flex-col items-center">
-                            <span className="text-xl font-bold font-mono">{deviceCareScore}</span>
+                            <motion.span
+                              key={deviceCareScore}
+                              initial={{ scale: 0.8 }}
+                              animate={{ scale: 1 }}
+                              className="text-xl font-bold font-mono"
+                            >
+                              {deviceCareScore}
+                            </motion.span>
                             <span className="text-[8px] text-zinc-400 uppercase font-semibold">Score</span>
                           </div>
                         </div>
@@ -757,23 +829,25 @@ export const PhoneSimulator: React.FC<PhoneSimulatorProps> = ({
                           {deviceCareScore === 100 ? "No issues detected" : "1 app consuming background power"}
                         </span>
 
-                        <button
+                        <motion.button
+                          whileHover={{ scale: 1.02 }}
+                          whileTap={{ scale: 0.96 }}
                           onClick={handleOptimizeNow}
                           disabled={isOptimizing || deviceCareScore === 100}
-                          className={`mt-3 w-full py-2 rounded-lg text-xs font-medium transition-all ${
+                          className={`mt-3 w-full py-2 rounded-lg text-xs font-medium transition-colors cursor-pointer ${
                             deviceCareScore === 100
                               ? "bg-emerald-500/15 text-emerald-400 border border-emerald-500/30"
                               : "bg-[#1E56FF] hover:bg-[#2F68FD] text-white active:scale-95 shadow-sm"
                           }`}
                         >
                           {isOptimizing ? "Optimizing..." : deviceCareScore === 100 ? "Optimized" : "Optimize Now"}
-                        </button>
+                        </motion.button>
                       </div>
 
                       {/* Power Saving Switch */}
                       <div
                         onClick={togglePowerSaving}
-                        className={`p-2.5 rounded-xl border flex items-center justify-between cursor-pointer ${
+                        className={`p-2.5 rounded-xl border flex items-center justify-between cursor-pointer transition-colors ${
                           deviceState.darkMode ? "bg-white/[0.04] border-white/10" : "bg-black/[0.03] border-black/10"
                         }`}
                       >
@@ -786,14 +860,14 @@ export const PhoneSimulator: React.FC<PhoneSimulatorProps> = ({
                             deviceState.powerSaving ? "bg-[#1E56FF] justify-end" : "bg-zinc-600 justify-start"
                           }`}
                         >
-                          <div className="w-4 h-4 rounded-full bg-white shadow-sm" />
+                          <motion.div layout className="w-4 h-4 rounded-full bg-white shadow-sm" />
                         </div>
                       </div>
 
                       {/* Protect Battery Switch */}
                       <div
                         onClick={toggleProtectBattery}
-                        className={`p-2.5 rounded-xl border flex items-center justify-between cursor-pointer ${
+                        className={`p-2.5 rounded-xl border flex items-center justify-between cursor-pointer transition-colors ${
                           deviceState.darkMode ? "bg-white/[0.04] border-white/10" : "bg-black/[0.03] border-black/10"
                         }`}
                       >
@@ -806,7 +880,7 @@ export const PhoneSimulator: React.FC<PhoneSimulatorProps> = ({
                             deviceState.protectBattery ? "bg-emerald-500 justify-end" : "bg-zinc-600 justify-start"
                           }`}
                         >
-                          <div className="w-4 h-4 rounded-full bg-white shadow-sm" />
+                          <motion.div layout className="w-4 h-4 rounded-full bg-white shadow-sm" />
                         </div>
                       </div>
                     </motion.div>
@@ -816,16 +890,16 @@ export const PhoneSimulator: React.FC<PhoneSimulatorProps> = ({
                   {deviceState.screen === "storage" && (
                     <motion.div
                       key="storage"
-                      initial={{ opacity: 0 }}
-                      animate={{ opacity: 1 }}
-                      exit={{ opacity: 0 }}
-                      transition={screenTransition}
+                      initial={{ opacity: 0, x: 18 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      exit={{ opacity: 0, x: -18 }}
+                      transition={transitions.screenSlide}
                       className="space-y-3 pb-4"
                     >
                       <div className="flex items-center gap-2 pt-1">
                         <button
                           onClick={() => navigateTo("settings")}
-                          className="p-1 rounded-md hover:bg-white/10 text-zinc-400 transition-colors"
+                          className="p-1 rounded-md hover:bg-white/10 text-zinc-400 transition-colors cursor-pointer"
                         >
                           <ArrowLeft className="w-3.5 h-3.5" />
                         </button>
@@ -860,16 +934,23 @@ export const PhoneSimulator: React.FC<PhoneSimulatorProps> = ({
                         </div>
                         <div className="flex justify-between text-[10px] font-semibold text-[#1E56FF] pt-1 border-t border-white/10">
                           <span>Cached Files:</span>
-                          <span className="font-mono">
+                          <motion.span
+                            key={deviceState.cacheSizeMb}
+                            initial={{ scale: 1.15 }}
+                            animate={{ scale: 1 }}
+                            className="font-mono"
+                          >
                             {deviceState.cacheSizeMb > 0 ? `${deviceState.cacheSizeMb}.0 MB` : "0.0 MB (Cleared)"}
-                          </span>
+                          </motion.span>
                         </div>
                       </div>
 
-                      <button
+                      <motion.button
+                        whileHover={{ scale: 1.02 }}
+                        whileTap={{ scale: 0.96 }}
                         onClick={handleClearCache}
                         disabled={deviceState.cacheSizeMb === 0}
-                        className={`w-full py-2.5 rounded-lg border text-xs font-medium flex items-center justify-center gap-1.5 transition-all ${
+                        className={`w-full py-2.5 rounded-lg border text-xs font-medium flex items-center justify-center gap-1.5 transition-colors cursor-pointer ${
                           deviceState.cacheSizeMb > 0
                             ? "bg-[#1E56FF] hover:bg-[#2F68FD] border-[#1E56FF] text-white active:scale-95 shadow-sm"
                             : "bg-emerald-500/15 border-emerald-500/30 text-emerald-400 cursor-default"
@@ -886,7 +967,7 @@ export const PhoneSimulator: React.FC<PhoneSimulatorProps> = ({
                             <span>Cache Cleared</span>
                           </>
                         )}
-                      </button>
+                      </motion.button>
                     </motion.div>
                   )}
 

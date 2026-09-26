@@ -270,19 +270,26 @@ function FixFlowApp() {
               {/* Screen Preview Switcher */}
               <div className="w-full pt-3 mt-3 border-t border-white/[0.05] flex items-center justify-between text-xs">
                 <span className="text-[11px] text-zinc-400">Quick Jump:</span>
-                <div className="flex gap-1">
+                <div className="flex gap-1 p-0.5 bg-[#0E1013] rounded-lg border border-white/[0.06]">
                   {(['home', 'display', 'battery', 'storage'] as OneUIScreen[]).map((scr) => (
                     <button
                       key={scr}
                       data-testid={`quick-jump-${scr}`}
                       onClick={() => setDeviceState((p) => ({ ...p, screen: scr, isLocked: false }))}
-                      className={`px-2.5 py-1 rounded text-[10px] font-medium capitalize transition-all ${
+                      className={`relative px-2.5 py-1 rounded text-[10px] font-medium capitalize transition-colors cursor-pointer ${
                         deviceState.screen === scr
-                          ? 'bg-[#1E56FF] text-white shadow-sm'
-                          : 'bg-[#191C23] text-zinc-400 hover:text-white hover:bg-[#20242D]'
+                          ? 'text-white'
+                          : 'text-zinc-400 hover:text-white'
                       }`}
                     >
-                      {scr}
+                      {deviceState.screen === scr && (
+                        <motion.div
+                          layoutId="quickJumpPill"
+                          className="absolute inset-0 bg-[#1E56FF] rounded shadow-sm"
+                          transition={springs.pill}
+                        />
+                      )}
+                      <span className="relative z-10">{scr}</span>
                     </button>
                   ))}
                 </div>

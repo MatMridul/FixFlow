@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 import {
   ExternalLink,
   CheckCircle,
@@ -9,6 +10,12 @@ import {
   Square,
 } from "lucide-react";
 import type { ActionPayload, GoalPayload, SimulatedDeviceState, OneUIScreen } from "../types/engine";
+import {
+  listContainerVariants,
+  cardItemVariants,
+  springs,
+  microInteractions,
+} from "../theme/motion";
 
 interface ActionCardStreamProps {
   goal: GoalPayload | null;
@@ -47,7 +54,6 @@ export const ActionCardStream: React.FC<ActionCardStreamProps> = ({
     setTimeout(() => setCopiedLink(null), 2000);
   };
 
-  // Determine target One UI screen from action name and steps
   const inferTargetScreen = (action: ActionPayload): OneUIScreen => {
     const text = `${action.actionName} ${action.description} ${action.stepGroups.flatMap((sg) => sg.steps).join(" ")}`.toLowerCase();
     if (text.includes("safe mode") || text.includes("reboot") || text.includes("restart")) return "safe_mode";
@@ -67,11 +73,16 @@ export const ActionCardStream: React.FC<ActionCardStreamProps> = ({
   return (
     <div className="w-full space-y-3">
       {/* Plan Header */}
-      <div className="p-4 rounded-xl bg-[#13151A] border border-white/[0.07] space-y-2.5">
+      <motion.div
+        initial={{ opacity: 0, y: 8 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={springs.snappy}
+        className="p-4 rounded-xl bg-[#13151A] border border-white/[0.07] space-y-2.5 shadow-sm"
+      >
         <div className="flex flex-wrap items-center justify-between gap-2">
           <div>
             <div className="flex items-center gap-2">
-              <span className="w-1.5 h-1.5 rounded-full bg-[#1E56FF]" />
+              <span className="w-1.5 h-1.5 rounded-full bg-[#1E56FF] animate-pulse" />
               <span className="text-[11px] font-semibold text-zinc-400 uppercase tracking-wider block">
                 Guided Plan ({goal.actions.length} {goal.actions.length === 1 ? "Action" : "Actions"})
               </span>
@@ -87,44 +98,53 @@ export const ActionCardStream: React.FC<ActionCardStreamProps> = ({
           </div>
         </div>
 
-        {/* Progress Bar */}
+        {/* Animated Progress Bar */}
         <div className="space-y-1 pt-2 border-t border-white/[0.05]">
           <div className="flex justify-between text-[11px] text-zinc-400">
             <span>Troubleshooting Progress</span>
             <span className="font-mono text-zinc-200">{progressPercent}% Completed</span>
           </div>
-          <div className="w-full h-1 rounded-full bg-[#0E1013] overflow-hidden">
-            <div
-              className="h-full bg-[#1E56FF] rounded-full transition-all duration-300"
-              style={{ width: `${progressPercent}%` }}
+          <div className="w-full h-1.5 rounded-full bg-[#0E1013] overflow-hidden">
+            <motion.div
+              className="h-full bg-gradient-to-r from-[#1E56FF] to-[#2F68FD] rounded-full"
+              initial={{ width: 0 }}
+              animate={{ width: `${progressPercent}%` }}
+              transition={{ type: "spring", stiffness: 300, damping: 30 }}
             />
           </div>
         </div>
-      </div>
+      </motion.div>
 
-      {/* Action Cards Stream */}
-      <div className="space-y-2.5">
+      {/* Cascading Action Cards Stream with Stagger */}
+      <motion.div
+        variants={listContainerVariants}
+        initial="hidden"
+        animate="visible"
+        key={goal.title}
+        className="space-y-2.5"
+      >
         {goal.actions.map((action, actionIdx) => {
           const targetScreen = inferTargetScreen(action);
           const isCurrentScreen = deviceState.screen === targetScreen;
           const isAutoSkipped = action.actionName.toLowerCase().includes("brightness") && deviceState.adaptiveBrightness;
 
           return (
-            <div
+            <motion.div
               key={actionIdx}
+              variants={cardItemVariants}
               className={`p-4 rounded-xl border transition-all ${
                 isCurrentScreen
-                  ? "bg-[#13151A] border-[#1E56FF]/40 shadow-sm"
-                  : "bg-[#13151A] border-white/[0.07] hover:border-white/[0.12]"
+                  ? "bg-[#13151A] border-[#1E56FF]/50 shadow-[0_0_20px_-8px_rgba(30,86,255,0.3)]"
+                  : "bg-[#13151A] border-white/[0.07] hover:border-white/[0.14]"
               }`}
             >
               {/* Card Header */}
               <div className="flex items-start justify-between gap-3">
                 <div className="flex items-start gap-3">
                   <div
-                    className={`w-6 h-6 rounded-md flex items-center justify-center font-mono text-xs font-semibold shrink-0 mt-0.5 ${
+                    className={`w-6 h-6 rounded-md flex items-center justify-center font-mono text-xs font-semibold shrink-0 mt-0.5 transition-colors ${
                       isCurrentScreen
-                        ? "bg-[#1E56FF] text-white"
+                        ? "bg-[#1E56FF] text-white shadow-sm"
                         : "bg-[#191C23] text-zinc-400 border border-white/[0.06]"
                     }`}
                   >
@@ -146,12 +166,21 @@ export const ActionCardStream: React.FC<ActionCardStreamProps> = ({
               </div>
 
               {/* Already Active Notice */}
-              {isAutoSkipped && (
-                <div className="my-2.5 px-3 py-1.5 rounded-lg bg-emerald-500/10 border border-emerald-500/20 flex items-center gap-2 text-xs text-emerald-400">
-                  <CheckCircle className="w-3.5 h-3.5 shrink-0" />
-                  <span>Already Configured: Setting is active on your device.</span>
-                </div>
-              )}
+              <AnimatePresence>
+                {isAutoSkipped && (
+                  <motion.div
+                    initial={{ opacity: 0, height: 0 }}
+                    animate={{ opacity: 1, height: "auto" }}
+                    exit={{ opacity: 0, height: 0 }}
+                    className="overflow-hidden"
+                  >
+                    <div className="my-2.5 px-3 py-1.5 rounded-lg bg-emerald-500/10 border border-emerald-500/20 flex items-center gap-2 text-xs text-emerald-400">
+                      <CheckCircle className="w-3.5 h-3.5 shrink-0" />
+                      <span>Already Configured: Setting is active on your device.</span>
+                    </div>
+                  </motion.div>
+                )}
+              </AnimatePresence>
 
               {/* Sub-Steps */}
               <div className="space-y-1.5 mt-3 pt-2.5 border-t border-white/[0.05]">
@@ -162,8 +191,9 @@ export const ActionCardStream: React.FC<ActionCardStreamProps> = ({
                       const isDone = !!completedSteps[stepKey];
 
                       return (
-                        <div
+                        <motion.div
                           key={stepIdx}
+                          whileHover={{ x: 2 }}
                           onClick={() => toggleStep(stepKey)}
                           className={`flex items-start gap-2 p-1.5 rounded-md cursor-pointer transition-colors text-xs select-none ${
                             isDone
@@ -171,7 +201,7 @@ export const ActionCardStream: React.FC<ActionCardStreamProps> = ({
                               : "hover:bg-[#191C23] text-zinc-300"
                           }`}
                         >
-                          <div className="mt-0.5 shrink-0 text-zinc-400">
+                          <div className="mt-0.5 shrink-0 text-zinc-400 transition-transform">
                             {isDone ? (
                               <CheckSquare className="w-3.5 h-3.5 text-emerald-400" />
                             ) : (
@@ -179,39 +209,45 @@ export const ActionCardStream: React.FC<ActionCardStreamProps> = ({
                             )}
                           </div>
                           <span className="leading-relaxed">{stepText}</span>
-                        </div>
+                        </motion.div>
                       );
                     })}
 
                     {/* Interactive "Simulate on Galaxy S24" and Deeplink Actions */}
                     <div className="pt-1.5 flex flex-wrap items-center gap-2">
-                      <button
+                      <motion.button
+                        whileHover={microInteractions.hoverButton}
+                        whileTap={microInteractions.tap}
                         onClick={() => {
                           const deeplink = sg.actionableDeeplink?.deeplink || `settings://${targetScreen}`;
                           onTriggerDeeplink(deeplink, targetScreen, action.actionName);
                           onSuccessToast(`Applied "${action.actionName}" on your Galaxy`);
                         }}
-                        className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-[#1E56FF] hover:bg-[#2F68FD] text-white font-medium text-xs transition-all active:scale-95 shadow-sm"
+                        className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-[#1E56FF] hover:bg-[#2F68FD] text-white font-medium text-xs transition-colors active:scale-95 shadow-sm cursor-pointer"
                       >
                         <Play className="w-3 h-3 fill-current" />
                         <span>Simulate on Galaxy S24</span>
-                      </button>
+                      </motion.button>
 
                       {sg.actionableDeeplink && (
                         <>
-                          <button
+                          <motion.button
+                            whileHover={microInteractions.hoverButton}
+                            whileTap={microInteractions.tap}
                             onClick={() => {
                               onTriggerDeeplink(sg.actionableDeeplink!.deeplink, targetScreen, action.actionName);
                             }}
-                            className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg bg-[#191C23] hover:bg-[#20242D] text-zinc-300 text-xs border border-white/[0.07] transition-all"
+                            className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg bg-[#191C23] hover:bg-[#20242D] text-zinc-300 text-xs border border-white/[0.07] transition-colors cursor-pointer"
                           >
                             <ExternalLink className="w-3 h-3 text-zinc-400" />
                             <span>{sg.actionableDeeplink.message || "Open in Settings"}</span>
-                          </button>
+                          </motion.button>
 
-                          <button
+                          <motion.button
+                            whileHover={microInteractions.hoverButton}
+                            whileTap={microInteractions.tap}
                             onClick={() => handleCopy(sg.actionableDeeplink!.deeplink)}
-                            className="px-2 py-1.5 rounded-lg bg-[#191C23] hover:bg-[#20242D] text-zinc-400 hover:text-white border border-white/[0.07] transition-all text-xs flex items-center gap-1"
+                            className="px-2 py-1.5 rounded-lg bg-[#191C23] hover:bg-[#20242D] text-zinc-400 hover:text-white border border-white/[0.07] transition-colors text-xs flex items-center gap-1 cursor-pointer"
                             title="Copy Direct Settings Link"
                           >
                             {copiedLink === sg.actionableDeeplink.deeplink ? (
@@ -225,17 +261,17 @@ export const ActionCardStream: React.FC<ActionCardStreamProps> = ({
                                 <span className="text-[11px]">Copy Link</span>
                               </>
                             )}
-                          </button>
+                          </motion.button>
                         </>
                       )}
                     </div>
                   </div>
                 ))}
               </div>
-            </div>
+            </motion.div>
           );
         })}
-      </div>
+      </motion.div>
     </div>
   );
 };
