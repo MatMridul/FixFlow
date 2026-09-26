@@ -80,3 +80,4 @@ tmp/
 .agents/
 graphify-out/
 .graphify*
+FixFlow_Conversation_*.md

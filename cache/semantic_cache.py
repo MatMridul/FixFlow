@@ -123,7 +123,7 @@ class SemanticCache:
         best_goal_data = None
         best_hash = None
 
-        for item_hash, item_vec, item_goal in cached_entries:
+        for item_hash, item_vec, item_goal, *rest in cached_entries:
             sim = cosine_similarity(query_vec, item_vec)
             if sim > best_sim:
                 best_sim = sim

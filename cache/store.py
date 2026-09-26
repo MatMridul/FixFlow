@@ -47,7 +47,7 @@ class CacheStore:
         """Exact lookup by SHA-256 hash."""
         with self._get_connection() as conn:
             cursor = conn.execute(
-                "SELECT raw_query, normalized_query, embedding_json, goal_payload, hit_count FROM semantic_cache WHERE query_hash = ?",
+                "SELECT raw_query, normalized_query, embedding_json, goal_payload, hit_count, signature_json FROM semantic_cache WHERE query_hash = ?",
                 (query_hash,)
             )
             row = cursor.fetchone()
@@ -62,25 +62,28 @@ class CacheStore:
                     "embedding": json.loads(row[2]) if row[2] else None,
                     "goal_payload": json.loads(row[3]),
                     "hit_count": row[4] + 1,
+                    "signature": json.loads(row[5]) if row[5] else None,
                 }
         return None
 
-    def get_all_embeddings(self) -> List[Tuple[str, List[float], Dict[str, Any]]]:
-        """Retrieve all cached items with embeddings for vector search."""
+    def get_all_embeddings(self) -> List[Tuple[str, List[float], Dict[str, Any], Optional[Dict[str, Any]]]]:
+        """Retrieve all cached items with embeddings and signatures for vector search."""
         results = []
         with self._get_connection() as conn:
             cursor = conn.execute(
-                "SELECT query_hash, embedding_json, goal_payload FROM semantic_cache WHERE embedding_json IS NOT NULL"
+                "SELECT query_hash, embedding_json, goal_payload, signature_json FROM semantic_cache WHERE embedding_json IS NOT NULL"
             )
             for row in cursor.fetchall():
-                q_hash, emb_json, goal_json = row
+                q_hash, emb_json, goal_json, sig_json = row
                 try:
                     emb = json.loads(emb_json)
                     goal = json.loads(goal_json)
-                    results.append((q_hash, emb, goal))
+                    sig = json.loads(sig_json) if sig_json else None
+                    results.append((q_hash, emb, goal, sig))
                 except Exception:
                     continue
         return results
+
 
     def save(
         self,
