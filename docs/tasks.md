@@ -87,7 +87,7 @@
 
 *Goal: Implement and measure Mridul's three key architectural novelties (N1, N2, N5).*
 
-- [ ] **Task A.1.1 — Novelty N2: Intent-Signature Gated Cache (False-Hit Protection)**
+- [x] **Task A.1.1 — Novelty N2: Intent-Signature Gated Cache (False-Hit Protection)**
   - **Branch:** `feature/mridul-n2-intent-signature`
   - **Files:** `enrichment/intent_signature.py`, `cache/gated_cache.py`
   - **Spec Scope:**
