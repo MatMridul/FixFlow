@@ -75,23 +75,28 @@ class CompositionalCache(GatedSemanticCache):
     def get_compound(self, query: str) -> CompositionalCacheResult:
         """
         Evaluate single or compound queries compositionally.
+        1. Fast-Path: Check if the full query hits directly in cache (exact/semantic).
+        2. Compositional Path: If miss, decompose into sub-intents and evaluate per-clause hits.
         """
         start_time = time.perf_counter()
-        decomposed = decompose_query_intents(query)
 
-        # Single intent path: fallback directly to base gated lookup
-        if len(decomposed) <= 1:
-            base_res = self.get(query)
+        # 1. Primary Full-Query Fast-Path Lookup
+        full_res = self.get(query)
+        if full_res.hit and full_res.goal is not None:
             latency_ms = (time.perf_counter() - start_time) * 1000.0
-            if base_res.hit and base_res.goal:
-                return CompositionalCacheResult(
-                    hit=True,
-                    partial_hit=False,
-                    hit_type=f"single_{base_res.hit_type}",
-                    goals=[base_res.goal],
-                    missing_clauses=[],
-                    latency_ms=round(latency_ms, 2),
-                )
+            return CompositionalCacheResult(
+                hit=True,
+                partial_hit=False,
+                hit_type=f"full_{full_res.hit_type}",
+                goals=[full_res.goal],
+                missing_clauses=[],
+                latency_ms=round(latency_ms, 2),
+            )
+
+        # 2. Compositional Multi-Intent Lookup
+        decomposed = decompose_query_intents(query)
+        if len(decomposed) <= 1:
+            latency_ms = (time.perf_counter() - start_time) * 1000.0
             return CompositionalCacheResult(
                 hit=False,
                 partial_hit=False,
