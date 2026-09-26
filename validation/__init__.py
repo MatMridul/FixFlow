@@ -17,6 +17,7 @@ from validation.repair import (
     programmatic_repair_goal,
     repair_goal_or_json,
 )
+from validation.calibrator import calibrate_score
 from validation.schema_validator import ValidationReport, validate_goal, validate_response
 from validation.scrubber import contains_urls, scrub_goal, scrub_urls
 
@@ -41,5 +42,7 @@ __all__ = [
     "construct_repair_prompt",
     "programmatic_repair_goal",
     "repair_goal_or_json",
+    "calibrate_score",
 ]
+
 

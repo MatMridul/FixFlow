@@ -11,8 +11,8 @@ from api.models import (
     TroubleshootResponse,
 )
 from cache import SemanticCache
-from extraction import StructureExtractor
-from validation import repair_goal_or_json, validate_goal
+from extraction import StructureExtractor, filter_provenance
+from validation import calibrate_score, repair_goal_or_json, validate_goal
 
 router = APIRouter()
 
@@ -41,7 +41,8 @@ def troubleshoot(payload: TroubleshootRequest, request: Request) -> Troubleshoot
     - Level 1 & 2 Cache lookup.
     - If hit: return immediately with cost_usd = 0.0.
     - If miss without SIIS: return contexts: [] and fallback = 'no_siis_context'.
-    - If miss with SIIS: cold path extraction, validation, repair, cache write, and return.
+    - If miss with SIIS: cold path extraction, provenance filtering, resolution, validation,
+      calibration, cache write, and return.
     """
     start_time = time.perf_counter()
     cache: Optional[SemanticCache] = getattr(request.app.state, "cache", None)
@@ -104,6 +105,24 @@ def troubleshoot(payload: TroubleshootRequest, request: Request) -> Troubleshoot
             ),
         )
 
+    # 3.1 Provenance Filtering (Novelty N5: Hallucination elimination)
+    siis_text = f"{payload.siis_response.title or ''}. {payload.siis_response.content or ''}"
+    goal, grounding_coverage, _ = filter_provenance(goal, siis_text, threshold=0.15)
+
+    if not goal.actions:
+        latency = (time.perf_counter() - start_time) * 1000.0
+        return TroubleshootResponse(
+            query=payload.query,
+            response=ContextDeeplinkResponse(contexts=[]),
+            meta=MetaBlock(
+                latency_ms=round(latency, 2),
+                cache_hit=False,
+                model="fixflow-provenance-filter",
+                cost_usd=0.001,
+                fallback="no_match",
+            ),
+        )
+
     # 4. Dev B Hook: Catalog Screen Resolution & Deeplink Binding (if registered)
     if resolver_fn is not None:
         try:
@@ -117,6 +136,30 @@ def troubleshoot(payload: TroubleshootRequest, request: Request) -> Troubleshoot
         repaired_goal, repair_report = repair_goal_or_json(goal)
         if repaired_goal is not None and repair_report.is_valid:
             goal = repaired_goal
+            report = repair_report
+
+    # 5.1 Evidence-Calibrated Confidence Scoring (Novelty N5)
+    validator_pass_rate = 1.0 if report.is_valid else max(0.0, 1.0 - (len(report.violations) * 0.15))
+    goal.score = calibrate_score(
+        grounding_coverage=grounding_coverage,
+        validator_pass_rate=validator_pass_rate,
+        retrieval_margin=1.0,
+        path_alignment=1.0,
+    )
+
+    if goal.score < 0.25:
+        latency = (time.perf_counter() - start_time) * 1000.0
+        return TroubleshootResponse(
+            query=payload.query,
+            response=ContextDeeplinkResponse(contexts=[]),
+            meta=MetaBlock(
+                latency_ms=round(latency, 2),
+                cache_hit=False,
+                model="fixflow-calibrator",
+                cost_usd=0.001,
+                fallback="no_match",
+            ),
+        )
 
     # 6. Update Cache with verified Goal
     if cache is not None:
@@ -134,3 +177,4 @@ def troubleshoot(payload: TroubleshootRequest, request: Request) -> Troubleshoot
             fallback=None,
         ),
     )
+

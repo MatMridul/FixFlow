@@ -97,7 +97,7 @@
     - Gated Cache Rule: Cache hit requires **both** cosine similarity $\ge \tau$ **AND** compatible signature (`polarity` match is mandatory).
   - **Acceptance Criteria:** Correctly rejects near-miss queries (*"battery draining fast"* vs *"battery not charging"*); false-hit rate drops to 0% on adversarial set.
 
-- [ ] **Task A.1.2 — Novelty N5: Step Provenance Bipartite Filter & Score Calibrator**
+- [x] **Task A.1.2 — Novelty N5: Step Provenance Bipartite Filter & Score Calibrator**
   - **Branch:** `feature/mridul-n5-provenance-calibration`
   - **Files:** `extraction/provenance.py`, `validation/calibrator.py`
   - **Spec Scope:**

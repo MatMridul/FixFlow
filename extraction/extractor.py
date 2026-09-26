@@ -43,8 +43,16 @@ def extract_fallback_actions_from_siis(content: str) -> List[Action]:
         # Clean title
         action_title = re.sub(r'^#+\s*', '', header_line).strip()
         action_title = re.sub(r'^(?:Step\s+\d+:?|\d+[\.\)])\s*', '', action_title, flags=re.IGNORECASE).strip()
-        if not action_title or len(action_title.split()) > 6:
-            action_title = "Resolve Device Issue"
+        if not action_title or len(action_title.split()) > 6 or len(lines) == 1:
+            lower_h = header_line.lower()
+            if any(w in lower_h for w in ["display", "screen", "flicker", "brightness"]):
+                action_title = "Adjust Display Settings"
+            elif any(w in lower_h for w in ["battery", "charge", "drain"]):
+                action_title = "Inspect Battery Usage"
+            elif any(w in lower_h for w in ["network", "wifi", "bluetooth", "connection"]):
+                action_title = "Check Network Settings"
+            else:
+                action_title = "Review Device Settings"
 
         # Categorize
         lower_title = action_title.lower()
@@ -59,11 +67,21 @@ def extract_fallback_actions_from_siis(content: str) -> List[Action]:
         step_lines = []
         for line in lines[1:]:
             cleaned_line = re.sub(r'^(?:[-*•]|\d+\.)\s*', '', line).strip()
-            if cleaned_line and not contains_urls(cleaned_line) and len(cleaned_line) > 10:
+            if cleaned_line and not contains_urls(cleaned_line) and len(cleaned_line) > 5:
                 step_lines.append(cleaned_line)
 
         if not step_lines:
-            step_lines = [f"Follow instructions to {action_title.lower()}."]
+            # If no multi-line steps, extract sentences from the section content
+            candidate_sentences = [
+                s.strip() for s in re.split(r'(?<=[.!?])\s+', sec)
+                if s.strip() and not contains_urls(s) and len(s.strip()) > 5
+            ]
+            if candidate_sentences:
+                step_lines.extend(candidate_sentences)
+            else:
+                candidate = re.sub(r'^(?:[-*•]|\d+\.)\s*', '', header_line).strip()
+                if candidate:
+                    step_lines.append(candidate)
 
         actions.append(
             Action(
