@@ -10,7 +10,7 @@ from api.models import (
     TroubleshootRequest,
     TroubleshootResponse,
 )
-from cache import SemanticCache
+from cache import CompositionalCache, SemanticCache
 from extraction import StructureExtractor, filter_provenance
 from validation import calibrate_score, repair_goal_or_json, validate_goal
 
@@ -38,7 +38,7 @@ def health_check(request: Request) -> Dict[str, Any]:
 def troubleshoot(payload: TroubleshootRequest, request: Request) -> TroubleshootResponse:
     """
     Orchestrate request across Cache -> Extractor -> Resolver -> Validator -> Response.
-    - Level 1 & 2 Cache lookup.
+    - Level 1 & 2 Cache lookup (including Novelty N1 Compositional lookup).
     - If hit: return immediately with cost_usd = 0.0.
     - If miss without SIIS: return contexts: [] and fallback = 'no_siis_context'.
     - If miss with SIIS: cold path extraction, provenance filtering, resolution, validation,
@@ -49,22 +49,38 @@ def troubleshoot(payload: TroubleshootRequest, request: Request) -> Troubleshoot
     extractor: Optional[StructureExtractor] = getattr(request.app.state, "extractor", None)
     resolver_fn: Optional[Callable] = getattr(request.app.state, "resolver_fn", None)
 
-    # 1. Cache Fast Path Lookup
+    # 1. Cache Fast Path Lookup (Novelty N1 Compositional & Gated Fast-Path)
     if cache is not None:
-        cache_res = cache.get(payload.query)
-        if cache_res.hit and cache_res.goal is not None:
-            latency = (time.perf_counter() - start_time) * 1000.0
-            return TroubleshootResponse(
-                query=payload.query,
-                response=ContextDeeplinkResponse(contexts=[cache_res.goal]),
-                meta=MetaBlock(
-                    latency_ms=round(latency, 2),
-                    cache_hit=True,
-                    model=f"cache-{cache_res.hit_type}-v1",
-                    cost_usd=0.0,
-                    fallback=None,
-                ),
-            )
+        if isinstance(cache, CompositionalCache):
+            comp_res = cache.get_compound(payload.query)
+            if comp_res.hit and comp_res.goals:
+                latency = (time.perf_counter() - start_time) * 1000.0
+                return TroubleshootResponse(
+                    query=payload.query,
+                    response=ContextDeeplinkResponse(contexts=comp_res.goals),
+                    meta=MetaBlock(
+                        latency_ms=round(latency, 2),
+                        cache_hit=True,
+                        model=f"cache-{comp_res.hit_type}-v1",
+                        cost_usd=0.0,
+                        fallback=None,
+                    ),
+                )
+        else:
+            cache_res = cache.get(payload.query)
+            if cache_res.hit and cache_res.goal is not None:
+                latency = (time.perf_counter() - start_time) * 1000.0
+                return TroubleshootResponse(
+                    query=payload.query,
+                    response=ContextDeeplinkResponse(contexts=[cache_res.goal]),
+                    meta=MetaBlock(
+                        latency_ms=round(latency, 2),
+                        cache_hit=True,
+                        model=f"cache-{cache_res.hit_type}-v1",
+                        cost_usd=0.0,
+                        fallback=None,
+                    ),
+                )
 
     # 2. Cache Miss: Check SIIS availability
     if payload.siis_response is None:
@@ -163,7 +179,10 @@ def troubleshoot(payload: TroubleshootRequest, request: Request) -> Troubleshoot
 
     # 6. Update Cache with verified Goal
     if cache is not None:
-        cache.put(payload.query, goal)
+        if isinstance(cache, CompositionalCache):
+            cache.put_compound(payload.query, [goal])
+        else:
+            cache.put(payload.query, goal)
 
     latency = (time.perf_counter() - start_time) * 1000.0
     return TroubleshootResponse(

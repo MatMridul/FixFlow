@@ -108,7 +108,7 @@
     - Trigger `no_match` fallback if calibrated score falls below threshold $\theta$.
   - **Acceptance Criteria:** Hallucinated step rate = 0.0%; score reflects empirical grounding rather than raw LLM confidence.
 
-- [ ] **Task A.1.3 — Novelty N1: Clause Splitter & Compositional Multi-Intent Cache**
+- [x] **Task A.1.3 — Novelty N1: Clause Splitter & Compositional Multi-Intent Cache**
   - **Branch:** `feature/mridul-n1-compositional-cache`
   - **Files:** `enrichment/clause_splitter.py`, `cache/compositional.py`
   - **Spec Scope:**

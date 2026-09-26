@@ -5,7 +5,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
 from api.routes import router
-from cache import CacheStore, GatedSemanticCache, SemanticCache
+from cache import CacheStore, CompositionalCache, GatedSemanticCache, SemanticCache
 from extraction import StructureExtractor
 
 
@@ -30,8 +30,8 @@ def create_app(
         allow_headers=["*"],
     )
 
-    # Initialize service components on app state (Defaults to N2 Gated Semantic Cache)
-    app.state.cache = cache or GatedSemanticCache(store=CacheStore())
+    # Initialize service components on app state (Defaults to N1 Compositional Cache)
+    app.state.cache = cache or CompositionalCache(store=CacheStore())
     app.state.extractor = extractor or StructureExtractor()
     app.state.resolver_fn = resolver_fn
 
