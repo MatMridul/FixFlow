@@ -1,0 +1,452 @@
+[
+  {
+    "id": "nm_01",
+    "domain": "display",
+    "query_a": "How do I turn on Dark Mode?",
+    "query_b": "How do I turn off Dark Mode?",
+    "trap_type": "polarity_inversion",
+    "expected_cache_hit": false,
+    "rationale": "Exact same component and domain, but opposite polarity (enable vs disable)."
+  },
+  {
+    "id": "nm_02",
+    "domain": "display",
+    "query_a": "Enable Always On Display on my Galaxy S24",
+    "query_b": "Disable Always On Display on my Galaxy S24",
+    "trap_type": "polarity_inversion",
+    "expected_cache_hit": false,
+    "rationale": "Opposite polarity for Always On Display."
+  },
+  {
+    "id": "nm_03",
+    "domain": "display",
+    "query_a": "Turn on Eye comfort shield to reduce blue light",
+    "query_b": "Turn off Eye comfort shield",
+    "trap_type": "polarity_inversion",
+    "expected_cache_hit": false,
+    "rationale": "Opposite polarity for Eye comfort shield."
+  },
+  {
+    "id": "nm_04",
+    "domain": "battery",
+    "query_a": "Turn on Power saving mode to conserve battery",
+    "query_b": "Turn off Power saving mode",
+    "trap_type": "polarity_inversion",
+    "expected_cache_hit": false,
+    "rationale": "Enabling power saving vs disabling power saving."
+  },
+  {
+    "id": "nm_05",
+    "domain": "battery",
+    "query_a": "Enable Protect Battery limit to 80%",
+    "query_b": "Disable Protect Battery to charge to 100%",
+    "trap_type": "polarity_inversion",
+    "expected_cache_hit": false,
+    "rationale": "Protect battery toggle on vs off."
+  },
+  {
+    "id": "nm_06",
+    "domain": "battery",
+    "query_a": "Activate fast charging in battery settings",
+    "query_b": "Deactivate fast charging in battery settings",
+    "trap_type": "polarity_inversion",
+    "expected_cache_hit": false,
+    "rationale": "Opposite polarity for fast charging setting."
+  },
+  {
+    "id": "nm_07",
+    "domain": "connectivity",
+    "query_a": "Turn on Airplane mode on Samsung Galaxy",
+    "query_b": "Turn off Airplane mode on Samsung Galaxy",
+    "trap_type": "polarity_inversion",
+    "expected_cache_hit": false,
+    "rationale": "Airplane mode toggle polarity opposite."
+  },
+  {
+    "id": "nm_08",
+    "domain": "connectivity",
+    "query_a": "Enable Mobile Hotspot for sharing internet",
+    "query_b": "Disable Mobile Hotspot",
+    "trap_type": "polarity_inversion",
+    "expected_cache_hit": false,
+    "rationale": "Hotspot enable vs disable."
+  },
+  {
+    "id": "nm_09",
+    "domain": "connectivity",
+    "query_a": "Turn on Bluetooth pairing mode",
+    "query_b": "Turn off Bluetooth",
+    "trap_type": "polarity_inversion",
+    "expected_cache_hit": false,
+    "rationale": "Bluetooth toggle polarity."
+  },
+  {
+    "id": "nm_10",
+    "domain": "connectivity",
+    "query_a": "Turn on Wi-Fi Calling for better indoor reception",
+    "query_b": "Turn off Wi-Fi Calling",
+    "trap_type": "polarity_inversion",
+    "expected_cache_hit": false,
+    "rationale": "Wi-Fi calling enable vs disable."
+  },
+  {
+    "id": "nm_11",
+    "domain": "sound",
+    "query_a": "Turn on Dolby Atmos for gaming audio",
+    "query_b": "Turn off Dolby Atmos audio",
+    "trap_type": "polarity_inversion",
+    "expected_cache_hit": false,
+    "rationale": "Dolby Atmos toggle on vs off."
+  },
+  {
+    "id": "nm_12",
+    "domain": "sound",
+    "query_a": "Mute all sounds and system audio",
+    "query_b": "Unmute all sounds and enable media volume",
+    "trap_type": "polarity_inversion",
+    "expected_cache_hit": false,
+    "rationale": "Mute vs unmute audio state."
+  },
+  {
+    "id": "nm_13",
+    "domain": "system",
+    "query_a": "Turn on Do Not Disturb during bedtime",
+    "query_b": "Turn off Do Not Disturb",
+    "trap_type": "polarity_inversion",
+    "expected_cache_hit": false,
+    "rationale": "DND enable vs disable."
+  },
+  {
+    "id": "nm_14",
+    "domain": "system",
+    "query_a": "Enable auto-rotate screen orientation",
+    "query_b": "Lock screen orientation and disable auto-rotate",
+    "trap_type": "polarity_inversion",
+    "expected_cache_hit": false,
+    "rationale": "Auto-rotate lock vs unlock."
+  },
+  {
+    "id": "nm_15",
+    "domain": "system",
+    "query_a": "Turn on developer options in settings",
+    "query_b": "Turn off developer options",
+    "trap_type": "polarity_inversion",
+    "expected_cache_hit": false,
+    "rationale": "Developer options state inversion."
+  },
+  {
+    "id": "nm_16",
+    "domain": "display",
+    "query_a": "How to adjust screen brightness?",
+    "query_b": "How to change screen timeout duration?",
+    "trap_type": "component_mismatch",
+    "expected_cache_hit": false,
+    "rationale": "Both in Display settings menu, but targets Brightness slider vs Screen Timeout dropdown."
+  },
+  {
+    "id": "nm_17",
+    "domain": "display",
+    "query_a": "Change screen zoom and font size",
+    "query_b": "Change screen resolution to WQHD+",
+    "trap_type": "component_mismatch",
+    "expected_cache_hit": false,
+    "rationale": "Font/zoom sizing vs Display resolution toggle."
+  },
+  {
+    "id": "nm_18",
+    "domain": "display",
+    "query_a": "Set motion smoothness to Adaptive 120Hz",
+    "query_b": "Enable accidental touch protection",
+    "trap_type": "component_mismatch",
+    "expected_cache_hit": false,
+    "rationale": "Refresh rate controller vs touchscreen sensor protection."
+  },
+  {
+    "id": "nm_19",
+    "domain": "display",
+    "query_a": "Change lock screen wallpaper",
+    "query_b": "Change home screen grid layout",
+    "trap_type": "component_mismatch",
+    "expected_cache_hit": false,
+    "rationale": "Wallpaper settings vs Home screen launcher layout."
+  },
+  {
+    "id": "nm_20",
+    "domain": "battery",
+    "query_a": "Put unused apps to deep sleep",
+    "query_b": "Check battery usage by app in Device Care",
+    "trap_type": "component_mismatch",
+    "expected_cache_hit": false,
+    "rationale": "Deep sleep background limits vs battery analytics monitor."
+  },
+  {
+    "id": "nm_21",
+    "domain": "battery",
+    "query_a": "Enable wireless power sharing to charge galaxy watch",
+    "query_b": "Enable fast wireless charging",
+    "trap_type": "component_mismatch",
+    "expected_cache_hit": false,
+    "rationale": "Reverse wireless charging TX vs wireless charging input speed RX."
+  },
+  {
+    "id": "nm_22",
+    "domain": "connectivity",
+    "query_a": "Forget saved Wi-Fi network",
+    "query_b": "Forget paired Bluetooth device",
+    "trap_type": "component_mismatch",
+    "expected_cache_hit": false,
+    "rationale": "Wi-Fi connection profile vs Bluetooth paired peripheral."
+  },
+  {
+    "id": "nm_23",
+    "domain": "connectivity",
+    "query_a": "Change Wi-Fi MAC address to phone MAC",
+    "query_b": "Change Wi-Fi IP settings to static IP",
+    "trap_type": "component_mismatch",
+    "expected_cache_hit": false,
+    "rationale": "MAC randomization setting vs DHCP/static IP addressing."
+  },
+  {
+    "id": "nm_24",
+    "domain": "connectivity",
+    "query_a": "Set up private DNS in network settings",
+    "query_b": "Set up VPN connection in more connection settings",
+    "trap_type": "component_mismatch",
+    "expected_cache_hit": false,
+    "rationale": "DNS host configuration vs VPN client configuration."
+  },
+  {
+    "id": "nm_25",
+    "domain": "connectivity",
+    "query_a": "Enable NFC for contactless Google Pay",
+    "query_b": "Enable Ultra-wideband UWB connectivity",
+    "trap_type": "component_mismatch",
+    "expected_cache_hit": false,
+    "rationale": "NFC radio toggle vs UWB spatial radio toggle."
+  },
+  {
+    "id": "nm_26",
+    "domain": "sound",
+    "query_a": "Change incoming call ringtone",
+    "query_b": "Change message notification sound",
+    "trap_type": "component_mismatch",
+    "expected_cache_hit": false,
+    "rationale": "Voice call audio tone vs SMS/notification audio tone."
+  },
+  {
+    "id": "nm_27",
+    "domain": "sound",
+    "query_a": "Adjust media volume with volume keys",
+    "query_b": "Adjust system vibration intensity",
+    "trap_type": "component_mismatch",
+    "expected_cache_hit": false,
+    "rationale": "Media playback acoustic volume vs haptic vibration motor amplitude."
+  },
+  {
+    "id": "nm_28",
+    "domain": "system",
+    "query_a": "Change screen lock type to fingerprint",
+    "query_b": "Change screen lock type to PIN",
+    "trap_type": "component_mismatch",
+    "expected_cache_hit": false,
+    "rationale": "Biometric fingerprint enrollment vs numerical PIN authentication."
+  },
+  {
+    "id": "nm_29",
+    "domain": "system",
+    "query_a": "Change default navigation bar to swipe gestures",
+    "query_b": "Change navigation bar button order",
+    "trap_type": "component_mismatch",
+    "expected_cache_hit": false,
+    "rationale": "Gesture vs 3-button mode vs button placement swap."
+  },
+  {
+    "id": "nm_30",
+    "domain": "system",
+    "query_a": "Clear app cache for Samsung Messages",
+    "query_b": "Clear app data and storage for Samsung Messages",
+    "trap_type": "component_mismatch",
+    "expected_cache_hit": false,
+    "rationale": "Non-destructive temporary cache wipe vs destructive app database purge."
+  },
+  {
+    "id": "nm_31",
+    "domain": "connectivity",
+    "query_a": "Wi-Fi keeps dropping when phone screen is locked",
+    "query_b": "Wi-Fi keeps dropping during WhatsApp voice calls",
+    "trap_type": "trigger_mismatch",
+    "expected_cache_hit": false,
+    "rationale": "Power saving sleep trigger vs VoIP traffic / buffer bloat trigger."
+  },
+  {
+    "id": "nm_32",
+    "domain": "connectivity",
+    "query_a": "Bluetooth disconnects when walking away from speaker",
+    "query_b": "Bluetooth disconnects immediately upon connecting",
+    "trap_type": "trigger_mismatch",
+    "expected_cache_hit": false,
+    "rationale": "RF range / antenna physical attenuation vs codec / profile handshake crash."
+  },
+  {
+    "id": "nm_33",
+    "domain": "battery",
+    "query_a": "Battery drains excessively overnight in standby",
+    "query_b": "Battery drains excessively while playing 3D games",
+    "trap_type": "trigger_mismatch",
+    "expected_cache_hit": false,
+    "rationale": "Deep sleep wakelock issue vs GPU thermal/power consumption issue."
+  },
+  {
+    "id": "nm_34",
+    "domain": "battery",
+    "query_a": "Device heats up while charging with 45W brick",
+    "query_b": "Device heats up while using Google Maps navigation",
+    "trap_type": "trigger_mismatch",
+    "expected_cache_hit": false,
+    "rationale": "Battery charging IC thermal dissipation vs continuous GPS/modem/screen load."
+  },
+  {
+    "id": "nm_35",
+    "domain": "display",
+    "query_a": "Screen flickers only when brightness is set below 10%",
+    "query_b": "Screen flickers constantly at all brightness levels",
+    "trap_type": "trigger_mismatch",
+    "expected_cache_hit": false,
+    "rationale": "OLED PWM dimming frequency issue vs damaged display ribbon cable."
+  },
+  {
+    "id": "nm_36",
+    "domain": "display",
+    "query_a": "Screen touch unresponsive in cold weather",
+    "query_b": "Screen touch unresponsive along the curved edges",
+    "trap_type": "trigger_mismatch",
+    "expected_cache_hit": false,
+    "rationale": "Touch sensitivity temperature threshold vs edge rejection algorithm."
+  },
+  {
+    "id": "nm_37",
+    "domain": "sound",
+    "query_a": "No sound from speaker during incoming phone calls",
+    "query_b": "No sound from speaker when playing YouTube videos",
+    "trap_type": "trigger_mismatch",
+    "expected_cache_hit": false,
+    "rationale": "Ringtone/Telephony stream mute vs media audio stream channel issue."
+  },
+  {
+    "id": "nm_38",
+    "domain": "sound",
+    "query_a": "Microphone muffled when on speakerphone",
+    "query_b": "Microphone muffled in voice recorder app",
+    "trap_type": "trigger_mismatch",
+    "expected_cache_hit": false,
+    "rationale": "Top noise-cancellation mic acoustic feedback cancellation vs bottom primary mic lint obstruction."
+  },
+  {
+    "id": "nm_39",
+    "domain": "system",
+    "query_a": "Phone restarts automatically during overnight charging",
+    "query_b": "Phone restarts automatically when opening camera app",
+    "trap_type": "trigger_mismatch",
+    "expected_cache_hit": false,
+    "rationale": "Scheduled Auto Restart maintenance feature vs kernel panic / OOM on camera sensor init."
+  },
+  {
+    "id": "nm_40",
+    "domain": "system",
+    "query_a": "Notifications do not arrive until I unlock the phone",
+    "query_b": "Notifications arrive without any alert sound or vibration",
+    "trap_type": "trigger_mismatch",
+    "expected_cache_hit": false,
+    "rationale": "Android Doze background network suspension vs notification channel priority/silent categorization."
+  },
+  {
+    "id": "nm_41",
+    "domain": "system",
+    "query_a": "Reset all network settings on Galaxy",
+    "query_b": "Factory data reset phone and erase everything",
+    "trap_type": "scope_mismatch",
+    "expected_cache_hit": false,
+    "rationale": "Non-destructive radio config purge vs catastrophic wiping of user partition."
+  },
+  {
+    "id": "nm_42",
+    "domain": "system",
+    "query_a": "Reset app preferences in application manager",
+    "query_b": "Reset all settings to default without deleting files",
+    "trap_type": "scope_mismatch",
+    "expected_cache_hit": false,
+    "rationale": "Disabled apps/permissions reset vs system global configuration restoration."
+  },
+  {
+    "id": "nm_43",
+    "domain": "system",
+    "query_a": "Restart Galaxy phone in Safe Mode",
+    "query_b": "Reboot Galaxy phone into Recovery Mode",
+    "trap_type": "scope_mismatch",
+    "expected_cache_hit": false,
+    "rationale": "Android OS sandbox mode without 3rd party apps vs hardware bootloader recovery console."
+  },
+  {
+    "id": "nm_44",
+    "domain": "battery",
+    "query_a": "Uninstall battery draining third-party app",
+    "query_b": "Disable pre-installed bloatware system app",
+    "trap_type": "scope_mismatch",
+    "expected_cache_hit": false,
+    "rationale": "Standard user space uninstallation vs system package deactivation."
+  },
+  {
+    "id": "nm_45",
+    "domain": "display",
+    "query_a": "Turn on camera flashlight from quick panel",
+    "query_b": "Increase screen brightness to maximum in sunlight",
+    "trap_type": "scope_mismatch",
+    "expected_cache_hit": false,
+    "rationale": "Rear physical LED torch vs front AMOLED display panel luminance."
+  },
+  {
+    "id": "nm_46",
+    "domain": "connectivity",
+    "query_a": "Turn on Mobile Data roaming when traveling abroad",
+    "query_b": "Turn on Mobile Hotspot data tethering",
+    "trap_type": "scope_mismatch",
+    "expected_cache_hit": false,
+    "rationale": "Cellular carrier roaming data access vs local Wi-Fi tethering broadcaster."
+  },
+  {
+    "id": "nm_47",
+    "domain": "connectivity",
+    "query_a": "Share files using Quick Share nearby devices",
+    "query_b": "Back up photos to OneDrive cloud storage",
+    "trap_type": "scope_mismatch",
+    "expected_cache_hit": false,
+    "rationale": "Local peer-to-peer Wi-Fi Direct/BLE transfer vs remote cloud synchronization."
+  },
+  {
+    "id": "nm_48",
+    "domain": "sound",
+    "query_a": "Enable separate app sound to play music on Bluetooth",
+    "query_b": "Enable dual audio to stream to two Bluetooth headphones",
+    "trap_type": "scope_mismatch",
+    "expected_cache_hit": false,
+    "rationale": "App audio routing to specific audio endpoint vs multi-device A2DP audio broadcasting."
+  },
+  {
+    "id": "nm_49",
+    "domain": "system",
+    "query_a": "Update phone software over the air OTA",
+    "query_b": "Update Galaxy Store applications",
+    "trap_type": "scope_mismatch",
+    "expected_cache_hit": false,
+    "rationale": "One UI Android firmware OS flashing vs OEM app updates."
+  },
+  {
+    "id": "nm_50",
+    "domain": "system",
+    "query_a": "Enable Maintenance Mode before sending phone for repair",
+    "query_b": "Enable Secure Folder to hide personal photos",
+    "trap_type": "scope_mismatch",
+    "expected_cache_hit": false,
+    "rationale": "Device Care hardware technician isolation sandbox vs Knox encrypted container."
+  }
+]

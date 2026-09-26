@@ -1,0 +1,1406 @@
+[
+  {
+    "id": "cal_disp_01",
+    "domain": "display",
+    "query": "Screen flickers intermittently at low brightness",
+    "ground_truth_actions": [
+      {
+        "actionTitle": "Adjust Brightness Slider",
+        "category": "auto"
+      },
+      {
+        "actionTitle": "Turn Off Adaptive Brightness",
+        "category": "auto"
+      }
+    ],
+    "grounding_coverage": 1.0,
+    "validator_pass_rate": 1.0,
+    "retrieval_margin": 1.0,
+    "path_alignment": 1.0,
+    "expected_calibrated_score": 1.0,
+    "label": 1
+  },
+  {
+    "id": "cal_disp_02",
+    "domain": "display",
+    "query": "Adaptive 120Hz refresh rate stuck at 60Hz",
+    "ground_truth_actions": [
+      {
+        "actionTitle": "Enable Adaptive Motion Smoothness",
+        "category": "auto"
+      }
+    ],
+    "grounding_coverage": 1.0,
+    "validator_pass_rate": 1.0,
+    "retrieval_margin": 0.9,
+    "path_alignment": 1.0,
+    "expected_calibrated_score": 0.98,
+    "label": 1
+  },
+  {
+    "id": "cal_disp_03",
+    "domain": "display",
+    "query": "Dark mode turns on during the day unexpectedly",
+    "ground_truth_actions": [
+      {
+        "actionTitle": "Check Dark Mode Schedule Settings",
+        "category": "auto"
+      }
+    ],
+    "grounding_coverage": 0.9,
+    "validator_pass_rate": 1.0,
+    "retrieval_margin": 0.85,
+    "path_alignment": 0.9,
+    "expected_calibrated_score": 0.92,
+    "label": 1
+  },
+  {
+    "id": "cal_disp_04",
+    "domain": "display",
+    "query": "Screen turns off too quickly after 15 seconds",
+    "ground_truth_actions": [
+      {
+        "actionTitle": "Increase Screen Timeout to 2 Minutes",
+        "category": "auto"
+      }
+    ],
+    "grounding_coverage": 1.0,
+    "validator_pass_rate": 1.0,
+    "retrieval_margin": 1.0,
+    "path_alignment": 1.0,
+    "expected_calibrated_score": 1.0,
+    "label": 1
+  },
+  {
+    "id": "cal_disp_05",
+    "domain": "display",
+    "query": "Text and icons are too small to read",
+    "ground_truth_actions": [
+      {
+        "actionTitle": "Adjust Font Size and Screen Zoom",
+        "category": "auto"
+      }
+    ],
+    "grounding_coverage": 1.0,
+    "validator_pass_rate": 1.0,
+    "retrieval_margin": 0.95,
+    "path_alignment": 1.0,
+    "expected_calibrated_score": 0.99,
+    "label": 1
+  },
+  {
+    "id": "cal_disp_06",
+    "domain": "display",
+    "query": "Eye comfort shield turns screen yellow",
+    "ground_truth_actions": [
+      {
+        "actionTitle": "Adjust Color Temperature Slider",
+        "category": "auto"
+      },
+      {
+        "actionTitle": "Turn Off Eye Comfort Shield",
+        "category": "auto"
+      }
+    ],
+    "grounding_coverage": 1.0,
+    "validator_pass_rate": 1.0,
+    "retrieval_margin": 0.9,
+    "path_alignment": 0.9,
+    "expected_calibrated_score": 0.97,
+    "label": 1
+  },
+  {
+    "id": "cal_disp_07",
+    "domain": "display",
+    "query": "Display colors look washed out and dull",
+    "ground_truth_actions": [
+      {
+        "actionTitle": "Switch Screen Mode to Vivid",
+        "category": "auto"
+      }
+    ],
+    "grounding_coverage": 1.0,
+    "validator_pass_rate": 1.0,
+    "retrieval_margin": 0.8,
+    "path_alignment": 1.0,
+    "expected_calibrated_score": 0.97,
+    "label": 1
+  },
+  {
+    "id": "cal_disp_08",
+    "domain": "display",
+    "query": "Always On Display does not show clock when tapped",
+    "ground_truth_actions": [
+      {
+        "actionTitle": "Set Always On Display to Tap to Show",
+        "category": "auto"
+      }
+    ],
+    "grounding_coverage": 1.0,
+    "validator_pass_rate": 1.0,
+    "retrieval_margin": 0.95,
+    "path_alignment": 1.0,
+    "expected_calibrated_score": 0.99,
+    "label": 1
+  },
+  {
+    "id": "cal_disp_09",
+    "domain": "display",
+    "query": "Screen touch unresponsive with glass screen protector",
+    "ground_truth_actions": [
+      {
+        "actionTitle": "Turn On Touch Sensitivity",
+        "category": "auto"
+      }
+    ],
+    "grounding_coverage": 1.0,
+    "validator_pass_rate": 1.0,
+    "retrieval_margin": 1.0,
+    "path_alignment": 1.0,
+    "expected_calibrated_score": 1.0,
+    "label": 1
+  },
+  {
+    "id": "cal_disp_10",
+    "domain": "display",
+    "query": "Edge lighting does not flash for new WhatsApp messages",
+    "ground_truth_actions": [
+      {
+        "actionTitle": "Enable Edge Lighting Style for All Apps",
+        "category": "auto"
+      }
+    ],
+    "grounding_coverage": 0.85,
+    "validator_pass_rate": 1.0,
+    "retrieval_margin": 0.8,
+    "path_alignment": 0.85,
+    "expected_calibrated_score": 0.89,
+    "label": 1
+  },
+  {
+    "id": "cal_disp_11",
+    "domain": "display",
+    "query": "Pocket touches trigger accidental emergency calls",
+    "ground_truth_actions": [
+      {
+        "actionTitle": "Turn On Accidental Touch Protection",
+        "category": "auto"
+      }
+    ],
+    "grounding_coverage": 1.0,
+    "validator_pass_rate": 1.0,
+    "retrieval_margin": 1.0,
+    "path_alignment": 1.0,
+    "expected_calibrated_score": 1.0,
+    "label": 1
+  },
+  {
+    "id": "cal_disp_12",
+    "domain": "display",
+    "query": "Screen resolution changed from QHD+ to FHD+ after gaming",
+    "ground_truth_actions": [
+      {
+        "actionTitle": "Set Screen Resolution to WQHD+",
+        "category": "auto"
+      }
+    ],
+    "grounding_coverage": 1.0,
+    "validator_pass_rate": 1.0,
+    "retrieval_margin": 0.9,
+    "path_alignment": 1.0,
+    "expected_calibrated_score": 0.98,
+    "label": 1
+  },
+  {
+    "id": "cal_disp_13",
+    "domain": "display",
+    "query": "Brightness drops suddenly in direct sunlight",
+    "ground_truth_actions": [
+      {
+        "actionTitle": "Turn Off Extra Dim",
+        "category": "auto"
+      },
+      {
+        "actionTitle": "Enable Adaptive Brightness",
+        "category": "auto"
+      }
+    ],
+    "grounding_coverage": 0.9,
+    "validator_pass_rate": 1.0,
+    "retrieval_margin": 0.85,
+    "path_alignment": 0.9,
+    "expected_calibrated_score": 0.92,
+    "label": 1
+  },
+  {
+    "id": "cal_disp_14",
+    "domain": "display",
+    "query": "Camera cutout notch cuts off video playback",
+    "ground_truth_actions": [
+      {
+        "actionTitle": "Configure Camera Cutout Per App",
+        "category": "auto"
+      }
+    ],
+    "grounding_coverage": 0.8,
+    "validator_pass_rate": 1.0,
+    "retrieval_margin": 0.75,
+    "path_alignment": 0.8,
+    "expected_calibrated_score": 0.85,
+    "label": 1
+  },
+  {
+    "id": "cal_disp_15",
+    "domain": "display",
+    "query": "App does not stretch to full screen aspect ratio",
+    "ground_truth_actions": [
+      {
+        "actionTitle": "Set App Aspect Ratio to Full Screen",
+        "category": "auto"
+      }
+    ],
+    "grounding_coverage": 0.85,
+    "validator_pass_rate": 1.0,
+    "retrieval_margin": 0.8,
+    "path_alignment": 0.9,
+    "expected_calibrated_score": 0.9,
+    "label": 1
+  },
+  {
+    "id": "cal_disp_16",
+    "domain": "display",
+    "query": "One-handed mode gestures not triggering",
+    "ground_truth_actions": [
+      {
+        "actionTitle": "Enable One-Handed Mode Gesture",
+        "category": "auto"
+      }
+    ],
+    "grounding_coverage": 1.0,
+    "validator_pass_rate": 1.0,
+    "retrieval_margin": 0.9,
+    "path_alignment": 1.0,
+    "expected_calibrated_score": 0.98,
+    "label": 1
+  },
+  {
+    "id": "cal_disp_17",
+    "domain": "display",
+    "query": "Screen saver does not appear when charging on stand",
+    "ground_truth_actions": [
+      {
+        "actionTitle": "Turn On Screen Saver Colors",
+        "category": "auto"
+      }
+    ],
+    "grounding_coverage": 0.75,
+    "validator_pass_rate": 0.9,
+    "retrieval_margin": 0.7,
+    "path_alignment": 0.8,
+    "expected_calibrated_score": 0.8,
+    "label": 1
+  },
+  {
+    "id": "cal_disp_18",
+    "domain": "display",
+    "query": "Multi-window split screen not allowing all apps",
+    "ground_truth_actions": [
+      {
+        "actionTitle": "Enable Multi Window for All Apps in Labs",
+        "category": "auto"
+      }
+    ],
+    "grounding_coverage": 0.7,
+    "validator_pass_rate": 0.8,
+    "retrieval_margin": 0.7,
+    "path_alignment": 0.7,
+    "expected_calibrated_score": 0.73,
+    "label": 1
+  },
+  {
+    "id": "cal_disp_19",
+    "domain": "display",
+    "query": "Green vertical line appeared across AMOLED display",
+    "ground_truth_actions": [
+      {
+        "actionTitle": "Visit Authorized Samsung Service Center",
+        "category": "manual"
+      }
+    ],
+    "grounding_coverage": 0.3,
+    "validator_pass_rate": 0.5,
+    "retrieval_margin": 0.3,
+    "path_alignment": 0.4,
+    "expected_calibrated_score": 0.38,
+    "label": 0
+  },
+  {
+    "id": "cal_disp_20",
+    "domain": "display",
+    "query": "Screen glass physically shattered after dropping on asphalt",
+    "ground_truth_actions": [
+      {
+        "actionTitle": "Schedule Hardware Repair",
+        "category": "auto"
+      }
+    ],
+    "grounding_coverage": 0.2,
+    "validator_pass_rate": 0.4,
+    "retrieval_margin": 0.2,
+    "path_alignment": 0.3,
+    "expected_calibrated_score": 0.28,
+    "label": 0
+  },
+  {
+    "id": "cal_batt_01",
+    "domain": "battery",
+    "query": "Battery draining abnormally fast within 4 hours",
+    "ground_truth_actions": [
+      {
+        "actionTitle": "Enable Power Saving Mode",
+        "category": "auto"
+      },
+      {
+        "actionTitle": "Put Unused Apps to Sleep",
+        "category": "auto"
+      }
+    ],
+    "grounding_coverage": 1.0,
+    "validator_pass_rate": 1.0,
+    "retrieval_margin": 1.0,
+    "path_alignment": 1.0,
+    "expected_calibrated_score": 1.0,
+    "label": 1
+  },
+  {
+    "id": "cal_batt_02",
+    "domain": "battery",
+    "query": "Phone charges very slowly even on 45W charger",
+    "ground_truth_actions": [
+      {
+        "actionTitle": "Turn On Fast Charging in Battery Settings",
+        "category": "auto"
+      }
+    ],
+    "grounding_coverage": 1.0,
+    "validator_pass_rate": 1.0,
+    "retrieval_margin": 1.0,
+    "path_alignment": 1.0,
+    "expected_calibrated_score": 1.0,
+    "label": 1
+  },
+  {
+    "id": "cal_batt_03",
+    "domain": "battery",
+    "query": "Wireless power share stops charging galaxy watch",
+    "ground_truth_actions": [
+      {
+        "actionTitle": "Ensure Phone Battery Above 30%",
+        "category": "auto"
+      },
+      {
+        "actionTitle": "Turn On Wireless Power Sharing",
+        "category": "auto"
+      }
+    ],
+    "grounding_coverage": 1.0,
+    "validator_pass_rate": 1.0,
+    "retrieval_margin": 0.9,
+    "path_alignment": 0.95,
+    "expected_calibrated_score": 0.98,
+    "label": 1
+  },
+  {
+    "id": "cal_batt_04",
+    "domain": "battery",
+    "query": "Battery stops charging at 80% maximum",
+    "ground_truth_actions": [
+      {
+        "actionTitle": "Turn Off Protect Battery or Adjust Limit",
+        "category": "auto"
+      }
+    ],
+    "grounding_coverage": 1.0,
+    "validator_pass_rate": 1.0,
+    "retrieval_margin": 1.0,
+    "path_alignment": 1.0,
+    "expected_calibrated_score": 1.0,
+    "label": 1
+  },
+  {
+    "id": "cal_batt_05",
+    "domain": "battery",
+    "query": "Background social media apps consuming too much power",
+    "ground_truth_actions": [
+      {
+        "actionTitle": "Add Background Apps to Deep Sleeping Apps",
+        "category": "auto"
+      }
+    ],
+    "grounding_coverage": 1.0,
+    "validator_pass_rate": 1.0,
+    "retrieval_margin": 0.95,
+    "path_alignment": 1.0,
+    "expected_calibrated_score": 0.99,
+    "label": 1
+  },
+  {
+    "id": "cal_batt_06",
+    "domain": "battery",
+    "query": "Adaptive battery not learning usage patterns",
+    "ground_truth_actions": [
+      {
+        "actionTitle": "Turn On Adaptive Battery Toggle",
+        "category": "auto"
+      }
+    ],
+    "grounding_coverage": 1.0,
+    "validator_pass_rate": 1.0,
+    "retrieval_margin": 0.85,
+    "path_alignment": 0.9,
+    "expected_calibrated_score": 0.96,
+    "label": 1
+  },
+  {
+    "id": "cal_batt_07",
+    "domain": "battery",
+    "query": "Overheating during fast charging on hot days",
+    "ground_truth_actions": [
+      {
+        "actionTitle": "Disable Fast Charging While Ambient Temp High",
+        "category": "auto"
+      }
+    ],
+    "grounding_coverage": 0.9,
+    "validator_pass_rate": 1.0,
+    "retrieval_margin": 0.85,
+    "path_alignment": 0.9,
+    "expected_calibrated_score": 0.92,
+    "label": 1
+  },
+  {
+    "id": "cal_batt_08",
+    "domain": "battery",
+    "query": "Battery percentage number missing from status bar",
+    "ground_truth_actions": [
+      {
+        "actionTitle": "Show Battery Percentage in Notification Settings",
+        "category": "auto"
+      }
+    ],
+    "grounding_coverage": 1.0,
+    "validator_pass_rate": 1.0,
+    "retrieval_margin": 1.0,
+    "path_alignment": 1.0,
+    "expected_calibrated_score": 1.0,
+    "label": 1
+  },
+  {
+    "id": "cal_batt_09",
+    "domain": "battery",
+    "query": "Phone needs daily automatic cleanup",
+    "ground_truth_actions": [
+      {
+        "actionTitle": "Enable Auto Restart in Device Care",
+        "category": "auto"
+      }
+    ],
+    "grounding_coverage": 1.0,
+    "validator_pass_rate": 1.0,
+    "retrieval_margin": 0.9,
+    "path_alignment": 1.0,
+    "expected_calibrated_score": 0.98,
+    "label": 1
+  },
+  {
+    "id": "cal_batt_10",
+    "domain": "battery",
+    "query": "Charging animation and info missing from lock screen",
+    "ground_truth_actions": [
+      {
+        "actionTitle": "Show Charging Information Toggle On",
+        "category": "auto"
+      }
+    ],
+    "grounding_coverage": 1.0,
+    "validator_pass_rate": 1.0,
+    "retrieval_margin": 0.85,
+    "path_alignment": 0.9,
+    "expected_calibrated_score": 0.96,
+    "label": 1
+  },
+  {
+    "id": "cal_batt_11",
+    "domain": "battery",
+    "query": "Moisture detected warning blocks USB charging port",
+    "ground_truth_actions": [
+      {
+        "actionTitle": "Air Dry Port and Clear Android System USB Cache",
+        "category": "auto"
+      }
+    ],
+    "grounding_coverage": 0.8,
+    "validator_pass_rate": 0.9,
+    "retrieval_margin": 0.8,
+    "path_alignment": 0.85,
+    "expected_calibrated_score": 0.84,
+    "label": 1
+  },
+  {
+    "id": "cal_batt_12",
+    "domain": "battery",
+    "query": "Battery level jumps from 20% to 0% abruptly",
+    "ground_truth_actions": [
+      {
+        "actionTitle": "Calibrate Battery Meter via Full Cycle",
+        "category": "auto"
+      }
+    ],
+    "grounding_coverage": 0.7,
+    "validator_pass_rate": 0.8,
+    "retrieval_margin": 0.7,
+    "path_alignment": 0.75,
+    "expected_calibrated_score": 0.74,
+    "label": 1
+  },
+  {
+    "id": "cal_batt_13",
+    "domain": "battery",
+    "query": "Fast wireless charging pad fan too loud at night",
+    "ground_truth_actions": [
+      {
+        "actionTitle": "Turn Off Fast Wireless Charging Overnight",
+        "category": "auto"
+      }
+    ],
+    "grounding_coverage": 0.9,
+    "validator_pass_rate": 1.0,
+    "retrieval_margin": 0.85,
+    "path_alignment": 0.9,
+    "expected_calibrated_score": 0.92,
+    "label": 1
+  },
+  {
+    "id": "cal_batt_14",
+    "domain": "battery",
+    "query": "High background drain from Google Play Services",
+    "ground_truth_actions": [
+      {
+        "actionTitle": "Clear Cache for Google Play Services",
+        "category": "auto"
+      }
+    ],
+    "grounding_coverage": 0.75,
+    "validator_pass_rate": 0.85,
+    "retrieval_margin": 0.7,
+    "path_alignment": 0.8,
+    "expected_calibrated_score": 0.78,
+    "label": 1
+  },
+  {
+    "id": "cal_batt_15",
+    "domain": "battery",
+    "query": "Screen consumes 70% of daily battery capacity",
+    "ground_truth_actions": [
+      {
+        "actionTitle": "Lower Brightness and Shorten Timeout",
+        "category": "auto"
+      }
+    ],
+    "grounding_coverage": 0.95,
+    "validator_pass_rate": 1.0,
+    "retrieval_margin": 0.9,
+    "path_alignment": 0.95,
+    "expected_calibrated_score": 0.96,
+    "label": 1
+  },
+  {
+    "id": "cal_batt_16",
+    "domain": "battery",
+    "query": "GPS navigation drains entire battery on long drives",
+    "ground_truth_actions": [
+      {
+        "actionTitle": "Use Car Charger and Turn Off High Accuracy Scan",
+        "category": "auto"
+      }
+    ],
+    "grounding_coverage": 0.8,
+    "validator_pass_rate": 0.9,
+    "retrieval_margin": 0.75,
+    "path_alignment": 0.8,
+    "expected_calibrated_score": 0.82,
+    "label": 1
+  },
+  {
+    "id": "cal_batt_17",
+    "domain": "battery",
+    "query": "Device warm to touch while idling in pocket",
+    "ground_truth_actions": [
+      {
+        "actionTitle": "Check Device Care for Rogue Background Processes",
+        "category": "auto"
+      }
+    ],
+    "grounding_coverage": 0.85,
+    "validator_pass_rate": 0.9,
+    "retrieval_margin": 0.8,
+    "path_alignment": 0.85,
+    "expected_calibrated_score": 0.86,
+    "label": 1
+  },
+  {
+    "id": "cal_batt_18",
+    "domain": "battery",
+    "query": "Battery health status dropped to Weak in diagnostics",
+    "ground_truth_actions": [
+      {
+        "actionTitle": "Check Battery Status in Samsung Members",
+        "category": "auto"
+      }
+    ],
+    "grounding_coverage": 0.8,
+    "validator_pass_rate": 0.85,
+    "retrieval_margin": 0.75,
+    "path_alignment": 0.8,
+    "expected_calibrated_score": 0.81,
+    "label": 1
+  },
+  {
+    "id": "cal_batt_19",
+    "domain": "battery",
+    "query": "Battery swollen and pushing back glass panel open",
+    "ground_truth_actions": [
+      {
+        "actionTitle": "Stop Charging Immediately and Contact Service Center",
+        "category": "manual"
+      }
+    ],
+    "grounding_coverage": 0.2,
+    "validator_pass_rate": 0.4,
+    "retrieval_margin": 0.2,
+    "path_alignment": 0.3,
+    "expected_calibrated_score": 0.28,
+    "label": 0
+  },
+  {
+    "id": "cal_batt_20",
+    "domain": "battery",
+    "query": "Liquid spilled into USB-C port while phone was plugged in",
+    "ground_truth_actions": [
+      {
+        "actionTitle": "Power Down Phone and Dry Completely",
+        "category": "auto"
+      }
+    ],
+    "grounding_coverage": 0.3,
+    "validator_pass_rate": 0.5,
+    "retrieval_margin": 0.3,
+    "path_alignment": 0.4,
+    "expected_calibrated_score": 0.38,
+    "label": 0
+  },
+  {
+    "id": "cal_conn_01",
+    "domain": "connectivity",
+    "query": "Wi-Fi disconnects frequently every few minutes",
+    "ground_truth_actions": [
+      {
+        "actionTitle": "Forget and Reconnect to Wi-Fi Network",
+        "category": "auto"
+      },
+      {
+        "actionTitle": "Turn Off Intelligent Wi-Fi Switch",
+        "category": "auto"
+      }
+    ],
+    "grounding_coverage": 1.0,
+    "validator_pass_rate": 1.0,
+    "retrieval_margin": 1.0,
+    "path_alignment": 1.0,
+    "expected_calibrated_score": 1.0,
+    "label": 1
+  },
+  {
+    "id": "cal_conn_02",
+    "domain": "connectivity",
+    "query": "Bluetooth headphones audio cuts out and stutters",
+    "ground_truth_actions": [
+      {
+        "actionTitle": "Unpair and Re-pair Bluetooth Device",
+        "category": "auto"
+      },
+      {
+        "actionTitle": "Clear Bluetooth System Cache",
+        "category": "auto"
+      }
+    ],
+    "grounding_coverage": 1.0,
+    "validator_pass_rate": 1.0,
+    "retrieval_margin": 0.95,
+    "path_alignment": 1.0,
+    "expected_calibrated_score": 0.99,
+    "label": 1
+  },
+  {
+    "id": "cal_conn_03",
+    "domain": "connectivity",
+    "query": "Mobile hotspot turns off automatically after 10 minutes",
+    "ground_truth_actions": [
+      {
+        "actionTitle": "Change Hotspot Timeout to Never",
+        "category": "auto"
+      }
+    ],
+    "grounding_coverage": 1.0,
+    "validator_pass_rate": 1.0,
+    "retrieval_margin": 1.0,
+    "path_alignment": 1.0,
+    "expected_calibrated_score": 1.0,
+    "label": 1
+  },
+  {
+    "id": "cal_conn_04",
+    "domain": "connectivity",
+    "query": "Mobile data icon shows exclamation mark with no internet",
+    "ground_truth_actions": [
+      {
+        "actionTitle": "Toggle Airplane Mode",
+        "category": "auto"
+      },
+      {
+        "actionTitle": "Reset APN Access Point Names",
+        "category": "auto"
+      }
+    ],
+    "grounding_coverage": 1.0,
+    "validator_pass_rate": 1.0,
+    "retrieval_margin": 0.9,
+    "path_alignment": 0.95,
+    "expected_calibrated_score": 0.98,
+    "label": 1
+  },
+  {
+    "id": "cal_conn_05",
+    "domain": "connectivity",
+    "query": "All network connections corrupted after update",
+    "ground_truth_actions": [
+      {
+        "actionTitle": "Reset Network Settings in General Management",
+        "category": "auto"
+      }
+    ],
+    "grounding_coverage": 1.0,
+    "validator_pass_rate": 1.0,
+    "retrieval_margin": 1.0,
+    "path_alignment": 1.0,
+    "expected_calibrated_score": 1.0,
+    "label": 1
+  },
+  {
+    "id": "cal_conn_06",
+    "domain": "connectivity",
+    "query": "Wi-Fi calling toggle disabled by carrier",
+    "ground_truth_actions": [
+      {
+        "actionTitle": "Turn On Wi-Fi Calling in Phone App Settings",
+        "category": "auto"
+      }
+    ],
+    "grounding_coverage": 0.95,
+    "validator_pass_rate": 1.0,
+    "retrieval_margin": 0.9,
+    "path_alignment": 0.95,
+    "expected_calibrated_score": 0.96,
+    "label": 1
+  },
+  {
+    "id": "cal_conn_07",
+    "domain": "connectivity",
+    "query": "Quick Share cannot find nearby Galaxy devices",
+    "ground_truth_actions": [
+      {
+        "actionTitle": "Set Quick Share Visibility to Anyone Nearby",
+        "category": "auto"
+      }
+    ],
+    "grounding_coverage": 1.0,
+    "validator_pass_rate": 1.0,
+    "retrieval_margin": 0.95,
+    "path_alignment": 1.0,
+    "expected_calibrated_score": 0.99,
+    "label": 1
+  },
+  {
+    "id": "cal_conn_08",
+    "domain": "connectivity",
+    "query": "Private DNS server cannot be accessed error",
+    "ground_truth_actions": [
+      {
+        "actionTitle": "Set Private DNS to Automatic or Turn Off",
+        "category": "auto"
+      }
+    ],
+    "grounding_coverage": 1.0,
+    "validator_pass_rate": 1.0,
+    "retrieval_margin": 1.0,
+    "path_alignment": 1.0,
+    "expected_calibrated_score": 1.0,
+    "label": 1
+  },
+  {
+    "id": "cal_conn_09",
+    "domain": "connectivity",
+    "query": "NFC Google Pay contactless payment terminal rejected",
+    "ground_truth_actions": [
+      {
+        "actionTitle": "Set Default Payment App to Google Wallet",
+        "category": "auto"
+      },
+      {
+        "actionTitle": "Ensure NFC Turned On",
+        "category": "auto"
+      }
+    ],
+    "grounding_coverage": 1.0,
+    "validator_pass_rate": 1.0,
+    "retrieval_margin": 0.9,
+    "path_alignment": 1.0,
+    "expected_calibrated_score": 0.98,
+    "label": 1
+  },
+  {
+    "id": "cal_conn_10",
+    "domain": "connectivity",
+    "query": "VoLTE calls dropping when switching cell towers",
+    "ground_truth_actions": [
+      {
+        "actionTitle": "Verify VoLTE Enabled in Mobile Networks",
+        "category": "auto"
+      }
+    ],
+    "grounding_coverage": 0.85,
+    "validator_pass_rate": 0.9,
+    "retrieval_margin": 0.8,
+    "path_alignment": 0.85,
+    "expected_calibrated_score": 0.86,
+    "label": 1
+  },
+  {
+    "id": "cal_conn_11",
+    "domain": "connectivity",
+    "query": "Airplane mode switch stuck in grayed out state",
+    "ground_truth_actions": [
+      {
+        "actionTitle": "Restart Device in Safe Mode to Isolate Radio Crash",
+        "category": "auto"
+      }
+    ],
+    "grounding_coverage": 0.8,
+    "validator_pass_rate": 0.9,
+    "retrieval_margin": 0.75,
+    "path_alignment": 0.8,
+    "expected_calibrated_score": 0.82,
+    "label": 1
+  },
+  {
+    "id": "cal_conn_12",
+    "domain": "connectivity",
+    "query": "5G connection drains battery without speed boost",
+    "ground_truth_actions": [
+      {
+        "actionTitle": "Change Network Mode to LTE 3G 2G Auto",
+        "category": "auto"
+      }
+    ],
+    "grounding_coverage": 1.0,
+    "validator_pass_rate": 1.0,
+    "retrieval_margin": 0.95,
+    "path_alignment": 1.0,
+    "expected_calibrated_score": 0.99,
+    "label": 1
+  },
+  {
+    "id": "cal_conn_13",
+    "domain": "connectivity",
+    "query": "eSIM profile not activating after scanning QR code",
+    "ground_truth_actions": [
+      {
+        "actionTitle": "Check SIM Card Manager and Re-scan Profile",
+        "category": "auto"
+      }
+    ],
+    "grounding_coverage": 0.85,
+    "validator_pass_rate": 0.9,
+    "retrieval_margin": 0.8,
+    "path_alignment": 0.85,
+    "expected_calibrated_score": 0.86,
+    "label": 1
+  },
+  {
+    "id": "cal_conn_14",
+    "domain": "connectivity",
+    "query": "Dual SIM not switching mobile data automatically",
+    "ground_truth_actions": [
+      {
+        "actionTitle": "Enable Auto Data Switching in SIM Manager",
+        "category": "auto"
+      }
+    ],
+    "grounding_coverage": 0.9,
+    "validator_pass_rate": 1.0,
+    "retrieval_margin": 0.9,
+    "path_alignment": 0.9,
+    "expected_calibrated_score": 0.93,
+    "label": 1
+  },
+  {
+    "id": "cal_conn_15",
+    "domain": "connectivity",
+    "query": "Bluetooth pairing rejected due to wrong PIN",
+    "ground_truth_actions": [
+      {
+        "actionTitle": "Delete Device from Both Ends and Retry Pairing",
+        "category": "auto"
+      }
+    ],
+    "grounding_coverage": 0.9,
+    "validator_pass_rate": 0.95,
+    "retrieval_margin": 0.85,
+    "path_alignment": 0.9,
+    "expected_calibrated_score": 0.91,
+    "label": 1
+  },
+  {
+    "id": "cal_conn_16",
+    "domain": "connectivity",
+    "query": "Wi-Fi 6GHz 6E network SSID not visible in scan list",
+    "ground_truth_actions": [
+      {
+        "actionTitle": "Verify Router 6GHz WPA3 Security Compatibility",
+        "category": "auto"
+      }
+    ],
+    "grounding_coverage": 0.75,
+    "validator_pass_rate": 0.8,
+    "retrieval_margin": 0.7,
+    "path_alignment": 0.75,
+    "expected_calibrated_score": 0.76,
+    "label": 1
+  },
+  {
+    "id": "cal_conn_17",
+    "domain": "connectivity",
+    "query": "Android Auto wireless disconnects at toll plazas",
+    "ground_truth_actions": [
+      {
+        "actionTitle": "Switch to High Quality USB Cable for Android Auto",
+        "category": "auto"
+      }
+    ],
+    "grounding_coverage": 0.7,
+    "validator_pass_rate": 0.8,
+    "retrieval_margin": 0.7,
+    "path_alignment": 0.75,
+    "expected_calibrated_score": 0.74,
+    "label": 1
+  },
+  {
+    "id": "cal_conn_18",
+    "domain": "connectivity",
+    "query": "Smart View screen mirroring lags behind TV audio",
+    "ground_truth_actions": [
+      {
+        "actionTitle": "Change Aspect Ratio on Phone in Smart View",
+        "category": "auto"
+      }
+    ],
+    "grounding_coverage": 0.8,
+    "validator_pass_rate": 0.85,
+    "retrieval_margin": 0.75,
+    "path_alignment": 0.8,
+    "expected_calibrated_score": 0.81,
+    "label": 1
+  },
+  {
+    "id": "cal_conn_19",
+    "domain": "connectivity",
+    "query": "SIM card tray physically broken inside phone slot",
+    "ground_truth_actions": [
+      {
+        "actionTitle": "Do Not Probe Slot and Contact Repair Center",
+        "category": "manual"
+      }
+    ],
+    "grounding_coverage": 0.25,
+    "validator_pass_rate": 0.4,
+    "retrieval_margin": 0.2,
+    "path_alignment": 0.3,
+    "expected_calibrated_score": 0.29,
+    "label": 0
+  },
+  {
+    "id": "cal_conn_20",
+    "domain": "connectivity",
+    "query": "Cellular baseband antenna completely detached after drop",
+    "ground_truth_actions": [
+      {
+        "actionTitle": "Visit Hardware Technician for Board Repair",
+        "category": "manual"
+      }
+    ],
+    "grounding_coverage": 0.2,
+    "validator_pass_rate": 0.3,
+    "retrieval_margin": 0.2,
+    "path_alignment": 0.3,
+    "expected_calibrated_score": 0.24,
+    "label": 0
+  },
+  {
+    "id": "cal_sys_01",
+    "domain": "sound_system",
+    "query": "Speaker crackles at high volumes when playing music",
+    "ground_truth_actions": [
+      {
+        "actionTitle": "Turn Off Dolby Atmos Equalizer Bass Boost",
+        "category": "auto"
+      },
+      {
+        "actionTitle": "Clean Speaker Grill",
+        "category": "auto"
+      }
+    ],
+    "grounding_coverage": 0.9,
+    "validator_pass_rate": 1.0,
+    "retrieval_margin": 0.9,
+    "path_alignment": 0.95,
+    "expected_calibrated_score": 0.94,
+    "label": 1
+  },
+  {
+    "id": "cal_sys_02",
+    "domain": "sound_system",
+    "query": "No sound from speaker during incoming voice calls",
+    "ground_truth_actions": [
+      {
+        "actionTitle": "Check Sound Mode is Set to Sound not Mute",
+        "category": "auto"
+      },
+      {
+        "actionTitle": "Turn Up Ringtone Volume",
+        "category": "auto"
+      }
+    ],
+    "grounding_coverage": 1.0,
+    "validator_pass_rate": 1.0,
+    "retrieval_margin": 1.0,
+    "path_alignment": 1.0,
+    "expected_calibrated_score": 1.0,
+    "label": 1
+  },
+  {
+    "id": "cal_sys_03",
+    "domain": "sound_system",
+    "query": "Notification sounds completely silent for text messages",
+    "ground_truth_actions": [
+      {
+        "actionTitle": "Set App Notification Category to Alerting",
+        "category": "auto"
+      }
+    ],
+    "grounding_coverage": 1.0,
+    "validator_pass_rate": 1.0,
+    "retrieval_margin": 0.95,
+    "path_alignment": 1.0,
+    "expected_calibrated_score": 0.99,
+    "label": 1
+  },
+  {
+    "id": "cal_sys_04",
+    "domain": "sound_system",
+    "query": "Do Not Disturb schedule turns on during workday",
+    "ground_truth_actions": [
+      {
+        "actionTitle": "Review and Delete Unwanted DND Schedules",
+        "category": "auto"
+      }
+    ],
+    "grounding_coverage": 1.0,
+    "validator_pass_rate": 1.0,
+    "retrieval_margin": 1.0,
+    "path_alignment": 1.0,
+    "expected_calibrated_score": 1.0,
+    "label": 1
+  },
+  {
+    "id": "cal_sys_05",
+    "domain": "sound_system",
+    "query": "Dolby Atmos sound equalizer presets locked",
+    "ground_truth_actions": [
+      {
+        "actionTitle": "Connect Headphones to Unlock Dolby Atmos",
+        "category": "auto"
+      }
+    ],
+    "grounding_coverage": 0.85,
+    "validator_pass_rate": 0.95,
+    "retrieval_margin": 0.8,
+    "path_alignment": 0.9,
+    "expected_calibrated_score": 0.88,
+    "label": 1
+  },
+  {
+    "id": "cal_sys_06",
+    "domain": "sound_system",
+    "query": "Separate app sound playing Spotify on phone speaker instead of car",
+    "ground_truth_actions": [
+      {
+        "actionTitle": "Configure Separate App Sound Audio Device",
+        "category": "auto"
+      }
+    ],
+    "grounding_coverage": 0.95,
+    "validator_pass_rate": 1.0,
+    "retrieval_margin": 0.9,
+    "path_alignment": 0.95,
+    "expected_calibrated_score": 0.96,
+    "label": 1
+  },
+  {
+    "id": "cal_sys_07",
+    "domain": "sound_system",
+    "query": "Vibration intensity too weak to feel in pocket",
+    "ground_truth_actions": [
+      {
+        "actionTitle": "Increase Call and Notification Vibration Intensity",
+        "category": "auto"
+      }
+    ],
+    "grounding_coverage": 1.0,
+    "validator_pass_rate": 1.0,
+    "retrieval_margin": 1.0,
+    "path_alignment": 1.0,
+    "expected_calibrated_score": 1.0,
+    "label": 1
+  },
+  {
+    "id": "cal_sys_08",
+    "domain": "sound_system",
+    "query": "Volume rocker keys control ringtone instead of media",
+    "ground_truth_actions": [
+      {
+        "actionTitle": "Enable Use Volume Keys for Media",
+        "category": "auto"
+      }
+    ],
+    "grounding_coverage": 1.0,
+    "validator_pass_rate": 1.0,
+    "retrieval_margin": 1.0,
+    "path_alignment": 1.0,
+    "expected_calibrated_score": 1.0,
+    "label": 1
+  },
+  {
+    "id": "cal_sys_09",
+    "domain": "sound_system",
+    "query": "Microphone muffled during speakerphone conference calls",
+    "ground_truth_actions": [
+      {
+        "actionTitle": "Clean Top Secondary Microphone Hole",
+        "category": "auto"
+      }
+    ],
+    "grounding_coverage": 0.75,
+    "validator_pass_rate": 0.85,
+    "retrieval_margin": 0.7,
+    "path_alignment": 0.8,
+    "expected_calibrated_score": 0.78,
+    "label": 1
+  },
+  {
+    "id": "cal_sys_10",
+    "domain": "sound_system",
+    "query": "Phone restarts into bootloop after third-party launcher install",
+    "ground_truth_actions": [
+      {
+        "actionTitle": "Reboot into Safe Mode and Uninstall Launcher",
+        "category": "auto"
+      }
+    ],
+    "grounding_coverage": 0.85,
+    "validator_pass_rate": 0.9,
+    "retrieval_margin": 0.8,
+    "path_alignment": 0.85,
+    "expected_calibrated_score": 0.86,
+    "label": 1
+  },
+  {
+    "id": "cal_sys_11",
+    "domain": "sound_system",
+    "query": "System cache corrupted causing stuttering animations",
+    "ground_truth_actions": [
+      {
+        "actionTitle": "Wipe Cache Partition from Recovery Menu",
+        "category": "auto"
+      }
+    ],
+    "grounding_coverage": 0.8,
+    "validator_pass_rate": 0.85,
+    "retrieval_margin": 0.75,
+    "path_alignment": 0.8,
+    "expected_calibrated_score": 0.81,
+    "label": 1
+  },
+  {
+    "id": "cal_sys_12",
+    "domain": "sound_system",
+    "query": "Phone automatically restarts during business presentations",
+    "ground_truth_actions": [
+      {
+        "actionTitle": "Adjust Scheduled Auto Restart Time in Device Care",
+        "category": "auto"
+      }
+    ],
+    "grounding_coverage": 1.0,
+    "validator_pass_rate": 1.0,
+    "retrieval_margin": 0.95,
+    "path_alignment": 1.0,
+    "expected_calibrated_score": 0.99,
+    "label": 1
+  },
+  {
+    "id": "cal_sys_13",
+    "domain": "sound_system",
+    "query": "Camera app crashes immediately upon opening",
+    "ground_truth_actions": [
+      {
+        "actionTitle": "Clear Storage and Cache for Camera App",
+        "category": "auto"
+      }
+    ],
+    "grounding_coverage": 1.0,
+    "validator_pass_rate": 1.0,
+    "retrieval_margin": 0.9,
+    "path_alignment": 1.0,
+    "expected_calibrated_score": 0.98,
+    "label": 1
+  },
+  {
+    "id": "cal_sys_14",
+    "domain": "sound_system",
+    "query": "Lift to wake motion gesture triggers too easily in hand",
+    "ground_truth_actions": [
+      {
+        "actionTitle": "Turn Off Lift to Wake in Motions and Gestures",
+        "category": "auto"
+      }
+    ],
+    "grounding_coverage": 1.0,
+    "validator_pass_rate": 1.0,
+    "retrieval_margin": 1.0,
+    "path_alignment": 1.0,
+    "expected_calibrated_score": 1.0,
+    "label": 1
+  },
+  {
+    "id": "cal_sys_15",
+    "domain": "sound_system",
+    "query": "Lock screen clock font style reset to default",
+    "ground_truth_actions": [
+      {
+        "actionTitle": "Customize Lock Screen Clock Font in Wallpaper Settings",
+        "category": "auto"
+      }
+    ],
+    "grounding_coverage": 0.9,
+    "validator_pass_rate": 1.0,
+    "retrieval_margin": 0.85,
+    "path_alignment": 0.9,
+    "expected_calibrated_score": 0.92,
+    "label": 1
+  },
+  {
+    "id": "cal_sys_16",
+    "domain": "sound_system",
+    "query": "App permission denied popup blocks opening gallery",
+    "ground_truth_actions": [
+      {
+        "actionTitle": "Grant Storage and Photos Permission in App Info",
+        "category": "auto"
+      }
+    ],
+    "grounding_coverage": 1.0,
+    "validator_pass_rate": 1.0,
+    "retrieval_margin": 0.95,
+    "path_alignment": 1.0,
+    "expected_calibrated_score": 0.99,
+    "label": 1
+  },
+  {
+    "id": "cal_sys_17",
+    "domain": "sound_system",
+    "query": "Software update download stuck at 99 percent",
+    "ground_truth_actions": [
+      {
+        "actionTitle": "Clear Cache for Software Update System App",
+        "category": "auto"
+      }
+    ],
+    "grounding_coverage": 0.8,
+    "validator_pass_rate": 0.85,
+    "retrieval_margin": 0.75,
+    "path_alignment": 0.8,
+    "expected_calibrated_score": 0.81,
+    "label": 1
+  },
+  {
+    "id": "cal_sys_18",
+    "domain": "sound_system",
+    "query": "Side power key double press opens Bixby instead of camera",
+    "ground_truth_actions": [
+      {
+        "actionTitle": "Set Side Key Double Press to Quick Launch Camera",
+        "category": "auto"
+      }
+    ],
+    "grounding_coverage": 1.0,
+    "validator_pass_rate": 1.0,
+    "retrieval_margin": 1.0,
+    "path_alignment": 1.0,
+    "expected_calibrated_score": 1.0,
+    "label": 1
+  },
+  {
+    "id": "cal_sys_19",
+    "domain": "sound_system",
+    "query": "Earpiece speaker diaphragm punctured with sharp pin",
+    "ground_truth_actions": [
+      {
+        "actionTitle": "Replace Earpiece Speaker Component",
+        "category": "auto"
+      }
+    ],
+    "grounding_coverage": 0.2,
+    "validator_pass_rate": 0.3,
+    "retrieval_margin": 0.2,
+    "path_alignment": 0.3,
+    "expected_calibrated_score": 0.24,
+    "label": 0
+  },
+  {
+    "id": "cal_sys_20",
+    "domain": "sound_system",
+    "query": "Motherboard power IC burnt out from water immersion",
+    "ground_truth_actions": [
+      {
+        "actionTitle": "Submit for Motherboard Repair",
+        "category": "auto"
+      }
+    ],
+    "grounding_coverage": 0.15,
+    "validator_pass_rate": 0.3,
+    "retrieval_margin": 0.15,
+    "path_alignment": 0.25,
+    "expected_calibrated_score": 0.21,
+    "label": 0
+  }
+]
