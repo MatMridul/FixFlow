@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { TopBar } from './components/TopBar';
 import { DiagnosticIntake } from './components/DiagnosticIntake';
@@ -92,19 +92,17 @@ function FixFlowApp() {
     [query, activeSiis, addToast]
   );
 
-  // Auto-run first scenario and check health on mount
+  // Auto-run first scenario and check health strictly once on mount
+  const initializedRef = useRef(false);
   useEffect(() => {
-    let mounted = true;
+    if (initializedRef.current) return;
+    initializedRef.current = true;
+
     (async () => {
       const isHealthy = await checkServerHealth();
-      if (mounted) {
-        setServerOnline(isHealthy);
-      }
+      setServerOnline(isHealthy);
       await handleRunDiagnostic(BENCHMARK_SCENARIOS[0].query);
     })();
-    return () => {
-      mounted = false;
-    };
   }, [handleRunDiagnostic]);
 
   const handleTriggerDeeplink = (

@@ -1,6 +1,6 @@
 import type { TroubleshootResponsePayload } from "../types/engine";
 
-const API_BASE_URL = "http://localhost:8000";
+const API_BASE_URL = "http://127.0.0.1:8000";
 
 // Pre-grounded authentic Samsung benchmark scenarios from data/input.txt & data/siis_responses.json
 export const BENCHMARK_SCENARIOS = [

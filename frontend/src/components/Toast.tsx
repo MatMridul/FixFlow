@@ -15,7 +15,7 @@ export const ToastProvider: React.FC<{ children: React.ReactNode }> = ({ childre
   const addToast = useCallback(
     ({ type, title, message, duration = 4000 }: Omit<ToastMessage, 'id'>) => {
       const id = Math.random().toString(36).substring(2, 9);
-      setToasts((prev) => [...prev, { id, type, title, message, duration }]);
+      setToasts((prev) => [...prev.slice(-2), { id, type, title, message, duration }]);
 
       if (duration > 0) {
         setTimeout(() => {
@@ -31,7 +31,7 @@ export const ToastProvider: React.FC<{ children: React.ReactNode }> = ({ childre
       {children}
       <div
         aria-live="polite"
-        className="fixed top-4 right-4 z-50 flex flex-col gap-2 max-w-sm w-full pointer-events-none px-4 sm:px-0"
+        className="fixed top-16 right-4 z-50 flex flex-col gap-2 max-w-sm w-full pointer-events-none px-4 sm:px-0"
       >
         <AnimatePresence mode="popLayout">
           {toasts.map((toast) => {
