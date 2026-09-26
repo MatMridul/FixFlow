@@ -25,7 +25,7 @@ function FixFlowApp() {
   const [isMobileSimOpen, setIsMobileSimOpen] = useState(false);
   const [is404, setIs404] = useState(false);
 
-  // Phone simulation state - start immediately on Display screen with active settings
+  // Phone simulation state: starts immediately on Display screen with active settings
   const [deviceState, setDeviceState] = useState<SimulatedDeviceState>({
     screen: 'display',
     adaptiveBrightness: false,
@@ -63,7 +63,6 @@ function FixFlowApp() {
 
       setIsLoading(true);
 
-      // Check if complaint matches any benchmark scenario for SIIS ground truth
       const matched = BENCHMARK_SCENARIOS.find(
         (s) => s.query.trim().toLowerCase() === q.trim().toLowerCase()
       );
@@ -82,7 +81,7 @@ function FixFlowApp() {
         addToast({
           type: 'success',
           title: 'Troubleshooting Guide Ready',
-          message: `Generated ${actionsCount} verified step-by-step resolution actions for your Galaxy device.`,
+          message: `Generated ${actionsCount} verified resolution actions for your Galaxy device.`,
         });
       } catch (err) {
         addToast({
@@ -97,7 +96,6 @@ function FixFlowApp() {
     [query, activeSiis, addToast]
   );
 
-  // Auto-run first scenario and check health strictly once on mount
   const initializedRef = useRef(false);
   useEffect(() => {
     if (initializedRef.current) return;
@@ -154,7 +152,7 @@ function FixFlowApp() {
       lastActionNotice: notice,
       isLocked: false,
     }));
-    // On small screens, automatically open the phone simulator so the user sees the screen update
+
     if (window.innerWidth < 1024) {
       setIsMobileSimOpen(true);
     }
@@ -191,7 +189,7 @@ function FixFlowApp() {
 
   if (is404) {
     return (
-      <div className="min-h-screen bg-slate-950 text-slate-100 flex flex-col justify-between overflow-x-hidden">
+      <div className="min-h-screen bg-[#08090B] text-zinc-100 flex flex-col justify-between overflow-x-hidden">
         <TopBar
           serverOnline={serverOnline}
           onReset={handleReset}
@@ -212,8 +210,7 @@ function FixFlowApp() {
   const primaryGoal = diagnosticResult?.response.contexts[0] || null;
 
   return (
-    <div className="min-h-screen bg-slate-950 text-slate-100 flex flex-col justify-between overflow-x-hidden selection:bg-blue-600/30 selection:text-blue-200">
-      {/* Top Bar with clickable logo, status badges, mobile launcher */}
+    <div className="min-h-screen bg-[#08090B] text-zinc-100 flex flex-col justify-between overflow-x-hidden selection:bg-[#1E56FF]/30 selection:text-blue-100">
       <TopBar
         serverOnline={serverOnline}
         onReset={handleReset}
@@ -221,11 +218,11 @@ function FixFlowApp() {
         isMobileSimOpen={isMobileSimOpen}
       />
 
-      {/* Main Command Center Layout */}
+      {/* Main Workspace Layout */}
       <main className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 pt-6 pb-12">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
-          {/* Left Column: Intake, Telemetry, Action Card Stream, Refinement */}
-          <div className="lg:col-span-7 xl:col-span-7 space-y-6">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+          {/* Left Column: Resolution Center */}
+          <div className="lg:col-span-7 xl:col-span-7 space-y-4">
             <DiagnosticIntake
               query={query}
               setQuery={setQuery}
@@ -241,7 +238,7 @@ function FixFlowApp() {
               onSuccessToast={(msg) =>
                 addToast({
                   type: 'success',
-                  title: 'Setting Calibrated',
+                  title: 'Device Setting Updated',
                   message: msg,
                 })
               }
@@ -250,18 +247,18 @@ function FixFlowApp() {
             <RefinementBox onRefine={handleRefine} isProcessing={isLoading} />
           </div>
 
-          {/* Right Column: Sticky Samsung Galaxy S24 Simulator (Desktop) */}
-          <div className="hidden lg:block lg:col-span-5 xl:col-span-5 sticky top-20 space-y-3">
-            <div className="p-4 sm:p-5 rounded-3xl bg-slate-900/60 border border-slate-800/80 backdrop-blur-2xl shadow-2xl flex flex-col items-center">
-              <div className="w-full flex items-center justify-between border-b border-slate-800/70 pb-3 mb-3">
+          {/* Right Column: Sticky DeviceTwin */}
+          <div className="hidden lg:block lg:col-span-5 xl:col-span-5 sticky top-16 space-y-2.5">
+            <div className="p-4 rounded-xl bg-[#13151A] border border-white/[0.07] flex flex-col items-center">
+              <div className="w-full flex items-center justify-between border-b border-white/[0.05] pb-2.5 mb-3">
                 <div className="flex items-center gap-2">
                   <span className="w-2 h-2 rounded-full bg-emerald-400" />
-                  <span className="text-xs font-bold text-slate-200 tracking-wide">
-                    Your Galaxy S24 Ultra
+                  <span className="text-xs font-semibold text-zinc-200">
+                    Galaxy S24 Ultra
                   </span>
                 </div>
-                <span className="text-[10px] text-sky-400 bg-sky-500/10 px-2.5 py-0.5 rounded-full border border-sky-500/20 font-medium">
-                  Live Device Preview
+                <span className="text-[10px] font-mono text-zinc-400 bg-[#191C23] px-2 py-0.5 rounded border border-white/[0.05]">
+                  One UI 6.1 Live Twin
                 </span>
               </div>
 
@@ -271,18 +268,18 @@ function FixFlowApp() {
               />
 
               {/* Screen Preview Switcher */}
-              <div className="w-full pt-3 mt-3 border-t border-slate-800/60 flex items-center justify-between text-xs">
-                <span className="text-[11px] text-slate-400 font-medium">Screen Preview:</span>
+              <div className="w-full pt-3 mt-3 border-t border-white/[0.05] flex items-center justify-between text-xs">
+                <span className="text-[11px] text-zinc-400">Quick Jump:</span>
                 <div className="flex gap-1">
                   {(['home', 'display', 'battery', 'storage'] as OneUIScreen[]).map((scr) => (
                     <button
                       key={scr}
                       data-testid={`quick-jump-${scr}`}
                       onClick={() => setDeviceState((p) => ({ ...p, screen: scr, isLocked: false }))}
-                      className={`px-2.5 py-1 rounded-lg text-[10px] font-semibold capitalize transition-all ${
+                      className={`px-2.5 py-1 rounded text-[10px] font-medium capitalize transition-all ${
                         deviceState.screen === scr
-                          ? 'bg-sky-500 text-white shadow-sm'
-                          : 'bg-slate-800/80 text-slate-400 hover:text-white hover:bg-slate-700'
+                          ? 'bg-[#1E56FF] text-white shadow-sm'
+                          : 'bg-[#191C23] text-zinc-400 hover:text-white hover:bg-[#20242D]'
                       }`}
                     >
                       {scr}
@@ -295,7 +292,7 @@ function FixFlowApp() {
         </div>
       </main>
 
-      {/* Mobile Drawer / Bottom Sheet for Phone Simulator (Un-Vibe Rule 5 & 19) */}
+      {/* Mobile Drawer (Rule 5 & 19) */}
       <AnimatePresence>
         {isMobileSimOpen && (
           <div className="lg:hidden fixed inset-0 z-50 flex items-end sm:items-center justify-center p-0 sm:p-4">
@@ -304,7 +301,7 @@ function FixFlowApp() {
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               onClick={() => setIsMobileSimOpen(false)}
-              className="fixed inset-0 bg-slate-950/80 backdrop-blur-sm"
+              className="fixed inset-0 bg-black/80 backdrop-blur-sm"
             />
 
             <motion.div
@@ -324,7 +321,6 @@ function FixFlowApp() {
         )}
       </AnimatePresence>
 
-      {/* 19/19 Un-Vibe Code Verified Footer */}
       <Footer />
     </div>
   );

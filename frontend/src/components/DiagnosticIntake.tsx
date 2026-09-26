@@ -1,5 +1,5 @@
 import React from "react";
-import { Search, Sparkles, ChevronRight } from "lucide-react";
+import { Search, ChevronRight } from "lucide-react";
 import { BENCHMARK_SCENARIOS } from "../services/api";
 import type { MetaPayload } from "../types/engine";
 
@@ -24,56 +24,47 @@ export const DiagnosticIntake: React.FC<DiagnosticIntakeProps> = ({
   };
 
   return (
-    <div className="w-full relative overflow-hidden rounded-3xl p-5 sm:p-7 border border-slate-800/80 bg-slate-900/60 backdrop-blur-2xl shadow-2xl space-y-5">
-      {/* Specular Ambient Glow */}
-      <div className="absolute top-0 right-0 w-80 h-80 bg-gradient-to-br from-sky-500/10 via-blue-600/5 to-transparent rounded-full blur-3xl pointer-events-none" />
-
-      {/* Header with Galaxy AI Badge */}
-      <div className="flex flex-wrap items-center justify-between gap-2 border-b border-slate-800/70 pb-3">
-        <div className="flex items-center gap-2">
-          <div className="p-1.5 rounded-lg bg-sky-500/15 border border-sky-400/30 text-sky-400">
-            <Sparkles className="w-4 h-4 fill-sky-400/20" />
-          </div>
-          <div>
-            <span className="text-xs font-bold text-slate-100 tracking-wide">
-              Galaxy AI Troubleshooting Assistant
-            </span>
-            <span className="text-[10px] text-slate-400 block font-medium">
-              Samsung One UI 6.1 Diagnostic Care
-            </span>
-          </div>
+    <section className="w-full bg-[#13151A] border border-white/[0.07] rounded-xl p-5 sm:p-6 space-y-4">
+      {/* Header */}
+      <div className="flex items-center justify-between border-b border-white/[0.05] pb-3">
+        <div>
+          <h2 className="text-sm font-semibold text-white tracking-tight">
+            Galaxy Device Diagnostics
+          </h2>
+          <p className="text-xs text-zinc-400 mt-0.5">
+            Identify issues and generate verified step-by-step solutions for your device.
+          </p>
         </div>
-
-        <div className="flex items-center gap-1.5 px-3 py-1 rounded-full bg-sky-500/10 border border-sky-500/20 text-xs text-sky-300 font-medium">
-          <Sparkles className="w-3.5 h-3.5 text-sky-400" />
-          <span>Smart Assistant Ready</span>
+        <div className="text-[11px] font-mono text-zinc-400 bg-[#191C23] px-2.5 py-1 rounded border border-white/[0.06]">
+          One UI 6.1
         </div>
       </div>
 
-      {/* Search Input Bar (Zero placeholder text — Rule 6) */}
+      {/* Search Input Bar (Rule 6: Zero placeholder text) */}
       <div className="space-y-1.5">
-        <label className="text-xs font-medium text-slate-300 block">
+        <label htmlFor="diagnostic-search" className="text-xs font-medium text-zinc-300 block">
           Describe what's happening with your Galaxy device:
         </label>
         <div className="relative flex items-center">
-          <div className="absolute left-4 text-sky-400 pointer-events-none">
+          <div className="absolute left-3.5 text-zinc-500 pointer-events-none">
             <Search className="w-4 h-4" />
           </div>
           <input
+            id="diagnostic-search"
             type="text"
             value={query}
             onChange={(e) => setQuery(e.target.value)}
             onKeyDown={handleKeyDown}
             disabled={isLoading}
-            className="w-full pl-11 pr-28 py-3.5 rounded-2xl bg-slate-950/80 border border-slate-700/80 focus:border-sky-400 focus:ring-2 focus:ring-sky-500/20 text-white text-xs sm:text-sm font-medium transition-all shadow-inner"
+            className="w-full pl-10 pr-24 py-2.5 rounded-lg bg-[#0E1013] border border-white/[0.1] focus:border-[#1E56FF] focus:outline-none focus:ring-1 focus:ring-[#1E56FF] text-white text-xs sm:text-sm font-normal transition-colors"
           />
           <button
             onClick={() => onSubmit(query.trim())}
             disabled={isLoading || !query.trim()}
-            className="absolute right-2 px-4 py-2 rounded-xl bg-gradient-to-r from-sky-500 to-blue-600 hover:from-sky-400 hover:to-blue-500 text-white text-xs font-semibold shadow-md shadow-sky-500/25 active:scale-95 disabled:opacity-50 disabled:pointer-events-none transition-all flex items-center gap-1.5"
+            className="absolute right-1.5 px-3.5 py-1.5 rounded-md bg-[#1E56FF] hover:bg-[#2F68FD] text-white text-xs font-medium active:scale-95 disabled:opacity-40 disabled:pointer-events-none transition-all flex items-center gap-1"
           >
             {isLoading ? (
-              <span className="animate-spin">⟳</span>
+              <span className="animate-spin text-xs">⟳</span>
             ) : (
               <>
                 <span>Diagnose</span>
@@ -85,11 +76,11 @@ export const DiagnosticIntake: React.FC<DiagnosticIntakeProps> = ({
       </div>
 
       {/* Common Galaxy Issues & Quick Guides */}
-      <div className="space-y-2">
-        <span className="text-[11px] font-semibold text-slate-400 uppercase tracking-wider block">
+      <div className="space-y-2 pt-1">
+        <span className="text-[11px] font-medium text-zinc-400 uppercase tracking-wider block">
           Common Galaxy Issues &amp; Quick Guides
         </span>
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
           {BENCHMARK_SCENARIOS.map((scenario) => {
             const isSelected = query.trim().toLowerCase() === scenario.query.trim().toLowerCase();
             return (
@@ -100,38 +91,26 @@ export const DiagnosticIntake: React.FC<DiagnosticIntakeProps> = ({
                   onSubmit(scenario.query, scenario.siis_title, scenario.siis_content);
                 }}
                 disabled={isLoading}
-                className={`p-3 rounded-2xl border text-left transition-all flex items-start justify-between gap-2.5 group ${
+                className={`p-2.5 rounded-lg border text-left transition-all flex items-center justify-between gap-2 group ${
                   isSelected
-                    ? "bg-sky-500/15 border-sky-400/50 ring-1 ring-sky-400/30 text-white"
-                    : "bg-slate-950/50 border-slate-800/80 hover:bg-slate-800/40 hover:border-slate-700 text-slate-300"
+                    ? "bg-[#1E56FF]/10 border-[#1E56FF]/40 text-white"
+                    : "bg-[#191C23] border-white/[0.05] hover:bg-[#20242D] hover:border-white/[0.1] text-zinc-300"
                 }`}
               >
                 <div className="min-w-0">
-                  <div className="flex items-center gap-1.5 mb-1">
-                    <span className="w-1.5 h-1.5 rounded-full bg-sky-400 group-hover:scale-125 transition-transform" />
-                    <span className="text-[10px] font-mono text-sky-300 font-bold uppercase truncate">
-                      {scenario.tag}
-                    </span>
-                  </div>
-                  <span className="text-xs font-semibold block text-slate-200 group-hover:text-white leading-snug">
+                  <span className="text-[10px] font-mono text-zinc-400 uppercase tracking-wider block">
+                    {scenario.tag}
+                  </span>
+                  <span className="text-xs font-medium text-zinc-200 group-hover:text-white truncate block">
                     {scenario.label}
                   </span>
                 </div>
-                <ChevronRight className="w-4 h-4 text-slate-500 group-hover:text-sky-400 shrink-0 mt-2 transition-colors" />
+                <ChevronRight className="w-3.5 h-3.5 text-zinc-500 group-hover:text-zinc-300 shrink-0 transition-colors" />
               </button>
             );
           })}
         </div>
       </div>
-
-      {/* Official Samsung Support Guarantee Footer */}
-      <div className="pt-3 border-t border-slate-800/80 flex flex-wrap items-center justify-between gap-3 text-xs text-slate-400">
-        <div className="flex items-center gap-1.5 text-slate-300">
-          <Sparkles className="w-3.5 h-3.5 text-sky-400" />
-          <span>Official Samsung One UI 6.1 Diagnostic Solutions</span>
-        </div>
-        <span className="text-[11px] text-slate-500 font-medium">Samsung Electronics · Care+</span>
-      </div>
-    </div>
+    </section>
   );
 };
