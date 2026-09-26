@@ -161,3 +161,36 @@ class TestApiEndpoints:
         assert len(data["response"]["contexts"]) == 0
         assert data["meta"]["cache_hit"] is False
         assert data["meta"]["fallback"] == "no_match"
+
+    def test_troubleshoot_end_to_end_binds_real_deeplinks(self, test_client):
+        # Full cold-path: Query -> SIIS -> Extract -> Resolution Screen Graph -> Deeplink Binding -> Schema Valid
+        payload = {
+            "query": "How to back up my phone data to Samsung Cloud?",
+            "siis_response": {
+                "title": "Back Up Phone Data",
+                "content": (
+                    "Step 1: Open Settings.\n"
+                    "Navigate to and open Settings. Tap on Accounts and backup.\n"
+                    "Step 2: Select Back Up Data.\n"
+                    "Select Back up data to secure your personal files."
+                ),
+            },
+        }
+        response = test_client.post("/v1/troubleshoot", json=payload)
+        assert response.status_code == 200
+        data = response.json()
+
+        contexts = data["response"]["contexts"]
+        assert len(contexts) >= 1
+        goal = contexts[0]
+        assert len(goal["actions"]) >= 1
+
+        # Check that actionableDeeplink has been resolved to a valid bixby:// URI
+        found_deeplink = False
+        for action in goal["actions"]:
+            for sg in action["stepGroups"]:
+                if sg.get("actionableDeeplink") and sg["actionableDeeplink"]["deeplink"].startswith("bixby://"):
+                    found_deeplink = True
+                    break
+
+        assert found_deeplink, "Expected at least one stepGroup with a bound bixby:// deeplink"

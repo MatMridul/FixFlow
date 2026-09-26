@@ -33,6 +33,12 @@ def create_app(
     # Initialize service components on app state (Defaults to N1 Compositional Cache)
     app.state.cache = cache or CompositionalCache(store=CacheStore())
     app.state.extractor = extractor or StructureExtractor()
+    if resolver_fn is None:
+        try:
+            from resolution import resolve_goal_deeplinks
+            resolver_fn = resolve_goal_deeplinks
+        except Exception:
+            resolver_fn = None
     app.state.resolver_fn = resolver_fn
 
 

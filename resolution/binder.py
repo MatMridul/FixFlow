@@ -27,7 +27,7 @@ from SIIS text, which stays N4 work on the extraction side.
 from __future__ import annotations
 
 from dataclasses import dataclass
-from typing import Optional
+from typing import Any, Optional
 
 from catalog.loader import Catalog
 from catalog.models import CatalogEntry
@@ -122,3 +122,45 @@ def bind_actionable_deeplink(
         top_score=resolution.score,
         candidate=resolution.entry,
     )
+
+
+def resolve_goal_deeplinks(
+    goal: Any,
+    catalog: Optional[Catalog] = None,
+    retriever: Optional[HybridRetriever] = None,
+    threshold: float = DEFAULT_THRESHOLD,
+) -> Any:
+    """
+    Contract 1 & Novelty N3/N4: Resolve and bind actionableDeeplink and validationDeeplink
+    to each StepGroup within the Goal's actions, and order actions safe-first.
+    """
+    from resolution.ordering import order_actions
+    from schema import Deeplink, ValidationDeepLink
+
+    if catalog is None:
+        from catalog.loader import load_catalog
+        catalog = load_catalog()
+    if retriever is None:
+        retriever = HybridRetriever(catalog)
+
+    for action in getattr(goal, "actions", []):
+        category_str = action.category.value if hasattr(action.category, "value") else str(action.category or "manual")
+        for sg in getattr(action, "stepGroups", []):
+            bind_res = bind_actionable_deeplink(
+                steps=sg.steps,
+                category=category_str,
+                catalog=catalog,
+                retriever=retriever,
+                threshold=threshold,
+            )
+            if bind_res.status == "matched":
+                if bind_res.actionable_deeplink:
+                    sg.actionableDeeplink = Deeplink.model_validate(bind_res.actionable_deeplink)
+                if bind_res.validation_ref:
+                    v_dict = {k: v for k, v in bind_res.validation_ref.items() if k != "inferred"}
+                    sg.validationDeeplink = ValidationDeepLink.model_validate(v_dict)
+
+    if hasattr(goal, "actions") and goal.actions:
+        goal.actions = order_actions(goal.actions)
+
+    return goal
