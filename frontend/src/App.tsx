@@ -10,7 +10,7 @@ import { NotFound } from './components/NotFound';
 import { ToastProvider } from './components/Toast';
 import { useToast } from './hooks/useToast';
 import { BENCHMARK_SCENARIOS, submitTroubleshoot, checkServerHealth } from './services/api';
-import type { TroubleshootResponsePayload, SimulatedDeviceState } from './types/engine';
+import type { TroubleshootResponsePayload, SimulatedDeviceState, OneUIScreen } from './types/engine';
 import { springs } from './theme/motion';
 
 function FixFlowApp() {
@@ -25,13 +25,18 @@ function FixFlowApp() {
   const [isMobileSimOpen, setIsMobileSimOpen] = useState(false);
   const [is404, setIs404] = useState(false);
 
-  // Phone simulation state
+  // Phone simulation state - start immediately on Display screen with active settings
   const [deviceState, setDeviceState] = useState<SimulatedDeviceState>({
-    screen: 'home',
+    screen: 'display',
     adaptiveBrightness: false,
-    darkMode: false,
+    brightness: 75,
+    darkMode: true,
     powerSaving: false,
     protectBattery: false,
+    cacheSizeMb: 184,
+    quickPanelOpen: false,
+    isLocked: false,
+    isSafeMode: false,
     lastDeeplinkTriggered: null,
   });
 
@@ -107,12 +112,39 @@ function FixFlowApp() {
 
   const handleTriggerDeeplink = (
     deeplink: string,
-    targetScreen: 'display' | 'battery' | 'settings'
+    targetScreen: OneUIScreen,
+    actionName?: string
   ) => {
+    let notice = `Navigated to ${targetScreen.toUpperCase()}`;
+    let updates: Partial<SimulatedDeviceState> = {};
+
+    if (actionName) {
+      const lower = actionName.toLowerCase();
+      if (lower.includes('brightness') || lower.includes('adaptive')) {
+        updates = { adaptiveBrightness: true, brightness: 55 };
+        notice = 'Adaptive Brightness enabled (55%)';
+      } else if (lower.includes('power') || lower.includes('battery')) {
+        updates = { powerSaving: true };
+        notice = 'Power Saving Mode activated';
+      } else if (lower.includes('cache') || lower.includes('storage')) {
+        updates = { cacheSizeMb: 0 };
+        notice = '184 MB Cache cleared & freed';
+      } else if (lower.includes('safe mode') || lower.includes('reboot')) {
+        updates = { isSafeMode: true };
+        notice = 'Safe Mode diagnostic verified';
+      } else if (lower.includes('dark')) {
+        updates = { darkMode: true };
+        notice = 'One UI Dark Mode enabled';
+      }
+    }
+
     setDeviceState((prev) => ({
       ...prev,
+      ...updates,
       screen: targetScreen,
       lastDeeplinkTriggered: deeplink,
+      lastActionNotice: notice,
+      isLocked: false,
     }));
     // On small screens, automatically open the phone simulator so the user sees the screen update
     if (window.innerWidth < 1024) {
@@ -129,11 +161,16 @@ function FixFlowApp() {
   const handleReset = () => {
     setQuery(BENCHMARK_SCENARIOS[0].query);
     setDeviceState({
-      screen: 'home',
+      screen: 'display',
       adaptiveBrightness: false,
-      darkMode: false,
+      brightness: 75,
+      darkMode: true,
       powerSaving: false,
       protectBattery: false,
+      cacheSizeMb: 184,
+      quickPanelOpen: false,
+      isLocked: false,
+      isSafeMode: false,
       lastDeeplinkTriggered: null,
     });
     handleRunDiagnostic(BENCHMARK_SCENARIOS[0].query);
@@ -206,11 +243,46 @@ function FixFlowApp() {
           </div>
 
           {/* Right Column: Sticky Samsung Galaxy S24 Simulator (Desktop) */}
-          <div className="hidden lg:block lg:col-span-5 xl:col-span-5 sticky top-20">
-            <PhoneSimulator
-              deviceState={deviceState}
-              setDeviceState={setDeviceState}
-            />
+          <div className="hidden lg:block lg:col-span-5 xl:col-span-5 sticky top-20 space-y-3">
+            <div className="p-4 sm:p-5 rounded-3xl bg-slate-900/60 border border-slate-800/80 backdrop-blur-2xl shadow-2xl flex flex-col items-center">
+              <div className="w-full flex items-center justify-between border-b border-slate-800/70 pb-3 mb-3">
+                <div className="flex items-center gap-2">
+                  <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
+                  <span className="text-xs font-bold text-slate-200 tracking-wide">
+                    Live Galaxy S24 Mirror
+                  </span>
+                </div>
+                <span className="text-[10px] font-mono text-sky-400 bg-sky-500/10 px-2.5 py-0.5 rounded-full border border-sky-500/20">
+                  One UI 6.1 Interactive
+                </span>
+              </div>
+
+              <PhoneSimulator
+                deviceState={deviceState}
+                setDeviceState={setDeviceState}
+              />
+
+              {/* Quick Screen Switcher Toolbar */}
+              <div className="w-full pt-3 mt-3 border-t border-slate-800/60 flex items-center justify-between text-xs">
+                <span className="text-[11px] text-slate-400 font-medium">Quick Jump:</span>
+                <div className="flex gap-1">
+                  {(['home', 'display', 'battery', 'storage'] as OneUIScreen[]).map((scr) => (
+                    <button
+                      key={scr}
+                      data-testid={`quick-jump-${scr}`}
+                      onClick={() => setDeviceState((p) => ({ ...p, screen: scr, isLocked: false }))}
+                      className={`px-2.5 py-1 rounded-lg text-[10px] font-semibold capitalize transition-all ${
+                        deviceState.screen === scr
+                          ? 'bg-sky-500 text-white shadow-sm'
+                          : 'bg-slate-800/80 text-slate-400 hover:text-white hover:bg-slate-700'
+                      }`}
+                    >
+                      {scr}
+                    </button>
+                  ))}
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </main>

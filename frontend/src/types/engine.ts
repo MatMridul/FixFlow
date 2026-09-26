@@ -59,11 +59,22 @@ export interface TroubleshootResponsePayload {
   meta: MetaPayload;
 }
 
+export type OneUIScreen = "home" | "settings" | "display" | "battery" | "storage" | "safe_mode";
+
 export interface SimulatedDeviceState {
-  screen: "home" | "settings" | "display" | "battery";
+  screen: OneUIScreen;
   adaptiveBrightness: boolean;
+  brightness: number;
   darkMode: boolean;
   powerSaving: boolean;
   protectBattery: boolean;
+  cacheSizeMb: number;
+  quickPanelOpen: boolean;
+  isLocked: boolean;
+  isSafeMode: boolean;
   lastDeeplinkTriggered: string | null;
+  lastActionNotice?: string | null;
+  targetHighlight?: string | null;
+  isSimulating?: boolean;
 }
+

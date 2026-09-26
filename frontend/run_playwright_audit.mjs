@@ -71,6 +71,17 @@ async function runAudit() {
   const toastVisible = await toast.isVisible();
   console.log(`  ✓ Success Toast Dispatched (Rule 2): ${toastVisible}`);
 
+  // Test Action "Simulate on Galaxy S24" Button
+  console.log('\n--- Testing Simulate on Galaxy S24 Live Automation ---');
+  const simulateBtn = page.locator('button:has-text("Simulate on Galaxy S24")').first();
+  if (await simulateBtn.isVisible()) {
+    await simulateBtn.click();
+    await page.waitForTimeout(400);
+    console.log('  ✓ Clicked "Simulate on Galaxy S24" -> Triggered dynamic device state fix');
+    await page.screenshot({ path: path.join(SCREENSHOT_DIR, '02_action_simulation_executed.png') });
+    console.log('  📸 Captured 02_action_simulation_executed.png');
+  }
+
   // Test Deeplink Pill Click -> Updates Galaxy S24 Screen Simulator
   console.log('\n--- Testing Deeplink to Phone Simulator Synchronization ---');
   const deeplinkButton = await page.locator('button:has-text("settings://")').first();
@@ -78,13 +89,57 @@ async function runAudit() {
     const deeplinkText = await deeplinkButton.innerText();
     console.log(`  ✓ Found actionable deeplink pill: "${deeplinkText.trim()}"`);
     await deeplinkButton.click();
-    await page.waitForTimeout(600);
+    await page.waitForTimeout(400);
     console.log('  ✓ Deeplink triggered. Galaxy mirror screen updated!');
   }
 
-  // Capture Deeplink Mirrored Screenshot
-  await page.screenshot({ path: path.join(SCREENSHOT_DIR, '02_deeplink_phone_synced.png') });
-  console.log('  📸 Captured 02_deeplink_phone_synced.png');
+  // Test One UI Subsystem Navigation & Active Fix Execution
+  console.log('\n--- Testing One UI Subsystem Navigation & Active Device Fixes ---');
+  // 1. Device Care & Optimize
+  const batteryTab = page.locator('[data-testid="quick-jump-battery"]');
+  await batteryTab.click();
+  await page.waitForTimeout(300);
+  const optimizeBtn = page.locator('button:has-text("Optimize Now")').first();
+  if (await optimizeBtn.isVisible()) {
+    await optimizeBtn.click();
+    console.log('  ✓ Clicked "Optimize Now" inside Galaxy Device Care');
+    await page.waitForTimeout(1300);
+  }
+  await page.screenshot({ path: path.join(SCREENSHOT_DIR, '06_device_care_screen.png') });
+  console.log('  📸 Captured 06_device_care_screen.png (Device Care)');
+
+  // 2. App Storage & Clear Cache Execution
+  const storageTab = page.locator('[data-testid="quick-jump-storage"]');
+  await storageTab.click();
+  await page.waitForTimeout(300);
+  const clearCacheBtn = page.locator('button:has-text("Clear Cache")').first();
+  if (await clearCacheBtn.isVisible()) {
+    await clearCacheBtn.click();
+    console.log('  ✓ Clicked "Clear Cache" inside Galaxy App Storage (184MB -> 0MB)');
+    await page.waitForTimeout(300);
+  }
+  await page.screenshot({ path: path.join(SCREENSHOT_DIR, '07_storage_clearcache_screen.png') });
+  console.log('  📸 Captured 07_storage_clearcache_screen.png (App Storage & Clear Cache)');
+
+  // 3. Home Screen with App Grid
+  const homeTab = page.locator('[data-testid="quick-jump-home"]');
+  await homeTab.click();
+  await page.waitForTimeout(300);
+  await page.screenshot({ path: path.join(SCREENSHOT_DIR, '08_galaxy_home_screen.png') });
+  console.log('  📸 Captured 08_galaxy_home_screen.png (Galaxy Home Screen & Apps)');
+
+  // Return to Display & Test Dark/Light Mode switch
+  const displayTab = page.locator('[data-testid="quick-jump-display"]');
+  await displayTab.click();
+  await page.waitForTimeout(300);
+  const lightModeBtn = page.locator('button:has-text("Light")').first();
+  if (await lightModeBtn.isVisible()) {
+    await lightModeBtn.click();
+    console.log('  ✓ Toggled Light Mode inside One UI Display settings');
+    await page.waitForTimeout(200);
+  }
+  await page.screenshot({ path: path.join(SCREENSHOT_DIR, '09_display_settings_screen.png') });
+  console.log('  📸 Captured 09_display_settings_screen.png (Display Settings)');
 
   // Test Resolution Confetti (RefinementBox "Yes, fixed!")
   console.log('\n--- Testing Resolution & Confetti Celebration ---');
