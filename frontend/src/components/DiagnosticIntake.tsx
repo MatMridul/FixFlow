@@ -1,5 +1,5 @@
 import React from "react";
-import { Search, Clock, DollarSign, Database, CheckCircle2, Sparkles, ChevronRight, Zap } from "lucide-react";
+import { Search, Sparkles, ChevronRight } from "lucide-react";
 import { BENCHMARK_SCENARIOS } from "../services/api";
 import type { MetaPayload } from "../types/engine";
 
@@ -8,7 +8,7 @@ interface DiagnosticIntakeProps {
   setQuery: (q: string) => void;
   onSubmit: (customQuery?: string, siisTitle?: string, siisContent?: string) => void;
   isLoading: boolean;
-  meta: MetaPayload | null;
+  meta?: MetaPayload | null;
 }
 
 export const DiagnosticIntake: React.FC<DiagnosticIntakeProps> = ({
@@ -16,7 +16,6 @@ export const DiagnosticIntake: React.FC<DiagnosticIntakeProps> = ({
   setQuery,
   onSubmit,
   isLoading,
-  meta,
 }) => {
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === "Enter" && query.trim() && !isLoading) {
@@ -37,35 +36,24 @@ export const DiagnosticIntake: React.FC<DiagnosticIntakeProps> = ({
           </div>
           <div>
             <span className="text-xs font-bold text-slate-100 tracking-wide">
-              Galaxy AI Troubleshooting Console
+              Galaxy AI Troubleshooting Assistant
             </span>
-            <span className="text-[10px] text-slate-400 block font-mono">
-              Samsung One UI 6.1 Diagnostic Intelligence
+            <span className="text-[10px] text-slate-400 block font-medium">
+              Samsung One UI 6.1 Diagnostic Care
             </span>
           </div>
         </div>
 
-        {meta && (
-          <div className="flex items-center gap-2 text-xs font-mono">
-            <span
-              className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[11px] font-semibold border ${
-                meta.cache_hit
-                  ? "bg-emerald-500/15 text-emerald-300 border-emerald-500/30"
-                  : "bg-sky-500/15 text-sky-300 border-sky-500/30"
-              }`}
-            >
-              <Zap className="w-3 h-3 fill-current" />
-              <span>{meta.cache_hit ? "Fast Path (Cache Hit)" : "Cold Path Model"}</span>
-            </span>
-            <span className="text-slate-400 font-semibold">{meta.latency_ms.toFixed(1)}ms</span>
-          </div>
-        )}
+        <div className="flex items-center gap-1.5 px-3 py-1 rounded-full bg-sky-500/10 border border-sky-500/20 text-xs text-sky-300 font-medium">
+          <Sparkles className="w-3.5 h-3.5 text-sky-400" />
+          <span>Smart Assistant Ready</span>
+        </div>
       </div>
 
       {/* Search Input Bar (Zero placeholder text — Rule 6) */}
       <div className="space-y-1.5">
         <label className="text-xs font-medium text-slate-300 block">
-          Enter device symptom, error message, or multi-condition query:
+          Describe what's happening with your Galaxy device:
         </label>
         <div className="relative flex items-center">
           <div className="absolute left-4 text-sky-400 pointer-events-none">
@@ -96,10 +84,10 @@ export const DiagnosticIntake: React.FC<DiagnosticIntakeProps> = ({
         </div>
       </div>
 
-      {/* Benchmark 1-Click Scenarios Grid */}
+      {/* Common Galaxy Issues & Quick Guides */}
       <div className="space-y-2">
         <span className="text-[11px] font-semibold text-slate-400 uppercase tracking-wider block">
-          Pre-Warmed Benchmark Scenarios (1-Click Test Matrix)
+          Common Galaxy Issues &amp; Quick Guides
         </span>
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
           {BENCHMARK_SCENARIOS.map((scenario) => {
@@ -136,30 +124,14 @@ export const DiagnosticIntake: React.FC<DiagnosticIntakeProps> = ({
         </div>
       </div>
 
-      {/* Real-Time Telemetry Metrics Footer */}
-      {meta && (
-        <div className="pt-3 border-t border-slate-800/80 flex flex-wrap items-center justify-between gap-3 text-[11px] font-mono text-slate-400">
-          <div className="flex items-center gap-3">
-            <span className="flex items-center gap-1 text-slate-300">
-              <Clock className="w-3.5 h-3.5 text-sky-400" />
-              <span>{meta.latency_ms.toFixed(1)}ms</span>
-            </span>
-            <span className="flex items-center gap-1 text-emerald-400">
-              <DollarSign className="w-3.5 h-3.5" />
-              <span>${meta.cost_usd.toFixed(4)} USD</span>
-            </span>
-            <span className="flex items-center gap-1 text-indigo-300">
-              <Database className="w-3.5 h-3.5" />
-              <span>{meta.model}</span>
-            </span>
-          </div>
-
-          <div className="flex items-center gap-1 text-emerald-400 font-medium">
-            <CheckCircle2 className="w-3.5 h-3.5" />
-            <span>100% Ground Truth Parity</span>
-          </div>
+      {/* Official Samsung Support Guarantee Footer */}
+      <div className="pt-3 border-t border-slate-800/80 flex flex-wrap items-center justify-between gap-3 text-xs text-slate-400">
+        <div className="flex items-center gap-1.5 text-slate-300">
+          <Sparkles className="w-3.5 h-3.5 text-sky-400" />
+          <span>Official Samsung One UI 6.1 Diagnostic Solutions</span>
         </div>
-      )}
+        <span className="text-[11px] text-slate-500 font-medium">Samsung Electronics · Care+</span>
+      </div>
     </div>
   );
 };

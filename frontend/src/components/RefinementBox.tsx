@@ -78,10 +78,10 @@ export const RefinementBox: React.FC<RefinementBoxProps> = ({ onRefine, isProces
         <div className="flex items-center gap-2">
           <Sparkles className="w-4 h-4 text-sky-400" />
           <h3 className="text-sm font-semibold text-slate-100 tracking-wide">
-            Feedback &amp; Multi-Turn Refinement
+            Need More Help?
           </h3>
         </div>
-        <span className="text-[11px] text-slate-400 font-mono">Interactive Loop</span>
+        <span className="text-[11px] text-sky-400 font-medium">Galaxy Smart Care</span>
       </div>
 
       <div className="mt-4">
@@ -90,7 +90,7 @@ export const RefinementBox: React.FC<RefinementBoxProps> = ({ onRefine, isProces
             <div>
               <p className="text-xs font-medium text-slate-200">Did these steps resolve your issue?</p>
               <p className="text-[11px] text-slate-400 mt-0.5">
-                Confirming helps FixFlow tune safe diagnostic weights for Galaxy devices.
+                Let us know if your Galaxy device is working smoothly now.
               </p>
             </div>
             <div className="flex items-center gap-2 shrink-0">
@@ -127,9 +127,9 @@ export const RefinementBox: React.FC<RefinementBoxProps> = ({ onRefine, isProces
                   <Check className="w-5 h-5" />
                 </div>
                 <div>
-                  <h4 className="text-xs font-semibold text-emerald-300">Resolution Verified</h4>
+                  <h4 className="text-xs font-semibold text-emerald-300">Issue Resolved</h4>
                   <p className="text-[11px] text-emerald-400/80 mt-0.5">
-                    Troubleshooting plan confirmed effective. All telemetry metrics verified.
+                    Your Galaxy device settings are now restored to optimal condition.
                   </p>
                 </div>
               </div>

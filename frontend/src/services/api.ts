@@ -7,7 +7,7 @@ export const BENCHMARK_SCENARIOS = [
   {
     id: "scen_1",
     label: "Screen flickers & dims randomly",
-    tag: "Row 1 · Display",
+    tag: "Display & Screen",
     query: "My Samsung A115G tablet screen flashes and then goes completely blank whenever I tap to open an email in Gmail, and after it works for a short time it goes blank again.",
     siis_title: "Screen flicker and brightness issues",
     siis_content: "Step 1: Open Settings. Navigate to and open Settings. Tap on Display. Adjust the brightness slider to optimal level.\nStep 2: Restart Device. Press and hold Power button to reboot.",
@@ -15,7 +15,7 @@ export const BENCHMARK_SCENARIOS = [
   {
     id: "scen_2",
     label: "Screen flickers & battery drains fast",
-    tag: "Novelty N1 · Compound",
+    tag: "Display & Battery",
     query: "My Galaxy screen flickers and dims randomly and battery drains fast",
     siis_title: "Display and Battery Troubleshooting",
     siis_content: "Step 1: Adjust Brightness. Open Settings, tap Display, adjust brightness.\nStep 2: Enable Power Saving. Open Settings, tap Battery, turn on Power saving mode.",
@@ -23,7 +23,7 @@ export const BENCHMARK_SCENARIOS = [
   {
     id: "scen_3",
     label: "Turn on Dark Mode automatically",
-    tag: "Novelty N2 · Near-Miss Test",
+    tag: "Display & Theme",
     query: "How do I turn on Dark Mode automatically on my Galaxy phone?",
     siis_title: "Dark Mode Settings Guide",
     siis_content: "Step 1: Open Settings. Tap Display. Tap Dark mode settings. Turn on Turn on as scheduled.",
@@ -31,7 +31,7 @@ export const BENCHMARK_SCENARIOS = [
   {
     id: "scen_4",
     label: "Back up phone data to cloud",
-    tag: "Official Ground Truth · DL-0542",
+    tag: "Cloud & Backup",
     query: "How to back up my phone data to Samsung Cloud?",
     siis_title: "Back Up Phone Data",
     siis_content: "Step 1: Open Settings. Tap Accounts and backup.\nStep 2: Select Back Up Data. Select Back up data to secure personal files.",

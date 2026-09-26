@@ -81,8 +81,8 @@ function FixFlowApp() {
         const actionsCount = result.response.contexts[0]?.actions?.length || 0;
         addToast({
           type: 'success',
-          title: 'Diagnostic Plan Grounded',
-          message: `Generated verified troubleshooting plan (${actionsCount} actions, ${result.meta.latency_ms.toFixed(1)}ms)`,
+          title: 'Troubleshooting Guide Ready',
+          message: `Generated ${actionsCount} verified step-by-step resolution actions for your Galaxy device.`,
         });
       } catch (err) {
         addToast({
@@ -115,7 +115,15 @@ function FixFlowApp() {
     targetScreen: OneUIScreen,
     actionName?: string
   ) => {
-    let notice = `Navigated to ${targetScreen.toUpperCase()}`;
+    const screenNames: Record<OneUIScreen, string> = {
+      home: 'Home Screen',
+      settings: 'Settings',
+      display: 'Display Settings',
+      battery: 'Battery & Device Care',
+      storage: 'App Storage & Cache',
+      safe_mode: 'Safe Mode',
+    };
+    let notice = `Opened ${screenNames[targetScreen] || 'Settings'}`;
     let updates: Partial<SimulatedDeviceState> = {};
 
     if (actionName) {
@@ -247,13 +255,13 @@ function FixFlowApp() {
             <div className="p-4 sm:p-5 rounded-3xl bg-slate-900/60 border border-slate-800/80 backdrop-blur-2xl shadow-2xl flex flex-col items-center">
               <div className="w-full flex items-center justify-between border-b border-slate-800/70 pb-3 mb-3">
                 <div className="flex items-center gap-2">
-                  <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
+                  <span className="w-2 h-2 rounded-full bg-emerald-400" />
                   <span className="text-xs font-bold text-slate-200 tracking-wide">
-                    Live Galaxy S24 Mirror
+                    Your Galaxy S24 Ultra
                   </span>
                 </div>
-                <span className="text-[10px] font-mono text-sky-400 bg-sky-500/10 px-2.5 py-0.5 rounded-full border border-sky-500/20">
-                  One UI 6.1 Interactive
+                <span className="text-[10px] text-sky-400 bg-sky-500/10 px-2.5 py-0.5 rounded-full border border-sky-500/20 font-medium">
+                  Live Device Preview
                 </span>
               </div>
 
@@ -262,9 +270,9 @@ function FixFlowApp() {
                 setDeviceState={setDeviceState}
               />
 
-              {/* Quick Screen Switcher Toolbar */}
+              {/* Screen Preview Switcher */}
               <div className="w-full pt-3 mt-3 border-t border-slate-800/60 flex items-center justify-between text-xs">
-                <span className="text-[11px] text-slate-400 font-medium">Quick Jump:</span>
+                <span className="text-[11px] text-slate-400 font-medium">Screen Preview:</span>
                 <div className="flex gap-1">
                   {(['home', 'display', 'battery', 'storage'] as OneUIScreen[]).map((scr) => (
                     <button

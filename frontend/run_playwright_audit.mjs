@@ -84,7 +84,7 @@ async function runAudit() {
 
   // Test Deeplink Pill Click -> Updates Galaxy S24 Screen Simulator
   console.log('\n--- Testing Deeplink to Phone Simulator Synchronization ---');
-  const deeplinkButton = await page.locator('button:has-text("settings://")').first();
+  const deeplinkButton = await page.locator('button:has-text("Adjust Brightness"), button:has-text("Open in Settings"), button:has-text("settings://")').first();
   if (await deeplinkButton.isVisible()) {
     const deeplinkText = await deeplinkButton.innerText();
     console.log(`  ✓ Found actionable deeplink pill: "${deeplinkText.trim()}"`);
@@ -194,16 +194,16 @@ async function runAudit() {
   console.log('\n--- Testing Custom 404 Recovery (Rule 14) ---');
   await page.goto('http://127.0.0.1:5173/#404', { waitUntil: 'domcontentloaded' });
   await page.waitForTimeout(400);
-  const notFoundHeading = await page.locator('text=Settings Route Missing');
+  const notFoundHeading = await page.locator('text=Troubleshooting Guide Not Found');
   console.log(`  ✓ Custom 404 Page Rendered (Rule 14): ${await notFoundHeading.isVisible()}`);
   await page.screenshot({ path: path.join(SCREENSHOT_DIR, '05_custom_404_view.png') });
   console.log('  📸 Captured 05_custom_404_view.png');
 
   // Return home button on 404
-  const returnHomeButton = await page.locator('button:has-text("Return to Console")');
+  const returnHomeButton = await page.locator('button:has-text("Return to Support")');
   await returnHomeButton.click();
   await page.waitForTimeout(400);
-  console.log('  ✓ Return to Console successfully restored command center');
+  console.log('  ✓ Return to Support successfully restored command center');
 
   await browser.close();
   console.log('\n✨ Playwright Verification Complete: ALL 19 Un-Vibe Rules Passed!');

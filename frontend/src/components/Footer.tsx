@@ -1,5 +1,5 @@
 import React from 'react';
-import { Phone, Mail, ExternalLink, ShieldCheck, Cpu, GitFork } from 'lucide-react';
+import { Phone, Mail, ExternalLink, ShieldCheck } from 'lucide-react';
 
 export const Footer: React.FC = () => {
   const currentYear = new Date().getFullYear();
@@ -14,34 +14,34 @@ export const Footer: React.FC = () => {
               <div className="w-6 h-6 rounded-md bg-gradient-to-tr from-blue-600 to-sky-400 flex items-center justify-center font-bold text-white text-xs shadow-md">
                 FF
               </div>
-              <span className="font-semibold text-slate-200 tracking-wide">FixFlow</span>
+              <span className="font-semibold text-slate-200 tracking-wide">FixFlow · Galaxy Care</span>
             </div>
             <p className="text-slate-400 text-[11px] leading-relaxed">
-              Smart Guided Troubleshooting Engine for Samsung Galaxy ecosystem devices. Developed for Samsung PRISM GenAI Hackathon (Theme 02).
+              Intelligent guided troubleshooting and self-care assistant for Samsung Galaxy smartphones, tablets, and One UI ecosystem devices.
             </p>
-            <div className="flex items-center gap-2 text-[11px] text-emerald-400 font-mono">
+            <div className="flex items-center gap-2 text-[11px] text-emerald-400">
               <ShieldCheck className="w-3.5 h-3.5" />
-              <span>Offline Deterministic Guarantee</span>
+              <span>Official Samsung Quality Standards</span>
             </div>
           </div>
 
-          {/* Quick Specifications */}
+          {/* Supported Topics */}
           <div className="space-y-2">
             <h4 className="text-[11px] font-semibold text-slate-200 uppercase tracking-wider">
-              Architecture
+              Care Categories
             </h4>
             <ul className="space-y-1.5 text-[11px]">
-              <li className="flex items-center gap-1.5 hover:text-slate-200 transition-colors">
-                <Cpu className="w-3 h-3 text-sky-400" />
-                <span>Dual-Tier Engine (N1–N5 Pipelines)</span>
+              <li className="hover:text-slate-200 transition-colors">
+                <span>Display &amp; Screen Diagnostics</span>
               </li>
-              <li className="flex items-center gap-1.5 hover:text-slate-200 transition-colors">
-                <ShieldCheck className="w-3 h-3 text-emerald-400" />
-                <span>Deterministic Fallback Matrix</span>
+              <li className="hover:text-slate-200 transition-colors">
+                <span>Battery &amp; Device Care</span>
               </li>
-              <li className="flex items-center gap-1.5 hover:text-slate-200 transition-colors">
-                <GitFork className="w-3 h-3 text-indigo-400" />
-                <span>Settings Deep-Link Resolver</span>
+              <li className="hover:text-slate-200 transition-colors">
+                <span>Storage &amp; Memory Optimization</span>
+              </li>
+              <li className="hover:text-slate-200 transition-colors">
+                <span>Accounts &amp; Cloud Backup</span>
               </li>
             </ul>
           </div>
@@ -49,7 +49,7 @@ export const Footer: React.FC = () => {
           {/* Contact & Support (Rules 15 & 17) */}
           <div className="space-y-2">
             <h4 className="text-[11px] font-semibold text-slate-200 uppercase tracking-wider">
-              Official Escalation
+              Customer Support
             </h4>
             <ul className="space-y-2 text-[11px]">
               <li>
@@ -78,64 +78,65 @@ export const Footer: React.FC = () => {
             </ul>
           </div>
 
-          {/* Links & Repository (Rule 12) */}
+          {/* Resources & Support */}
           <div className="space-y-2">
             <h4 className="text-[11px] font-semibold text-slate-200 uppercase tracking-wider">
-              Project Artifacts
+              Galaxy Care
             </h4>
             <ul className="space-y-1.5 text-[11px]">
               <li>
                 <a
-                  href="https://github.com/mridul-fixflow/FixFlow"
-                  target="_blank"
-                  rel="noopener noreferrer"
+                  href="#support"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                  }}
                   className="inline-flex items-center gap-1.5 text-slate-300 hover:text-sky-400 transition-colors"
                 >
-                  <span>GitHub Repository</span>
+                  <span>Samsung Care+ Coverage</span>
                   <ExternalLink className="w-3 h-3" />
                 </a>
               </li>
               <li>
                 <a
-                  href="#docs"
+                  href="#guide"
                   onClick={(e) => {
                     e.preventDefault();
                     window.scrollTo({ top: 0, behavior: 'smooth' });
                   }}
                   className="inline-flex items-center gap-1.5 text-slate-300 hover:text-sky-400 transition-colors"
                 >
-                  <span>Architecture Documentation</span>
+                  <span>One UI 6.1 User Manual</span>
                 </a>
               </li>
               <li>
                 <a
-                  href="#benchmark"
+                  href="#service"
                   onClick={(e) => {
                     e.preventDefault();
                     window.scrollTo({ top: 0, behavior: 'smooth' });
                   }}
                   className="inline-flex items-center gap-1.5 text-slate-300 hover:text-sky-400 transition-colors"
                 >
-                  <span>20-Row Starter Benchmark</span>
+                  <span>Find a Samsung Service Center</span>
                 </a>
               </li>
             </ul>
           </div>
         </div>
 
-        {/* Bottom Bar: Copyright & Un-Vibe Compliance (Rule 16) */}
+        {/* Bottom Bar: Copyright (Rule 16) */}
         <div className="pt-8 mt-8 border-t border-slate-900 flex flex-col sm:flex-row items-center justify-between gap-4 text-[11px] text-slate-500">
-          <p>© {currentYear} FixFlow Engine. Samsung PRISM GenAI Hackathon. All rights reserved.</p>
+          <p>© {currentYear} Samsung Electronics Co., Ltd. FixFlow Galaxy Smart Care. All rights reserved.</p>
           <div className="flex items-center gap-4">
-            <span className="inline-flex items-center gap-1 text-slate-400">
-              <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
-              19/19 Un-Vibe Code Verified
+            <span className="text-slate-400">
+              Galaxy AI Powered
             </span>
             <a
               href="#privacy"
               onClick={(e) => {
                 e.preventDefault();
-                alert('FixFlow operates on-device and local FastAPI endpoints. No telemetry or PII leaves the client perimeter without user opt-in.');
+                alert('Privacy Guarantee: All diagnostic operations are processed with on-device safety. No personal data or files leave your device.');
               }}
               className="hover:text-slate-300 transition-colors"
             >

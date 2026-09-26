@@ -1,5 +1,5 @@
 import React from "react";
-import { Smartphone, Zap, Sparkles, ShieldCheck } from "lucide-react";
+import { Smartphone, Zap, Sparkles } from "lucide-react";
 
 interface TopBarProps {
   serverOnline: boolean;
@@ -35,28 +35,28 @@ export const TopBar: React.FC<TopBarProps> = ({
               <span className="w-1.5 h-1.5 rounded-full bg-samsung-blue"></span>
             </div>
             <p className="text-[10px] text-slate-400 font-medium tracking-wider uppercase hidden sm:block">
-              One UI Troubleshooting Engine
+              Samsung Smart Care · Galaxy AI
             </p>
           </div>
         </button>
 
-        {/* Desktop Engine Badges */}
+        {/* Consumer Device & Care Status Badges */}
         <div className="hidden md:flex items-center gap-3">
           <div className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-slate-900/80 border border-white/10 text-xs text-slate-300">
+            <Smartphone className="w-3.5 h-3.5 text-sky-400" />
+            <span className="font-medium">Galaxy S24 Ultra</span>
+          </div>
+
+          <div className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-emerald-950/40 border border-emerald-500/20 text-xs text-emerald-300">
             <span className={`w-2 h-2 rounded-full ${serverOnline ? "bg-emerald-400 shadow-[0_0_8px_#34d399]" : "bg-amber-400 shadow-[0_0_8px_#fbbf24]"}`}></span>
             <span className="font-medium">
-              {serverOnline ? "Engine Online (FastAPI:8000)" : "Deterministic Engine (Offline Mode)"}
+              {serverOnline ? "Device Connected" : "Device Offline"}
             </span>
           </div>
 
-          <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-blue-950/40 border border-blue-500/20 text-xs text-blue-300">
-            <ShieldCheck className="w-3.5 h-3.5 text-blue-400" />
-            <span className="font-medium">Theme 02 Certified</span>
-          </div>
-
-          <div className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-full bg-slate-800/60 border border-white/5 text-[11px] text-slate-400">
-            <Sparkles className="w-3 h-3 text-amber-300" />
-            <span>AI-Ready</span>
+          <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-sky-500/10 border border-sky-500/20 text-xs text-sky-300">
+            <Sparkles className="w-3.5 h-3.5 text-sky-400" />
+            <span className="font-medium">Galaxy AI Support</span>
           </div>
         </div>
 
