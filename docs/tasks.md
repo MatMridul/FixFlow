@@ -127,23 +127,23 @@
 
 *Goal: Build benchmark datasets, implement clean fallbacks, and harden the system for evaluation.*
 
-- [ ] **Task A.2.1 — Adversarial Near-Miss Test Dataset**
-  - **Branch:** `feature/mridul-adversarial-dataset`
+- [x] **Task A.2.1 — Adversarial Near-Miss Test Dataset**
+  - **Branch:** `feature/mridul-p2-datasets-fallbacks`
   - **Files:** `data/adversarial_near_miss.json`
   - **Spec Scope:**
     - Hand-craft 50 near-miss pairs across domains (e.g. negated polarity, different components).
   - **Acceptance Criteria:** Used in `eval/` to benchmark Cosine-only Cache vs N2 Gated Cache.
 
-- [ ] **Task A.2.2 — Calibration Dev-Set Ground Truth**
-  - **Branch:** `feature/mridul-calibration-dev-set`
+- [x] **Task A.2.2 — Calibration Dev-Set Ground Truth**
+  - **Branch:** `feature/mridul-p2-datasets-fallbacks`
   - **Files:** `data/calibration_dev_set.json`
   - **Spec Scope:**
     - Label ~80–100 scenarios across 4 domains with ground-truth step relevance and grounding coverage.
   - **Acceptance Criteria:** Generates calibration reliability diagrams and ECE metrics in `metrics.md`.
 
-- [ ] **Task A.2.3 — API Fallback & Edge-Case Handling**
-  - **Branch:** `feature/mridul-fallbacks`
-  - **Files:** `api/routes.py`, `api/models.py`
+- [x] **Task A.2.3 — API Fallback & Edge-Case Handling**
+  - **Branch:** `feature/mridul-p2-datasets-fallbacks`
+  - **Files:** `api/routes.py`, `api/models.py`, `tests/test_api.py`
   - **Spec Scope:**
     - If no SIIS provided and cache miss $\rightarrow$ return `contexts: []`, `meta.fallback = "no_siis_context"`.
     - If complaint unsupported / calibrated score $< \theta \rightarrow$ return `contexts: []`, `meta.fallback = "no_match"`.

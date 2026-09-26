@@ -92,3 +92,72 @@ class TestApiEndpoints:
     def test_troubleshoot_missing_required_query_field(self, test_client):
         response = test_client.post("/v1/troubleshoot", json={})
         assert response.status_code == 422
+
+    def test_troubleshoot_unsupported_issue_empty_actions_fallback(self, test_client):
+        # SIIS contains no actionable content -> extractor returns None -> fallback no_match
+        payload = {
+            "query": "My phone fell in liquid nitrogen and shattered",
+            "siis_response": {
+                "title": "Cryogenic hazard notice",
+                "content": "   ",
+            },
+        }
+        response = test_client.post("/v1/troubleshoot", json=payload)
+        assert response.status_code == 200
+        data = response.json()
+        assert len(data["response"]["contexts"]) == 0
+        assert data["meta"]["cache_hit"] is False
+        assert data["meta"]["fallback"] == "no_match"
+
+    def test_troubleshoot_hallucinated_steps_filtered_to_fallback(self, test_client, monkeypatch):
+        from schema import Action, Goal, StepGroup
+        unrelated_goal = Goal(
+            goal="Follow these steps to perform Spacecraft Troubleshooting",
+            title="Spacecraft issue",
+            description="It will guide through spaceship navigation",
+            actions=[
+                Action(
+                    actionName="Engage Warp Drive",
+                    description="It will engage hyperdrive engine",
+                    stepGroups=[StepGroup(steps=["Press hyperdrive button three times in cockpit"])],
+                )
+            ],
+            score=0.9,
+        )
+        class MockExtractor:
+            def extract(self, *args, **kwargs):
+                return unrelated_goal
+
+        monkeypatch.setattr(test_client.app.state, "extractor", MockExtractor())
+
+        payload = {
+            "query": "Spaceship engine broken",
+            "siis_response": {
+                "title": "Mobile network guide",
+                "content": "Check your SIM card and APN settings for 5G connectivity.",
+            },
+        }
+        response = test_client.post("/v1/troubleshoot", json=payload)
+        assert response.status_code == 200
+        data = response.json()
+        assert len(data["response"]["contexts"]) == 0
+        assert data["meta"]["fallback"] == "no_match"
+
+    def test_troubleshoot_low_calibrated_confidence_fallback(self, test_client, monkeypatch):
+        # Force low calibrated score below 0.25 threshold
+        import api.routes as routes
+        monkeypatch.setattr(routes, "calibrate_score", lambda **kwargs: 0.15)
+
+        payload = {
+            "query": "Phone screen flickers slightly",
+            "siis_response": {
+                "title": "Screen brightness guide",
+                "content": "Step 1: Adjust Brightness in Settings Display.",
+            },
+        }
+        response = test_client.post("/v1/troubleshoot", json=payload)
+        assert response.status_code == 200
+        data = response.json()
+        assert len(data["response"]["contexts"]) == 0
+        assert data["meta"]["cache_hit"] is False
+        assert data["meta"]["fallback"] == "no_match"

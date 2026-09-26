@@ -58,7 +58,7 @@ SYMPTOM_KEYWORDS = {
 }
 
 NEGATION_PATTERN = re.compile(
-    r"\b(not|no|cant|can't|cannot|wont|won't|unable|doesnt|doesn't|fails|failed|never|refuses|stop|stopped|without)\b",
+    r"\b(not|no|cant|can't|cannot|wont|won't|unable|doesnt|doesn't|fails|failed|never|refuses|stop|stopped|without|off|disable|disabled|disabling|deactivate|deactivated|mute)\b",
     re.IGNORECASE,
 )
 
@@ -130,9 +130,9 @@ def extract_intent_signature(text: str) -> IntentSignature:
             break
 
     # 4. Polarity detection
-    # Checks for negative polarity phrases like "not charging", "won't turn on", "cannot connect"
-    has_negation = bool(NEGATION_PATTERN.search(clean_text))
-    # If the text has negation near a symptom or verb, mark negated
+    # Checks for negative polarity phrases like "not charging", "won't turn on", "turn off", "disable"
+    text_for_negation = re.sub(r"\bdo not disturb\b", "dnd", clean_text)
+    has_negation = bool(NEGATION_PATTERN.search(text_for_negation))
     polarity = "negated" if has_negation else "normal"
 
     # 5. Trigger detection
