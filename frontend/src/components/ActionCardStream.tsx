@@ -77,13 +77,13 @@ export const ActionCardStream: React.FC<ActionCardStreamProps> = ({
         initial={{ opacity: 0, y: 8 }}
         animate={{ opacity: 1, y: 0 }}
         transition={springs.snappy}
-        className="p-4 rounded-xl bg-[#13151A] border border-white/[0.07] space-y-2.5 shadow-sm"
+        className="p-4 rounded-xl bg-[#080808] border border-white/[0.08] space-y-2.5"
       >
         <div className="flex flex-wrap items-center justify-between gap-2">
           <div>
             <div className="flex items-center gap-2">
-              <span className="w-1.5 h-1.5 rounded-full bg-[#1E56FF] animate-pulse" />
-              <span className="text-[11px] font-semibold text-zinc-400 uppercase tracking-wider block">
+              <span className="w-1.5 h-1.5 rounded-full bg-white shadow-[0_0_6px_rgba(255,255,255,0.8)]" />
+              <span className="text-[11px] font-semibold text-neutral-300 uppercase tracking-wider block">
                 Guided Plan ({goal.actions.length} {goal.actions.length === 1 ? "Action" : "Actions"})
               </span>
             </div>
@@ -92,21 +92,21 @@ export const ActionCardStream: React.FC<ActionCardStreamProps> = ({
             </h3>
           </div>
 
-          <div className="flex items-center gap-1.5 bg-emerald-500/10 border border-emerald-500/20 px-2.5 py-1 rounded-md text-xs text-emerald-400 font-medium">
-            <CheckCircle className="w-3.5 h-3.5" />
+          <div className="flex items-center gap-1.5 bg-[#141414] border border-white/[0.12] px-2.5 py-1 rounded text-xs text-white font-medium">
+            <CheckCircle className="w-3.5 h-3.5 text-white" />
             <span>Verified Resolution</span>
           </div>
         </div>
 
         {/* Animated Progress Bar */}
-        <div className="space-y-1 pt-2 border-t border-white/[0.05]">
-          <div className="flex justify-between text-[11px] text-zinc-400">
+        <div className="space-y-1 pt-2 border-t border-white/[0.06]">
+          <div className="flex justify-between text-[11px] text-neutral-400">
             <span>Troubleshooting Progress</span>
-            <span className="font-mono text-zinc-200">{progressPercent}% Completed</span>
+            <span className="font-mono text-white font-semibold">{progressPercent}% Completed</span>
           </div>
-          <div className="w-full h-1.5 rounded-full bg-[#0E1013] overflow-hidden">
+          <div className="w-full h-1.5 rounded-full bg-black border border-white/[0.06] overflow-hidden">
             <motion.div
-              className="h-full bg-gradient-to-r from-[#1E56FF] to-[#2F68FD] rounded-full"
+              className="h-full bg-white rounded-full"
               initial={{ width: 0 }}
               animate={{ width: `${progressPercent}%` }}
               transition={{ type: "spring", stiffness: 300, damping: 30 }}
@@ -134,18 +134,18 @@ export const ActionCardStream: React.FC<ActionCardStreamProps> = ({
               variants={cardItemVariants}
               className={`p-4 rounded-xl border transition-all ${
                 isCurrentScreen
-                  ? "bg-[#13151A] border-[#1E56FF]/50 shadow-[0_0_20px_-8px_rgba(30,86,255,0.3)]"
-                  : "bg-[#13151A] border-white/[0.07] hover:border-white/[0.14]"
+                  ? "bg-[#0E0E0E] border-white ring-1 ring-white/20 shadow-[0_0_20px_-8px_rgba(255,255,255,0.2)]"
+                  : "bg-[#080808] border-white/[0.08] hover:border-white/[0.18]"
               }`}
             >
               {/* Card Header */}
               <div className="flex items-start justify-between gap-3">
                 <div className="flex items-start gap-3">
                   <div
-                    className={`w-6 h-6 rounded-md flex items-center justify-center font-mono text-xs font-semibold shrink-0 mt-0.5 transition-colors ${
+                    className={`w-6 h-6 rounded flex items-center justify-center font-mono text-xs font-bold shrink-0 mt-0.5 transition-colors ${
                       isCurrentScreen
-                        ? "bg-[#1E56FF] text-white shadow-sm"
-                        : "bg-[#191C23] text-zinc-400 border border-white/[0.06]"
+                        ? "bg-white text-black shadow-sm"
+                        : "bg-[#181818] text-white border border-white/[0.08]"
                     }`}
                   >
                     {String(actionIdx + 1).padStart(2, "0")}
@@ -154,13 +154,13 @@ export const ActionCardStream: React.FC<ActionCardStreamProps> = ({
                     <h4 className="text-sm font-semibold text-white tracking-tight">
                       {action.actionName}
                     </h4>
-                    <p className="text-xs text-zinc-400 mt-0.5 leading-relaxed">
+                    <p className="text-xs text-neutral-400 mt-0.5 leading-relaxed">
                       {action.description}
                     </p>
                   </div>
                 </div>
 
-                <div className="text-[11px] font-mono text-zinc-400 bg-[#191C23] px-2 py-0.5 rounded border border-white/[0.05] shrink-0">
+                <div className="text-[11px] font-mono text-neutral-300 bg-[#121212] px-2 py-0.5 rounded border border-white/[0.08] shrink-0">
                   Step {actionIdx + 1}
                 </div>
               </div>
@@ -174,8 +174,8 @@ export const ActionCardStream: React.FC<ActionCardStreamProps> = ({
                     exit={{ opacity: 0, height: 0 }}
                     className="overflow-hidden"
                   >
-                    <div className="my-2.5 px-3 py-1.5 rounded-lg bg-emerald-500/10 border border-emerald-500/20 flex items-center gap-2 text-xs text-emerald-400">
-                      <CheckCircle className="w-3.5 h-3.5 shrink-0" />
+                    <div className="my-2.5 px-3 py-1.5 rounded bg-[#141414] border border-white/[0.15] flex items-center gap-2 text-xs text-white">
+                      <CheckCircle className="w-3.5 h-3.5 shrink-0 text-white" />
                       <span>Already Configured: Setting is active on your device.</span>
                     </div>
                   </motion.div>
@@ -183,7 +183,7 @@ export const ActionCardStream: React.FC<ActionCardStreamProps> = ({
               </AnimatePresence>
 
               {/* Sub-Steps */}
-              <div className="space-y-1.5 mt-3 pt-2.5 border-t border-white/[0.05]">
+              <div className="space-y-1.5 mt-3 pt-2.5 border-t border-white/[0.06]">
                 {action.stepGroups.map((sg, sgIdx) => (
                   <div key={sgIdx} className="space-y-2">
                     {sg.steps.map((stepText, stepIdx) => {
@@ -195,17 +195,17 @@ export const ActionCardStream: React.FC<ActionCardStreamProps> = ({
                           key={stepIdx}
                           whileHover={{ x: 2 }}
                           onClick={() => toggleStep(stepKey)}
-                          className={`flex items-start gap-2 p-1.5 rounded-md cursor-pointer transition-colors text-xs select-none ${
+                          className={`flex items-start gap-2 p-1.5 rounded cursor-pointer transition-colors text-xs select-none ${
                             isDone
-                              ? "text-zinc-500 line-through bg-transparent"
-                              : "hover:bg-[#191C23] text-zinc-300"
+                              ? "text-neutral-500 line-through bg-transparent"
+                              : "hover:bg-[#141414] text-neutral-200"
                           }`}
                         >
-                          <div className="mt-0.5 shrink-0 text-zinc-400 transition-transform">
+                          <div className="mt-0.5 shrink-0 text-neutral-400 transition-transform">
                             {isDone ? (
-                              <CheckSquare className="w-3.5 h-3.5 text-emerald-400" />
+                              <CheckSquare className="w-3.5 h-3.5 text-white" />
                             ) : (
-                              <Square className="w-3.5 h-3.5 text-zinc-500" />
+                              <Square className="w-3.5 h-3.5 text-neutral-600" />
                             )}
                           </div>
                           <span className="leading-relaxed">{stepText}</span>
@@ -223,7 +223,7 @@ export const ActionCardStream: React.FC<ActionCardStreamProps> = ({
                           onTriggerDeeplink(deeplink, targetScreen, action.actionName);
                           onSuccessToast(`Applied "${action.actionName}" on your Galaxy`);
                         }}
-                        className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-[#1E56FF] hover:bg-[#2F68FD] text-white font-medium text-xs transition-colors active:scale-95 shadow-sm cursor-pointer"
+                        className="flex items-center gap-1.5 px-3 py-1.5 rounded bg-white hover:bg-neutral-200 text-black font-semibold text-xs transition-colors active:scale-95 shadow-sm cursor-pointer"
                       >
                         <Play className="w-3 h-3 fill-current" />
                         <span>Simulate on Galaxy S24</span>
@@ -237,9 +237,9 @@ export const ActionCardStream: React.FC<ActionCardStreamProps> = ({
                             onClick={() => {
                               onTriggerDeeplink(sg.actionableDeeplink!.deeplink, targetScreen, action.actionName);
                             }}
-                            className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg bg-[#191C23] hover:bg-[#20242D] text-zinc-300 text-xs border border-white/[0.07] transition-colors cursor-pointer"
+                            className="flex items-center gap-1.5 px-2.5 py-1.5 rounded bg-[#141414] hover:bg-[#1E1E1E] text-white text-xs border border-white/[0.1] transition-colors cursor-pointer"
                           >
-                            <ExternalLink className="w-3 h-3 text-zinc-400" />
+                            <ExternalLink className="w-3 h-3 text-neutral-400" />
                             <span>{sg.actionableDeeplink.message || "Open in Settings"}</span>
                           </motion.button>
 
@@ -247,13 +247,13 @@ export const ActionCardStream: React.FC<ActionCardStreamProps> = ({
                             whileHover={microInteractions.hoverButton}
                             whileTap={microInteractions.tap}
                             onClick={() => handleCopy(sg.actionableDeeplink!.deeplink)}
-                            className="px-2 py-1.5 rounded-lg bg-[#191C23] hover:bg-[#20242D] text-zinc-400 hover:text-white border border-white/[0.07] transition-colors text-xs flex items-center gap-1 cursor-pointer"
+                            className="px-2 py-1.5 rounded bg-[#141414] hover:bg-[#1E1E1E] text-neutral-400 hover:text-white border border-white/[0.1] transition-colors text-xs flex items-center gap-1 cursor-pointer"
                             title="Copy Direct Settings Link"
                           >
                             {copiedLink === sg.actionableDeeplink.deeplink ? (
                               <>
-                                <Check className="w-3 h-3 text-emerald-400" />
-                                <span className="text-[11px] text-emerald-400">Copied</span>
+                                <Check className="w-3 h-3 text-white" />
+                                <span className="text-[11px] text-white font-medium">Copied</span>
                               </>
                             ) : (
                               <>

@@ -24,6 +24,7 @@ export const RefinementBox: React.FC<RefinementBoxProps> = ({ onRefine, isProces
       duration: 5000,
     });
 
+    // Monochrome / Silver / White celebration confetti
     const duration = 2.5 * 1000;
     const animationEnd = Date.now() + duration;
     const defaults = { startVelocity: 30, spread: 360, ticks: 60, zIndex: 1000 };
@@ -38,13 +39,13 @@ export const RefinementBox: React.FC<RefinementBoxProps> = ({ onRefine, isProces
         ...defaults,
         particleCount,
         origin: { x: 0.3, y: 0.7 },
-        colors: ['#1E56FF', '#2F68FD', '#10B981', '#3B82F6'],
+        colors: ['#FFFFFF', '#F5F5F5', '#E5E5E5', '#A3A3A3', '#737373'],
       });
       confetti({
         ...defaults,
         particleCount,
         origin: { x: 0.7, y: 0.7 },
-        colors: ['#1E56FF', '#2F68FD', '#10B981', '#3B82F6'],
+        colors: ['#FFFFFF', '#F5F5F5', '#E5E5E5', '#A3A3A3', '#737373'],
       });
     }, 250);
   };
@@ -72,20 +73,20 @@ export const RefinementBox: React.FC<RefinementBoxProps> = ({ onRefine, isProces
   };
 
   return (
-    <div className="bg-[#13151A] border border-white/[0.07] rounded-xl p-4 sm:p-5 mt-4 space-y-3">
-      <div className="flex items-center justify-between pb-2.5 border-b border-white/[0.05]">
-        <h3 className="text-xs font-semibold text-zinc-200 tracking-wide uppercase">
+    <div className="bg-[#080808] border border-white/[0.08] rounded-xl p-4 sm:p-5 mt-4 space-y-3">
+      <div className="flex items-center justify-between pb-2.5 border-b border-white/[0.06]">
+        <h3 className="text-xs font-semibold text-white tracking-wide uppercase">
           Resolution Verification
         </h3>
-        <span className="text-[11px] text-zinc-400 font-mono">One UI Self-Care</span>
+        <span className="text-[11px] text-neutral-400 font-mono">One UI Self-Care</span>
       </div>
 
       <div>
         {resolvedStatus === 'idle' && (
-          <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 p-3.5 rounded-lg bg-[#0E1013] border border-white/[0.05]">
+          <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 p-3.5 rounded bg-[#0D0D0D] border border-white/[0.06]">
             <div>
-              <p className="text-xs font-medium text-zinc-200">Did these steps resolve your issue?</p>
-              <p className="text-[11px] text-zinc-400 mt-0.5">
+              <p className="text-xs font-medium text-white">Did these steps resolve your issue?</p>
+              <p className="text-[11px] text-neutral-400 mt-0.5">
                 Confirm whether your Galaxy device is working normally.
               </p>
             </div>
@@ -93,15 +94,15 @@ export const RefinementBox: React.FC<RefinementBoxProps> = ({ onRefine, isProces
               <button
                 type="button"
                 onClick={handleResolved}
-                className="flex items-center gap-1.5 px-3 py-1.5 rounded-md bg-emerald-500/15 border border-emerald-500/30 text-emerald-400 hover:bg-emerald-500/25 text-xs font-medium transition-all"
+                className="flex items-center gap-1.5 px-3 py-1.5 rounded bg-white text-black hover:bg-neutral-200 text-xs font-semibold transition-all cursor-pointer"
               >
-                <ThumbsUp className="w-3.5 h-3.5" />
+                <ThumbsUp className="w-3.5 h-3.5 fill-black" />
                 <span>Yes, fixed!</span>
               </button>
               <button
                 type="button"
                 onClick={handleUnresolved}
-                className="flex items-center gap-1.5 px-3 py-1.5 rounded-md bg-[#191C23] border border-white/[0.07] text-zinc-300 hover:bg-[#20242D] text-xs font-medium transition-all"
+                className="flex items-center gap-1.5 px-3 py-1.5 rounded bg-[#161616] border border-white/[0.1] text-white hover:bg-[#202020] text-xs font-medium transition-all cursor-pointer"
               >
                 <ThumbsDown className="w-3.5 h-3.5" />
                 <span>Still having issues</span>
@@ -116,15 +117,15 @@ export const RefinementBox: React.FC<RefinementBoxProps> = ({ onRefine, isProces
               initial={{ opacity: 0, scale: 0.98 }}
               animate={{ opacity: 1, scale: 1 }}
               transition={springs.responsive}
-              className="p-3.5 rounded-lg bg-emerald-950/20 border border-emerald-500/30 text-emerald-200 flex items-center justify-between"
+              className="p-3.5 rounded bg-[#0E0E0E] border border-white/20 text-white flex items-center justify-between"
             >
               <div className="flex items-center gap-2.5">
-                <div className="p-1.5 rounded-md bg-emerald-500/20 text-emerald-400">
-                  <Check className="w-4 h-4" />
+                <div className="p-1.5 rounded bg-white text-black">
+                  <Check className="w-4 h-4 stroke-[3]" />
                 </div>
                 <div>
-                  <h4 className="text-xs font-semibold text-emerald-300">Issue Resolved</h4>
-                  <p className="text-[11px] text-emerald-400/80 mt-0.5">
+                  <h4 className="text-xs font-semibold text-white">Issue Resolved</h4>
+                  <p className="text-[11px] text-neutral-400 mt-0.5">
                     Your Galaxy device settings are now restored to optimal condition.
                   </p>
                 </div>
@@ -132,7 +133,7 @@ export const RefinementBox: React.FC<RefinementBoxProps> = ({ onRefine, isProces
               <button
                 type="button"
                 onClick={() => setResolvedStatus('idle')}
-                className="text-xs text-zinc-400 hover:text-zinc-200 underline font-mono ml-4"
+                className="text-xs text-neutral-400 hover:text-white underline font-mono ml-4 cursor-pointer"
               >
                 Reset
               </button>
@@ -147,8 +148,8 @@ export const RefinementBox: React.FC<RefinementBoxProps> = ({ onRefine, isProces
             transition={springs.responsive}
             className="mt-2.5 space-y-2.5"
           >
-            <div className="p-2.5 rounded-lg bg-amber-950/20 border border-amber-500/30 text-amber-200 text-xs flex items-center gap-2">
-              <HelpCircle className="w-3.5 h-3.5 text-amber-400 shrink-0" />
+            <div className="p-2.5 rounded bg-[#111111] border border-white/[0.1] text-white text-xs flex items-center gap-2">
+              <HelpCircle className="w-3.5 h-3.5 text-white shrink-0" />
               <span>Select a follow-up symptom below or describe your condition:</span>
             </div>
 
@@ -164,7 +165,7 @@ export const RefinementBox: React.FC<RefinementBoxProps> = ({ onRefine, isProces
                   key={chip}
                   type="button"
                   onClick={() => handleQuickFollowup(chip)}
-                  className="text-xs px-2.5 py-1 rounded-md bg-[#191C23] border border-white/[0.06] text-zinc-300 hover:text-white hover:border-white/[0.12] hover:bg-[#20242D] transition-all text-left"
+                  className="text-xs px-2.5 py-1 rounded bg-[#121212] border border-white/[0.08] text-neutral-300 hover:text-white hover:border-white/[0.2] hover:bg-[#1A1A1A] transition-all text-left cursor-pointer"
                 >
                   + {chip}
                 </button>
@@ -181,12 +182,12 @@ export const RefinementBox: React.FC<RefinementBoxProps> = ({ onRefine, isProces
             onChange={(e) => setInputText(e.target.value)}
             placeholder="Clarify symptoms (e.g., 'Only happens when 5G is active')..."
             disabled={isProcessing}
-            className="flex-1 bg-[#0E1013] border border-white/[0.08] rounded-lg px-3 py-2 text-xs text-zinc-100 placeholder-zinc-500 focus:outline-none focus:border-[#1E56FF] transition-all"
+            className="flex-1 bg-black border border-white/[0.1] rounded px-3 py-2 text-xs text-white placeholder-neutral-500 focus:outline-none focus:border-white transition-all"
           />
           <button
             type="submit"
             disabled={!inputText.trim() || isProcessing}
-            className="flex items-center gap-1.5 px-3.5 py-2 rounded-lg bg-[#1E56FF] hover:bg-[#2F68FD] disabled:opacity-40 disabled:pointer-events-none text-white text-xs font-medium transition-all shrink-0"
+            className="flex items-center gap-1.5 px-3.5 py-2 rounded bg-white hover:bg-neutral-200 disabled:opacity-30 disabled:pointer-events-none text-black text-xs font-semibold transition-all shrink-0 cursor-pointer"
           >
             {isProcessing ? (
               <RefreshCw className="w-3 h-3 animate-spin" />

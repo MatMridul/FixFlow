@@ -189,7 +189,7 @@ function FixFlowApp() {
 
   if (is404) {
     return (
-      <div className="min-h-screen bg-[#08090B] text-zinc-100 flex flex-col justify-between overflow-x-hidden">
+      <div className="min-h-screen bg-black text-white flex flex-col justify-between overflow-x-hidden">
         <TopBar
           serverOnline={serverOnline}
           onReset={handleReset}
@@ -210,7 +210,7 @@ function FixFlowApp() {
   const primaryGoal = diagnosticResult?.response.contexts[0] || null;
 
   return (
-    <div className="min-h-screen bg-[#08090B] text-zinc-100 flex flex-col justify-between overflow-x-hidden selection:bg-[#1E56FF]/30 selection:text-blue-100">
+    <div className="min-h-screen bg-black text-white flex flex-col justify-between overflow-x-hidden selection:bg-white selection:text-black">
       <TopBar
         serverOnline={serverOnline}
         onReset={handleReset}
@@ -249,15 +249,15 @@ function FixFlowApp() {
 
           {/* Right Column: Sticky DeviceTwin */}
           <div className="hidden lg:block lg:col-span-5 xl:col-span-5 sticky top-16 space-y-2.5">
-            <div className="p-4 rounded-xl bg-[#13151A] border border-white/[0.07] flex flex-col items-center">
-              <div className="w-full flex items-center justify-between border-b border-white/[0.05] pb-2.5 mb-3">
+            <div className="p-4 rounded-xl bg-[#080808] border border-white/[0.08] flex flex-col items-center">
+              <div className="w-full flex items-center justify-between border-b border-white/[0.06] pb-2.5 mb-3">
                 <div className="flex items-center gap-2">
-                  <span className="w-2 h-2 rounded-full bg-emerald-400" />
-                  <span className="text-xs font-semibold text-zinc-200">
+                  <span className="w-1.5 h-1.5 rounded-full bg-white shadow-[0_0_6px_rgba(255,255,255,0.8)]" />
+                  <span className="text-xs font-semibold text-white">
                     Galaxy S24 Ultra
                   </span>
                 </div>
-                <span className="text-[10px] font-mono text-zinc-400 bg-[#191C23] px-2 py-0.5 rounded border border-white/[0.05]">
+                <span className="text-[10px] font-mono text-neutral-300 bg-[#121212] px-2 py-0.5 rounded border border-white/[0.08]">
                   One UI 6.1 Live Twin
                 </span>
               </div>
@@ -268,9 +268,9 @@ function FixFlowApp() {
               />
 
               {/* Screen Preview Switcher */}
-              <div className="w-full pt-3 mt-3 border-t border-white/[0.05] flex items-center justify-between text-xs">
-                <span className="text-[11px] text-zinc-400">Quick Jump:</span>
-                <div className="flex gap-1 p-0.5 bg-[#0E1013] rounded-lg border border-white/[0.06]">
+              <div className="w-full pt-3 mt-3 border-t border-white/[0.06] flex items-center justify-between text-xs">
+                <span className="text-[11px] text-neutral-400">Quick Jump:</span>
+                <div className="flex gap-1 p-0.5 bg-black rounded border border-white/[0.08]">
                   {(['home', 'display', 'battery', 'storage'] as OneUIScreen[]).map((scr) => (
                     <button
                       key={scr}
@@ -278,14 +278,14 @@ function FixFlowApp() {
                       onClick={() => setDeviceState((p) => ({ ...p, screen: scr, isLocked: false }))}
                       className={`relative px-2.5 py-1 rounded text-[10px] font-medium capitalize transition-colors cursor-pointer ${
                         deviceState.screen === scr
-                          ? 'text-white'
-                          : 'text-zinc-400 hover:text-white'
+                          ? 'text-black font-semibold'
+                          : 'text-neutral-400 hover:text-white'
                       }`}
                     >
                       {deviceState.screen === scr && (
                         <motion.div
                           layoutId="quickJumpPill"
-                          className="absolute inset-0 bg-[#1E56FF] rounded shadow-sm"
+                          className="absolute inset-0 bg-white rounded shadow-sm"
                           transition={springs.pill}
                         />
                       )}
@@ -308,7 +308,7 @@ function FixFlowApp() {
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               onClick={() => setIsMobileSimOpen(false)}
-              className="fixed inset-0 bg-black/80 backdrop-blur-sm"
+              className="fixed inset-0 bg-black/90 backdrop-blur-md"
             />
 
             <motion.div
@@ -316,7 +316,7 @@ function FixFlowApp() {
               animate={{ y: 0 }}
               exit={{ y: '100%' }}
               transition={springs.responsive}
-              className="relative w-full max-w-md max-h-[92vh] overflow-y-auto flex flex-col items-center p-2"
+              className="relative w-full max-w-md max-h-[92vh] overflow-y-auto flex flex-col items-center p-2 bg-black rounded-t-2xl border-t border-white/20"
             >
               <PhoneSimulator
                 deviceState={deviceState}
