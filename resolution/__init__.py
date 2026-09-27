@@ -1,6 +1,11 @@
 from resolution.retriever import HybridRetriever, RetrievalResult
 from resolution.ordering import order_actions
-from resolution.binder import bind_actionable_deeplink, resolve_goal_deeplinks
+from resolution.binder import (
+    ResolutionStats,
+    bind_actionable_deeplink,
+    resolve_goal_deeplinks,
+    resolve_goal_deeplinks_with_stats,
+)
 
 __all__ = [
     "HybridRetriever",
@@ -8,4 +13,6 @@ __all__ = [
     "order_actions",
     "bind_actionable_deeplink",
     "resolve_goal_deeplinks",
+    "resolve_goal_deeplinks_with_stats",
+    "ResolutionStats",
 ]

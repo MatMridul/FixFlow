@@ -74,7 +74,8 @@ class TestP0CheckpointIntegration:
 
             assert data["meta"]["cache_hit"] is False
             assert data["meta"]["fallback"] is None
-            assert data["meta"]["cost_usd"] > 0.0
+            assert data["meta"]["cost_usd"] >= 0.0  # real cost; $0 on the deterministic path
+            assert 8 <= len(data["query_variations"]) <= 10  # FAQ A5
 
         # Health endpoint should now report all 20 items in cache
         health_resp = client.get("/health")

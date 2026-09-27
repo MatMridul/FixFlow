@@ -7,6 +7,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from api.routes import router
 from cache import CacheStore, CompositionalCache, GatedSemanticCache, SemanticCache
 from extraction import StructureExtractor
+from extraction.llm_client import LLMChain
 
 
 def create_app(
@@ -32,13 +33,15 @@ def create_app(
 
     # Initialize service components on app state (Defaults to N1 Compositional Cache)
     app.state.cache = cache or CompositionalCache(store=CacheStore())
-    app.state.extractor = extractor or StructureExtractor()
+    if extractor is None:
+        # Gemini -> Mistral chain when GEMINI_API_KEY / MISTRAL_API_KEY are set
+        # (env or .env); None -> deterministic extraction only.
+        extractor = StructureExtractor(llm_callable=LLMChain.from_env())
+    app.state.extractor = extractor
     if resolver_fn is None:
-        try:
-            from resolution import resolve_goal_deeplinks
-            resolver_fn = resolve_goal_deeplinks
-        except Exception:
-            resolver_fn = None
+        # Import failure here must be loud, not silently disable deeplinks.
+        from resolution import resolve_goal_deeplinks_with_stats
+        resolver_fn = resolve_goal_deeplinks_with_stats
     app.state.resolver_fn = resolver_fn
 
 

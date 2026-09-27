@@ -1,16 +1,29 @@
 """Schema-constrained LLM extractor for converting SIIS text into intermediate Goal structures."""
 import json
 import re
-from typing import Any, Callable, Dict, List, Optional, Tuple
+from dataclasses import dataclass, field
+from typing import Callable, List, Optional
 
+from extraction.deterministic import extract_goal_deterministic, topic_and_title
 from extraction.prompt import build_extraction_prompt
-from schema import Action, Goal, StepGroup, actionCategory
+from extraction.query_variations import merge_variations
+from schema import Goal
 from validation import (
-    contains_urls,
     programmatic_repair_goal,
     repair_goal_or_json,
     validate_goal,
 )
+
+DETERMINISTIC_MODEL_ID = "fixflow-deterministic-v2"
+
+
+@dataclass
+class ExtractionOutcome:
+    goal: Optional[Goal]
+    query_variations: List[str] = field(default_factory=list)
+    model: str = DETERMINISTIC_MODEL_ID
+    cost_usd: float = 0.0
+    llm_used: bool = False
 
 
 def clean_llm_json(raw_text: str) -> str:
@@ -25,101 +38,13 @@ def clean_llm_json(raw_text: str) -> str:
     return text
 
 
-def extract_fallback_actions_from_siis(content: str) -> List[Action]:
-    """
-    Deterministic rule-based fallback extractor:
-    Parses steps, headings, and bullet points from raw SIIS text when offline or without LLM.
-    """
-    actions: List[Action] = []
-    # Split by headings or steps (e.g. ## Step 1:, Step 1:, 1., etc.)
-    sections = re.split(r'\n(?=#{1,3}\s+|Step\s+\d+:?|\d+\.\s+)', content)
-
-    for sec in sections:
-        lines = [line.strip() for line in sec.split('\n') if line.strip()]
-        if not lines:
-            continue
-
-        header_line = lines[0]
-        # Clean title
-        action_title = re.sub(r'^#+\s*', '', header_line).strip()
-        action_title = re.sub(r'^(?:Step\s+\d+:?|\d+[\.\)])\s*', '', action_title, flags=re.IGNORECASE).strip()
-        if not action_title or len(action_title.split()) > 6 or len(lines) == 1:
-            lower_h = header_line.lower()
-            if any(w in lower_h for w in ["display", "screen", "flicker", "brightness"]):
-                action_title = "Adjust Display Settings"
-            elif any(w in lower_h for w in ["battery", "charge", "drain"]):
-                action_title = "Inspect Battery Usage"
-            elif any(w in lower_h for w in ["network", "wifi", "bluetooth", "connection"]):
-                action_title = "Check Network Settings"
-            else:
-                action_title = "Review Device Settings"
-
-        # Categorize
-        lower_title = action_title.lower()
-        if any(w in lower_title for w in ["reset", "wipe", "factory", "erase"]):
-            category = actionCategory.critical
-        elif any(w in lower_title for w in ["visit", "contact", "support", "service", "physical"]):
-            category = actionCategory.manual
-        else:
-            category = actionCategory.auto
-
-        # Extract steps
-        step_lines = []
-        for line in lines[1:]:
-            cleaned_line = re.sub(r'^(?:[-*•]|\d+\.)\s*', '', line).strip()
-            if cleaned_line and not contains_urls(cleaned_line) and len(cleaned_line) > 5:
-                step_lines.append(cleaned_line)
-
-        if not step_lines:
-            # If no multi-line steps, extract sentences from the section content
-            candidate_sentences = [
-                s.strip() for s in re.split(r'(?<=[.!?])\s+', sec)
-                if s.strip() and not contains_urls(s) and len(s.strip()) > 5
-            ]
-            if candidate_sentences:
-                step_lines.extend(candidate_sentences)
-            else:
-                candidate = re.sub(r'^(?:[-*•]|\d+\.)\s*', '', header_line).strip()
-                if candidate:
-                    step_lines.append(candidate)
-
-        actions.append(
-            Action(
-                actionName=action_title,
-                description=f"It will help you {action_title.lower()} properly",
-                category=category,
-                stepGroups=[
-                    StepGroup(
-                        steps=step_lines,
-                        actionableDeeplink=None,
-                        validationDeeplink=None,
-                    )
-                ],
-            )
-        )
-
-    # If nothing extracted, create default safe action
-    if not actions:
-        actions.append(
-            Action(
-                actionName="Review Device Settings",
-                description="It will help inspect and configure device settings",
-                category=actionCategory.auto,
-                stepGroups=[
-                    StepGroup(
-                        steps=["Navigate to and open Settings.", "Review related device options."],
-                        actionableDeeplink=None,
-                        validationDeeplink=None,
-                    )
-                ],
-            )
-        )
-
-    return actions
-
-
 class StructureExtractor:
-    """Extracts structured Goal objects from SIIS documentation conforming to Contract 1."""
+    """Extracts structured Goal objects from SIIS documentation conforming to Contract 1.
+
+    With an `llm_callable` (e.g. extraction.llm_client.LLMChain) the LLM does
+    the extraction and paraphrasing in one call; if it's absent or fails, the
+    deterministic extractor takes over so the API always answers.
+    """
 
     def __init__(
         self,
@@ -129,40 +54,51 @@ class StructureExtractor:
         self.llm_callable = llm_callable
         self.temperature = temperature
 
-    def extract(self, query: str, siis_title: str, siis_content: str) -> Optional[Goal]:
-        """
-        Extract an intermediate Goal from SIIS content.
-        Enforces Contract 1: deeplinks are initialized to None.
-        Returns repaired and validated Goal, or None if extraction fails.
-        """
+    def _call_llm(self, prompt: str):
+        """Returns (text, model_id, cost_usd). Uses the chain's richer
+        `complete()` when available so meta reports the model that actually
+        answered, not the one we hoped would."""
+        complete = getattr(self.llm_callable, "complete", None)
+        if callable(complete):
+            text, record = complete(prompt)
+            return text, record.model, record.cost_usd
+        return self.llm_callable(prompt), "custom-llm", 0.0
+
+    def extract_full(self, query: str, siis_title: str, siis_content: str) -> ExtractionOutcome:
         if not siis_content or not siis_content.strip():
-            return None
+            return ExtractionOutcome(goal=None)
 
         goal: Optional[Goal] = None
+        llm_variations: List[str] = []
+        model, cost, llm_used = DETERMINISTIC_MODEL_ID, 0.0, False
 
         if self.llm_callable is not None:
             prompt = build_extraction_prompt(query, siis_title, siis_content)
+            raw_response = ""
             try:
-                raw_response = self.llm_callable(prompt)
-                cleaned_json = clean_llm_json(raw_response)
-                parsed = json.loads(cleaned_json)
+                raw_response, model, cost = self._call_llm(prompt)
+                parsed = json.loads(clean_llm_json(raw_response))
+                if isinstance(parsed, dict):
+                    variations = parsed.pop("query_variations", None)
+                    if isinstance(variations, list):
+                        llm_variations = [v for v in variations if isinstance(v, str)]
                 goal = Goal.model_validate(parsed)
+                llm_used = True
             except Exception:
-                # Attempt repair if JSON failed to parse
-                goal, _ = repair_goal_or_json(raw_response, llm_callable=self.llm_callable)
+                if raw_response:
+                    try:
+                        # Single-shot LLM repair (Task A.0.3) — spends quota only on bad output.
+                        goal, _ = repair_goal_or_json(raw_response, llm_callable=self.llm_callable)
+                        llm_used = goal is not None
+                    except Exception:
+                        goal = None
+                if goal is None:
+                    model, cost = DETERMINISTIC_MODEL_ID, 0.0
 
-        # Fallback to deterministic extraction if LLM is not provided or failed
         if goal is None:
-            actions = extract_fallback_actions_from_siis(siis_content)
-            topic = re.sub(r'[^\w\s]', '', siis_title).strip()
-            if not topic:
-                topic = "Device"
-            goal = Goal(
-                goal=f"Follow these steps to perform this {topic} Troubleshooting",
-                title=f"{topic} issue",
-                actions=actions,
-                score=0.90,
-            )
+            goal = extract_goal_deterministic(query, siis_title, siis_content)
+            if not goal.actions:
+                return ExtractionOutcome(goal=None, model=model, cost_usd=cost)
 
         # Enforce Contract 1: empty deeplink fields ready for catalog resolution
         for action in goal.actions:
@@ -170,13 +106,21 @@ class StructureExtractor:
                 sg.actionableDeeplink = None
                 sg.validationDeeplink = None
 
-        # Apply programmatic repairs to ensure casing and rule compliance
         goal = programmatic_repair_goal(goal)
         report = validate_goal(goal)
+        if not report.is_valid:
+            repaired_goal, final_report = repair_goal_or_json(goal, llm_callable=None)
+            goal = repaired_goal if final_report.is_valid else None
 
-        if report.is_valid:
-            return goal
+        topic = topic_and_title(query, siis_title)[0]
+        return ExtractionOutcome(
+            goal=goal,
+            query_variations=merge_variations(llm_variations, query, topic),
+            model=model,
+            cost_usd=round(cost, 6),
+            llm_used=llm_used,
+        )
 
-        # Final repair attempt if still invalid
-        repaired_goal, final_report = repair_goal_or_json(goal, llm_callable=self.llm_callable)
-        return repaired_goal if final_report.is_valid else None
+    def extract(self, query: str, siis_title: str, siis_content: str) -> Optional[Goal]:
+        """Backward-compatible Goal-only entry point."""
+        return self.extract_full(query, siis_title, siis_content).goal

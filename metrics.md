@@ -1,6 +1,6 @@
 # System Performance Metrics & Evaluation Report
 
-**Generated:** 2026-09-26 11:23 UTC (eval/run_screen_eval.py)
+**Generated:** 2026-09-27 06:48 UTC (eval/run_screen_eval.py)
 **Scope:** resolution-only (N3 screen resolution, N4 catalog-side validation). Step accuracy, latency, and cost require the API + extraction layers, not yet built — see note at bottom.
 
 ---

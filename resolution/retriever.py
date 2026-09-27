@@ -28,8 +28,8 @@ from catalog.loader import Catalog
 
 _TOKEN_RE = re.compile(r"[a-z0-9]+")
 
-_NEGATIVE_WORDS = {"disable", "turn off", "off", "stop", "remove", "deactivate"}
-_POSITIVE_WORDS = {"enable", "turn on", "on", "start", "activate"}
+_NEGATIVE_WORDS = {"disable", "disables", "turn off", "switch off", "stop", "deactivate", "exit"}
+_POSITIVE_WORDS = {"enable", "enables", "turn on", "switch on", "start", "activate", "use"}
 
 
 def _tokenize(text: str) -> list[str]:
@@ -50,9 +50,11 @@ def _polarity(text: str) -> str:
     tie), not a silent one.
     """
     lowered = text.lower()
-    if any(w in lowered for w in _NEGATIVE_WORDS):
+    # Whole words only: substring matching found "on" inside "icon"/"button"
+    # and "off" inside "offers", flipping Enable/Disable picks at random.
+    if any(re.search(rf"\b{re.escape(w)}\b", lowered) for w in _NEGATIVE_WORDS):
         return "negative"
-    if any(w in lowered for w in _POSITIVE_WORDS):
+    if any(re.search(rf"\b{re.escape(w)}\b", lowered) for w in _POSITIVE_WORDS):
         return "positive"
     return "positive"  # default: troubleshooting steps skew toward enabling a fix
 
@@ -67,9 +69,15 @@ def _minmax(scores: np.ndarray) -> np.ndarray:
 @dataclass
 class RetrievalResult:
     entry: CatalogEntry
-    score: float
+    score: float          # min-max normalized per query — ranks WITHIN a query only
     bm25_score: float
     dense_score: float
+    raw_cosine: float = 0.0  # absolute TF-IDF cosine in [0, 1] — comparable ACROSS queries
+
+    # `score` can't gate "is this relevant at all": min-max normalization
+    # stretches every query's candidates to [0, 1], so the best candidate
+    # scores ~1.0 even for "Bake a chocolate cake" (matched "Enable Slow
+    # Keys" at 0.80). `raw_cosine` is the absolute signal thresholds use.
 
 
 class HybridRetriever:
@@ -126,6 +134,7 @@ class HybridRetriever:
                 score=float(combined[i]),
                 bm25_score=float(norm_bm25[i]),
                 dense_score=float(norm_dense[i]),
+                raw_cosine=float(dense_scores[i]),
             )
             for i in pool_order
         ]

@@ -6,13 +6,28 @@ from schema import Action, Goal, StepGroup
 MARKDOWN_LINK_PATTERN = re.compile(r'\[([^\]]+)\]\((?:https?://|www\.)[^\s\)]+\)', re.IGNORECASE)
 RAW_URL_PATTERN = re.compile(r'(?:https?://|www\.)[^\s<>"\'\)]+', re.IGNORECASE)
 SCHEME_URL_PATTERN = re.compile(r'https?://[^\s]+', re.IGNORECASE)
+# FAQ Q6 counts ".com", ".html", markdown images and link tags as URL leaks
+# too (gate G5: zero leaks) — e.g. an LLM writing "Visit samsung.com/support".
+BARE_DOMAIN_PATTERN = re.compile(
+    r'\b[a-z0-9-]+(?:\.[a-z0-9-]+)*\.(?:com|net|org|co|io|html?)\b(?:/[^\s<>"\')]*)?', re.IGNORECASE
+)
+MARKDOWN_IMAGE_PATTERN = re.compile(r'!\[[^\]]*\]\([^)]*\)')
+LINK_TAG_PATTERN = re.compile(r'<\s*/?\s*a\b[^>]*>', re.IGNORECASE)
 
 
 def contains_urls(text: str) -> bool:
-    """Check if the text contains any external web URLs (http/https/www/markdown web links)."""
+    """Check for anything the scorer treats as a URL leak: http(s), www., bare
+    .com/.html domains, markdown links/images, and <a> link tags."""
     if not text:
         return False
-    return bool(MARKDOWN_LINK_PATTERN.search(text) or RAW_URL_PATTERN.search(text) or SCHEME_URL_PATTERN.search(text))
+    return bool(
+        MARKDOWN_LINK_PATTERN.search(text)
+        or RAW_URL_PATTERN.search(text)
+        or SCHEME_URL_PATTERN.search(text)
+        or BARE_DOMAIN_PATTERN.search(text)
+        or MARKDOWN_IMAGE_PATTERN.search(text)
+        or LINK_TAG_PATTERN.search(text)
+    )
 
 
 def scrub_urls(text: str) -> str:
@@ -23,11 +38,14 @@ def scrub_urls(text: str) -> str:
     if not text:
         return text
 
-    # First, replace markdown link wrappers with just the anchor text
-    cleaned = MARKDOWN_LINK_PATTERN.sub(r'\1', text)
+    # First, drop images and replace markdown link wrappers with just the anchor text
+    cleaned = MARKDOWN_IMAGE_PATTERN.sub('', text)
+    cleaned = MARKDOWN_LINK_PATTERN.sub(r'\1', cleaned)
+    cleaned = LINK_TAG_PATTERN.sub('', cleaned)
 
-    # Second, remove raw URLs
+    # Second, remove raw URLs and bare domains
     cleaned = RAW_URL_PATTERN.sub('', cleaned)
+    cleaned = BARE_DOMAIN_PATTERN.sub('', cleaned)
 
     # Clean up excess whitespace and dangling punctuation
     cleaned = re.sub(r'\s+', ' ', cleaned).strip()

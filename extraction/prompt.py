@@ -11,14 +11,21 @@ CRITICAL RULES:
    - Output valid JSON conforming to the intermediate Goal object.
    - All `actionableDeeplink` and `validationDeeplink` fields MUST be null (these are populated downstream by the Catalog Resolver).
 3. TEXT RULES:
-   - 'goal': MUST match the exact syntax: "Follow these steps to perform this <Topic> Troubleshooting" (or "Configuration").
+   - 'goal': MUST match the exact syntax: "Follow these steps to perform this <Topic> Troubleshooting" (or "Configuration"). <Topic> is a SHORT 1-4 word Title Case name for the user's problem (e.g. "Blank Screen", "Screen Flicker"), NOT the SIIS article title.
    - 'title': Exactly 2-3 words in sentence case (first letter capitalized, all following words lowercase unless common acronyms like Wi-Fi/GPS).
-   - 'score': Float between 0.85 and 0.95 reflecting baseline extraction grounding.
-   - 'actionName': Title Case, represents a single settings screen or discrete operation (e.g. "Adjust Screen Brightness", "Restart Device", "Wipe Cache Partition").
-   - 'description': Must start with "It will " and concisely explain the user benefit (e.g. "It will stabilize your display refresh rate").
-   - 'category': "auto" (settings / on-device UI), "critical" (destructive/irreversible actions like Factory Data Reset, wipe cache; MUST be placed last), or "manual" (physical inspection, authorized service center visit).
-   - 'steps': Clear, imperative sentences (e.g. "Open Settings.", "Tap on Display.", "Turn on Dark mode."). ZERO external web URLs (no http/https).
-4. RETURN FORMAT:
+   - 'score': Always 0.0. Confidence is computed downstream from evidence; never self-report it.
+   - 'actionName': Title Case, represents a single settings screen or discrete operation (e.g. "Adjust Screen Brightness", "Force a Restart", "Check for Physical Damage"). One Action = One Screen.
+   - 'description': Must start with "It will " and concisely explain the user benefit in 5-7 words (e.g. "It will stabilize your display refresh rate").
+   - 'category':
+       "auto"     = done in on-device Settings / UI screens (reachable by a deeplink).
+       "critical" = disruptive or irreversible: restart / force restart, safe mode, software/firmware update, factory data reset, wipe. MUST be placed last.
+       "manual"   = physical intervention: inspecting for damage, charging, removing a case or screen protector, contacting support or visiting a service center.
+   - 'steps': Clear imperative sentences, ONE interaction each (e.g. "Open Settings.", "Tap Display.", "Turn on Dark mode."). Rewrite conversational SIIS prose into imperatives but never add an instruction the SIIS text does not contain. Skip greetings and explanations. ZERO external web URLs (no http/https).
+   - Order actions least-disruptive first: auto, then manual, then critical last.
+4. QUERY VARIATIONS:
+   - Add a top-level "query_variations" array with 8 to 10 UNIQUE paraphrases of the user complaint.
+   - Make them lexically diverse: formal, casual, a question, keyword-only, frustrated, and at least one with a realistic typo. Keep the same problem meaning.
+5. RETURN FORMAT:
    - Return PURE JSON only. No markdown formatting, no code blocks, no conversational preamble.
 """
 
@@ -38,9 +45,19 @@ Contact Samsung Support or visit an authorized Samsung Service Center. Provide d
 """
 
 FEW_SHOT_EXAMPLE_ASSISTANT = json.dumps({
+    "query_variations": [
+        "My Galaxy screen is cracked and keeps flashing.",
+        "Why does my cracked phone display flash on and off?",
+        "cracked screen flashing samsung",
+        "The display on my Samsung device has a crack and flickers intermittently.",
+        "ugh my screen cracked and now it keeps blinking",
+        "Phone screen broken and flashing, what should I do?",
+        "samsung craked screen flickering fix",
+        "Is a flashing, cracked Galaxy display repairable?",
+    ],
     "goal": "Follow these steps to perform this Screen Damage Troubleshooting",
     "title": "Screen display damage",
-    "score": 0.95,
+    "score": 0.0,
     "actions": [
         {
             "actionName": "Back Up Phone Data",
@@ -102,4 +119,4 @@ SIIS Reference Content:
 {siis_content}
 \"\"\"
 
-Extract the intermediate Goal JSON adhering to all constraints:"""
+Extract the intermediate Goal JSON (plus "query_variations") adhering to all constraints:"""

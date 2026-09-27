@@ -31,7 +31,7 @@ class TestApiEndpoints:
         response = test_client.get("/health")
         assert response.status_code == 200
         data = response.json()
-        assert data["status"] == "healthy"
+        assert data["status"] == "ok"  # FAQ gate G2
         assert data["service"] == "FixFlow"
         assert data["model_readiness"] is True
         assert data["cache_entries"] == 0
@@ -60,7 +60,11 @@ class TestApiEndpoints:
         assert len(data1["response"]["contexts"]) == 1
         assert data1["meta"]["cache_hit"] is False
         assert data1["meta"]["fallback"] is None
-        assert data1["meta"]["cost_usd"] > 0.0
+        # No LLM key in tests -> deterministic path, which genuinely costs $0
+        # (the old hardcoded 0.001 was a placeholder, not a real cost).
+        assert not data1["meta"]["model"].startswith("cache-")
+        assert data1["meta"]["cost_usd"] >= 0.0
+        assert 8 <= len(data1["query_variations"]) <= 10  # FAQ A5
 
         # Health endpoint should now report 1 cached item
         health_resp = test_client.get("/health")
@@ -140,8 +144,14 @@ class TestApiEndpoints:
         response = test_client.post("/v1/troubleshoot", json=payload)
         assert response.status_code == 200
         data = response.json()
-        assert len(data["response"]["contexts"]) == 0
-        assert data["meta"]["fallback"] == "no_match"
+        # FAQ A4 requires non-empty responses when SIIS is present, so fully
+        # ungrounded (hallucinated) LLM output is replaced by the SIIS-grounded
+        # deterministic plan rather than returning an empty answer.
+        contexts = data["response"]["contexts"]
+        assert len(contexts) == 1
+        dumped = str(contexts[0])
+        assert "Warp Drive" not in dumped and "hyperdrive" not in dumped
+        assert "SIM card" in dumped
 
     def test_troubleshoot_low_calibrated_confidence_fallback(self, test_client, monkeypatch):
         # Force low calibrated score below 0.25 threshold
@@ -158,9 +168,10 @@ class TestApiEndpoints:
         response = test_client.post("/v1/troubleshoot", json=payload)
         assert response.status_code == 200
         data = response.json()
-        assert len(data["response"]["contexts"]) == 0
+        # Low confidence is flagged, not turned into an empty answer (FAQ A4).
+        assert len(data["response"]["contexts"]) == 1
         assert data["meta"]["cache_hit"] is False
-        assert data["meta"]["fallback"] == "no_match"
+        assert data["meta"]["fallback"] == "low_confidence"
 
     def test_troubleshoot_end_to_end_binds_real_deeplinks(self, test_client):
         # Full cold-path: Query -> SIIS -> Extract -> Resolution Screen Graph -> Deeplink Binding -> Schema Valid

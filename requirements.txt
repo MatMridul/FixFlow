@@ -3,6 +3,7 @@ pydantic>=2.9.0
 fastapi>=0.110.0
 uvicorn>=0.30.0
 pytest>=8.0.0
+httpx2  # required by Starlette's TestClient (tests/scripts); missing it broke 4 test files
 
 # Dev B (Catalog & Resolution) — catalog/, resolution/, tests/
 rank-bm25>=0.2

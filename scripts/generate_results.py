@@ -17,7 +17,14 @@ def generate_and_validate():
     print("GENERATING & VALIDATING FIXFLOW HACKATHON RESULTS")
     print("=" * 70)
 
-    app = create_app()
+    # Fresh throwaway cache: the default store persists in data/cache_store.db,
+    # so reusing it made every row a cache hit replaying plans built by an
+    # older pipeline — results.jsonl must reflect the current code.
+    import tempfile
+    from cache import CacheStore, CompositionalCache
+
+    tmp_db = Path(tempfile.mkdtemp()) / "results_cache.db"
+    app = create_app(cache=CompositionalCache(store=CacheStore(db_path=str(tmp_db))))
     client = TestClient(app)
 
     data_dir = Path("data")
