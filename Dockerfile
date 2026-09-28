@@ -18,6 +18,9 @@ COPY data/ data/
 COPY tests/ tests/
 COPY frontend/ frontend/
 COPY scripts/ scripts/
+COPY results.json* .
+COPY metrics.md .
+COPY README.md .
 
 EXPOSE 8000
 
