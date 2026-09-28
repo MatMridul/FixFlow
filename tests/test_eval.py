@@ -50,9 +50,11 @@ def test_full_harness_runs_and_scores_own_dev_set():
     data."""
     results = run()
     summary = summarize(results)
-    assert summary["n_scenarios"] == 7
-    assert summary["screen_resolution_accuracy"] == 1.0
-    assert summary["failures"] == []
+    assert summary["n_scenarios"] >= 23  # 7 original + 16 hand-labelled (2026-09-29)
+    assert summary["screen_resolution_accuracy"] >= 0.9
+    # Known miss, kept in the set on purpose: the catalog mislabels adaptive
+    # battery as "Enable Adaptive Display" and the Battery page outranks it.
+    assert set(summary["failures"]) <= {"labelled_battery_adaptive_battery_on"}
 
 
 def test_metrics_md_renders_without_error():

@@ -62,6 +62,10 @@ def generate_and_validate():
             },
         }
 
+        # Every row is extracted from its own request: the kit reuses one SIIS
+        # article for several complaints, and without this the shared-article
+        # cache would copy an earlier row's plan into this one.
+        cache.clear()
         resp = client.post("/v1/troubleshoot", json=payload)
         assert resp.status_code == 200, f"Row {idx} failed HTTP 200"
         data = resp.json()

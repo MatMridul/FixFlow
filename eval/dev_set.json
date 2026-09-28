@@ -1,5 +1,5 @@
 {
-  "_readme": "Resolution-only dev set for scoring N3/N4 in isolation (resolution/screen_graph.py, resolution/binder.py) without needing Dev A's SIIS->steps extraction pipeline, which does not exist yet. Every scenario here is either (a) taken verbatim from an official source (sample_output.json, the brief's Appendix-B worked example) or (b) hand-constructed by the Dev B author against a specific real catalog entry, then verified to actually resolve there. This is NOT the brief's called-for 80-100 scenario, four-domain hand-labelled dev set - that needs real SIIS text run through extraction, which is blocked on Dev A's P0. Scope: Display + a couple of Battery/System entries, screen-resolution correctness only (no step-accuracy or provenance scoring, which are N5/Dev A's territory).",
+  "_readme": "Resolution-only dev set for scoring N3/N4 in isolation (resolution/screen_graph.py, resolution/binder.py) without needing Dev A's SIIS->steps extraction pipeline, which does not exist yet. Every scenario here is either (a) taken verbatim from an official source (sample_output.json, the brief's Appendix-B worked example) or (b) hand-constructed by the Dev B author against a specific real catalog entry, then verified to actually resolve there. This is NOT the brief's called-for 80-100 scenario, four-domain hand-labelled dev set - that needs real SIIS text run through extraction, which is blocked on Dev A's P0. Scope: Display + a couple of Battery/System entries, screen-resolution correctness only (no step-accuracy or provenance scoring, which are N5/Dev A's territory). Update 2026-09-29: added 16 hand-labelled scenarios (ids prefixed labelled_) across Display, Battery, Performance and Connections, each labelled by reading the catalog entry's message/description BEFORE running the resolver (labels were not adjusted to match its output).",
   "scenarios": [
     {
       "id": "official_backup",
@@ -90,6 +90,203 @@
       "category": "auto",
       "expected_deeplink_id": "DL-0026",
       "expected_is_page_level": false
+    },
+    {
+      "id": "labelled_display_nav_bar_page",
+      "source": "hand-labelled against catalog entry (2026-09-29), steps in Samsung SIIS style",
+      "steps": [
+        "Open Settings.",
+        "Tap Display.",
+        "Tap Navigation bar."
+      ],
+      "category": "auto",
+      "expected_deeplink_id": "DL-0169",
+      "expected_is_page_level": true
+    },
+    {
+      "id": "labelled_display_touch_sensitivity_on",
+      "source": "hand-labelled against catalog entry (2026-09-29), steps in Samsung SIIS style",
+      "steps": [
+        "Open Settings.",
+        "Tap Display.",
+        "Turn on Touch sensitivity."
+      ],
+      "category": "auto",
+      "expected_deeplink_id": "DL-0126",
+      "expected_is_page_level": false
+    },
+    {
+      "id": "labelled_display_eye_comfort_on",
+      "source": "hand-labelled against catalog entry (2026-09-29), steps in Samsung SIIS style",
+      "steps": [
+        "Open Settings.",
+        "Tap Display.",
+        "Turn on Eye Comfort Shield."
+      ],
+      "category": "auto",
+      "expected_deeplink_id": "DL-0040",
+      "expected_is_page_level": false
+    },
+    {
+      "id": "labelled_display_motion_smoothness",
+      "source": "hand-labelled against catalog entry (2026-09-29), steps in Samsung SIIS style",
+      "steps": [
+        "Open Settings.",
+        "Tap Display.",
+        "Tap Motion smoothness.",
+        "Select Adaptive."
+      ],
+      "category": "auto",
+      "expected_deeplink_id": "DL-0228",
+      "expected_is_page_level": false
+    },
+    {
+      "id": "labelled_display_screen_timeout",
+      "source": "hand-labelled against catalog entry (2026-09-29), steps in Samsung SIIS style",
+      "steps": [
+        "Open Settings.",
+        "Tap Display.",
+        "Tap Screen timeout.",
+        "Choose a longer timeout."
+      ],
+      "category": "auto",
+      "expected_deeplink_id": "DL-0220",
+      "expected_is_page_level": false
+    },
+    {
+      "id": "labelled_display_brightness",
+      "source": "hand-labelled against catalog entry (2026-09-29), steps in Samsung SIIS style",
+      "steps": [
+        "Open Settings.",
+        "Tap Display.",
+        "Drag the Brightness slider to the right."
+      ],
+      "category": "auto",
+      "expected_deeplink_id": "DL-0232",
+      "expected_is_page_level": false
+    },
+    {
+      "id": "labelled_display_screen_mode_page",
+      "source": "hand-labelled against catalog entry (2026-09-29), steps in Samsung SIIS style",
+      "steps": [
+        "Open Settings.",
+        "Tap Display.",
+        "Tap Screen mode."
+      ],
+      "category": "auto",
+      "expected_deeplink_id": "DL-0215",
+      "expected_is_page_level": true
+    },
+    {
+      "id": "labelled_display_adaptive_brightness_off",
+      "source": "hand-labelled against catalog entry (2026-09-29), steps in Samsung SIIS style",
+      "steps": [
+        "Open Settings.",
+        "Tap Display.",
+        "Turn off Adaptive brightness."
+      ],
+      "category": "auto",
+      "expected_deeplink_id": "DL-0020",
+      "expected_is_page_level": false
+    },
+    {
+      "id": "labelled_display_edge_panels_off",
+      "source": "hand-labelled against catalog entry (2026-09-29), steps in Samsung SIIS style",
+      "steps": [
+        "Open Settings.",
+        "Tap Display.",
+        "Turn off Edge panels."
+      ],
+      "category": "auto",
+      "expected_deeplink_id": "DL-0095",
+      "expected_is_page_level": false
+    },
+    {
+      "id": "labelled_battery_power_saving_on",
+      "source": "hand-labelled against catalog entry (2026-09-29), steps in Samsung SIIS style",
+      "steps": [
+        "Open Settings.",
+        "Tap Battery.",
+        "Turn on Power saving."
+      ],
+      "category": "auto",
+      "expected_deeplink_id": "DL-0412",
+      "expected_is_page_level": false
+    },
+    {
+      "id": "labelled_battery_power_saving_off",
+      "source": "hand-labelled against catalog entry (2026-09-29), steps in Samsung SIIS style",
+      "steps": [
+        "Open Settings.",
+        "Tap Battery.",
+        "Turn off Power saving."
+      ],
+      "category": "auto",
+      "expected_deeplink_id": "DL-0411",
+      "expected_is_page_level": false
+    },
+    {
+      "id": "labelled_battery_adaptive_battery_on",
+      "source": "hand-labelled against catalog entry (2026-09-29), steps in Samsung SIIS style",
+      "steps": [
+        "Open Settings.",
+        "Tap Battery.",
+        "Tap More battery settings.",
+        "Turn on Adaptive battery."
+      ],
+      "category": "auto",
+      "expected_deeplink_id": "DL-0398",
+      "expected_is_page_level": false
+    },
+    {
+      "id": "labelled_battery_protection_on",
+      "source": "hand-labelled against catalog entry (2026-09-29), steps in Samsung SIIS style",
+      "steps": [
+        "Open Settings.",
+        "Tap Battery.",
+        "Tap More battery settings.",
+        "Turn on Battery protection."
+      ],
+      "category": "auto",
+      "expected_deeplink_id": "DL-0410",
+      "expected_is_page_level": false
+    },
+    {
+      "id": "labelled_perf_multi_window_off",
+      "source": "hand-labelled against catalog entry (2026-09-29), steps in Samsung SIIS style",
+      "steps": [
+        "Open Settings.",
+        "Tap Advanced features.",
+        "Tap Multi window.",
+        "Turn off Multi window for all apps."
+      ],
+      "category": "auto",
+      "expected_deeplink_id": "DL-0167",
+      "expected_is_page_level": false
+    },
+    {
+      "id": "labelled_conn_bluetooth_page",
+      "source": "hand-labelled against catalog entry (2026-09-29), steps in Samsung SIIS style",
+      "steps": [
+        "Open Settings.",
+        "Tap Connections.",
+        "Tap Bluetooth."
+      ],
+      "category": "auto",
+      "expected_deeplink_id": "DL-0044",
+      "expected_is_page_level": true
+    },
+    {
+      "id": "labelled_conn_wifi_page",
+      "source": "hand-labelled against catalog entry (2026-09-29), steps in Samsung SIIS style",
+      "steps": [
+        "Open Settings.",
+        "Tap Connections.",
+        "Tap Wi-Fi."
+      ],
+      "category": "auto",
+      "expected_deeplink_id": "DL-0313",
+      "expected_is_page_level": true
     }
   ]
 }

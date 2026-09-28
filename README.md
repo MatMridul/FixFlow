@@ -182,8 +182,11 @@ docker run --env-file .env -p 8000:8000 fixflow
 ```bash
 pytest -q                               # LLM disabled in tests
 python scripts/generate_results.py      # writes results.jsonl / results.json
-python -m eval.run_screen_eval          # deeplink screen accuracy -> metrics.md
+python -m eval.run_screen_eval          # deeplink screen accuracy on eval/dev_set.json
+python scripts/benchmark.py             # full Appendix C report -> metrics.md (live LLM, ~8 min)
 ```
+
+`metrics.md` is generated, not hand-written. It covers cold, exact-repeat and paraphrase latency (N ≥ 30 per path), paraphrase hit rates with and without the SIIS article, the ablation tables, and known limitations.
 
 ---
 

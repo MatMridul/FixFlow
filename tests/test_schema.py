@@ -136,8 +136,12 @@ class TestApiModels:
         with pytest.raises(ValidationError):
             TroubleshootRequest.model_validate({})
 
-        with pytest.raises(ValidationError):
-            TroubleshootRequest.model_validate({"query": "Valid", "siis_response": {"title": "Missing content"}})
+        # Judges should never get a 422 for a thin SIIS payload: an article
+        # without content is accepted and the pipeline answers "no_match".
+        req = TroubleshootRequest.model_validate({"query": "Valid", "siis_response": {"title": "Missing content"}})
+        assert req.siis_response.content == ""
+        req = TroubleshootRequest.model_validate({"query": "Valid", "siis_response": "Step 1: Open Settings."})
+        assert req.siis_response.content == "Step 1: Open Settings."
 
     def test_troubleshoot_response_with_meta_and_variations(self):
         resp = TroubleshootResponse(

@@ -1,7 +1,7 @@
 """API request and response models for FixFlow (Samsung PRISM Theme 02)."""
 from typing import List, Optional
 
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, field_validator
 
 from schema import (
     Action,
@@ -30,6 +30,23 @@ class TroubleshootRequest(BaseModel):
         default=None,
         description="Optional SIIS reference payload. Required on cold path; optional on cache hit."
     )
+
+    @field_validator("siis_response", mode="before")
+    @classmethod
+    def _accept_raw_text(cls, v):
+        """The FAQ sends {title, content}; the theme brief shows a raw string
+        ("<optional raw text context>"). Accept both, plus a missing title."""
+        if isinstance(v, str):
+            return {"title": "", "content": v} if v.strip() else None
+        if isinstance(v, dict):
+            if "siis_response" in v and isinstance(v["siis_response"], (dict, str)):
+                return cls._accept_raw_text(v["siis_response"])  # whole kit entry passed through
+            # A missing field is filled rather than rejected (never a 422 for a
+            # thin payload); an article with no text then ends as "no_match".
+            if not (v.get("title") or v.get("content")):
+                return None
+            return {"title": v.get("title") or "", "content": v.get("content") or ""}
+        return v
 
 
 class MetaBlock(BaseModel):

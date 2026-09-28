@@ -127,6 +127,10 @@ def resolve_screen(
         filtered = [
             r for r in pool
             if needle in r.entry.description.lower() or needle in r.entry.message.lower()
+            # A toggle rarely names its parent screen: "Enable Power saving"
+            # never says "Battery". Keep leaves whose own label the action
+            # step spells out in full ("Turn on Power saving").
+            or _leaf_named(action_steps, r.entry)
         ]
         if filtered:
             # Trust the filter only if it isn't discarding a much stronger
@@ -159,7 +163,10 @@ def resolve_screen(
         # own documented fallback for when the breadcrumb doesn't resolve).
 
     page_level = [r for r in on_path if r.entry.originalType == "onClickURL"]
-    leaf_level = [r for r in on_path if r.entry.originalType != "onClickURL"]
+    # originalType None = read-only "Retrieves the current ..." entries, meant
+    # for validation reads, not for opening a screen. They only serve as a
+    # last resort (below), never ahead of a real toggle/slider.
+    leaf_level = [r for r in on_path if r.entry.originalType not in ("onClickURL", None)]
 
     # leaf_level/page_level preserve on_path's order, which already carries
     # the retriever's polarity-aware promotion (search() reorders the list
@@ -249,6 +256,20 @@ def _stems(text: str) -> set:
     return {w[:-1] if w.endswith("s") and len(w) > 4 else w for w in words if len(w) > 3}
 
 
+def _leaf_named(action_steps: list[str], entry: CatalogEntry) -> bool:
+    """Every distinctive word of the entry's label (from its message, or its
+    description when the message is a catalog mislabel like "Enable Adaptive
+    Display" for adaptive battery) appears in the action steps."""
+    if not action_steps or entry.originalType in ("onClickURL", None):
+        return False
+    text = _stems(" ".join(action_steps))
+    for label in (entry.message, entry.description):
+        own = _stems(label) - _LEAF_STOPWORDS
+        if own and own <= text:
+            return True
+    return False
+
+
 def _leaf_supported(action_steps: list[str], entry: CatalogEntry, breadcrumb: Optional[str]) -> bool:
     if not action_steps:
         return False  # pure navigation -> the step group targets a page, not a toggle
@@ -279,10 +300,24 @@ def _best_page_candidate(
         # Every candidate already names the breadcrumb screen, so they are
         # directly comparable: the general page ("View Navigation bar")
         # beats narrower sub-pages regardless of small score gaps.
-        return min(page_level, key=lambda r: (_extra_words_beyond_breadcrumb(r.entry, breadcrumb), -r.score))
+        return min(page_level, key=lambda r: (
+            _extra_words_beyond_breadcrumb(r.entry, breadcrumb),
+            _unexplained_description_words(r.entry, breadcrumb),
+            -r.score,
+        ))
     top_score = max(r.score for r in page_level)
     near_top = [r for r in page_level if top_score - r.score <= _PAGE_TIE_MARGIN]
-    return min(near_top, key=lambda r: _extra_words_beyond_breadcrumb(r.entry, breadcrumb))
+    return min(near_top, key=lambda r: (
+        _extra_words_beyond_breadcrumb(r.entry, breadcrumb),
+        _unexplained_description_words(r.entry, breadcrumb),
+    ))
+
+
+def _unexplained_description_words(entry: CatalogEntry, breadcrumb: Optional[str]) -> int:
+    """Secondary tie-break for pages sharing one message: two entries are both
+    "View WiFi Settings", but one opens "the Intelligent Wi-Fi settings page".
+    Prefer the description with fewer words beyond the breadcrumb."""
+    return len(_stems(entry.description) - _stems(breadcrumb or "") - _LEAF_STOPWORDS)
 
 
 def _extra_words_beyond_breadcrumb(entry: CatalogEntry, breadcrumb: Optional[str]) -> int:

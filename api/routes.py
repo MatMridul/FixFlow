@@ -77,7 +77,12 @@ def _troubleshoot(payload: TroubleshootRequest, request: Request, trace: Dict[st
     if cache is not None:
         if isinstance(cache, CompositionalCache):
             comp_res = cache.get_compound(payload.query)
-            if comp_res.hit and comp_res.goals:
+            # With an article attached, a wording-only (non-exact) hit may be
+            # another article's plan ("black screen" complaints look alike), so
+            # only exact hits are taken here; paraphrases go through the
+            # article lookup below.
+            wording_only = payload.siis_response is not None and "exact" not in (comp_res.hit_type or "")
+            if comp_res.hit and comp_res.goals and not wording_only:
                 trace.update(path="cache", cache_hit_type=comp_res.hit_type)
                 latency = (time.perf_counter() - start_time) * 1000.0
                 return TroubleshootResponse(
@@ -109,6 +114,46 @@ def _troubleshoot(payload: TroubleshootRequest, request: Request, trace: Dict[st
                         fallback=None,
                     ),
                 )
+
+    # 1b. Same knowledge article + compatible intent = same scenario (paraphrase hit).
+    fingerprint = None
+    if isinstance(cache, CompositionalCache) and payload.siis_response is not None:
+        fingerprint = cache.article_fingerprint(payload.siis_response.title or "", payload.siis_response.content or "")
+        art = cache.get_by_article(payload.query, fingerprint)
+        if art.hit and art.goals:
+            trace.update(path="cache", cache_hit_type="article")
+            latency = (time.perf_counter() - start_time) * 1000.0
+            return TroubleshootResponse(
+                query=payload.query,
+                query_variations=_cached_variations(payload.query),
+                response=ContextDeeplinkResponse(contexts=art.goals),
+                meta=MetaBlock(
+                    latency_ms=round(latency, 2),
+                    cache_hit=True,
+                    model="cache-article-v1",
+                    cost_usd=0.0,
+                    fallback=None,
+                ),
+            )
+
+    # 1c. No article: paraphrase lookup over pre-warmed query variations.
+    if isinstance(cache, CompositionalCache) and payload.siis_response is None:
+        var = cache.get_by_variants(payload.query)
+        if var.hit and var.goals:
+            trace.update(path="cache", cache_hit_type="variant")
+            latency = (time.perf_counter() - start_time) * 1000.0
+            return TroubleshootResponse(
+                query=payload.query,
+                query_variations=_cached_variations(payload.query),
+                response=ContextDeeplinkResponse(contexts=var.goals),
+                meta=MetaBlock(
+                    latency_ms=round(latency, 2),
+                    cache_hit=True,
+                    model="cache-variant-v1",
+                    cost_usd=0.0,
+                    fallback=None,
+                ),
+            )
 
     # 2. Cache Miss: Check SIIS availability
     if payload.siis_response is None:
@@ -222,6 +267,8 @@ def _troubleshoot(payload: TroubleshootRequest, request: Request, trace: Dict[st
     if cache is not None:
         if isinstance(cache, CompositionalCache):
             cache.put_compound(payload.query, [goal])
+            if fingerprint is not None:
+                cache.put_article(fingerprint, payload.query, [goal], variations=query_variations)
         else:
             cache.put(payload.query, goal)
 

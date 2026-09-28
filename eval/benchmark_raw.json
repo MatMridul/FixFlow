@@ -1,0 +1,2240 @@
+{
+ "live": {
+  "cold": [
+   {
+    "id": "kit_01",
+    "unseen": false,
+    "ms": 5585.603666957468,
+    "model": "openai/gpt-oss-120b",
+    "cost": 0.000515,
+    "non_empty": true,
+    "valid": true,
+    "acc": [
+     1.0,
+     0.6666666666666666,
+     1.0
+    ],
+    "fallback": null,
+    "first_call_hit": false
+   },
+   {
+    "id": "kit_02",
+    "unseen": false,
+    "ms": 5314.934083027765,
+    "model": "openai/gpt-oss-120b",
+    "cost": 0.000659,
+    "non_empty": true,
+    "valid": true,
+    "acc": [
+     0.875,
+     0.8,
+     1.0
+    ],
+    "fallback": null,
+    "first_call_hit": false
+   },
+   {
+    "id": "kit_03",
+    "unseen": false,
+    "ms": 4673.84241707623,
+    "model": "openai/gpt-oss-120b",
+    "cost": 0.000577,
+    "non_empty": true,
+    "valid": true,
+    "acc": [
+     0.7777777777777778,
+     0.0,
+     1.0
+    ],
+    "fallback": null,
+    "first_call_hit": false
+   },
+   {
+    "id": "kit_04",
+    "unseen": false,
+    "ms": 4962.133875116706,
+    "model": "openai/gpt-oss-120b",
+    "cost": 0.000546,
+    "non_empty": true,
+    "valid": true,
+    "acc": [
+     0.8181818181818182,
+     0.8,
+     1.0
+    ],
+    "fallback": null,
+    "first_call_hit": false
+   },
+   {
+    "id": "kit_05",
+    "unseen": false,
+    "ms": 3419.3271670956165,
+    "model": "openai/gpt-oss-120b",
+    "cost": 0.000366,
+    "non_empty": true,
+    "valid": true,
+    "acc": [
+     1.0,
+     0.75,
+     1.0
+    ],
+    "fallback": null,
+    "first_call_hit": false
+   },
+   {
+    "id": "kit_06",
+    "unseen": false,
+    "ms": 2676.231458084658,
+    "model": "fixflow-deterministic-v2",
+    "cost": 0.0,
+    "non_empty": true,
+    "valid": true,
+    "acc": [
+     1.0,
+     1.0,
+     1.0
+    ],
+    "fallback": null,
+    "first_call_hit": false
+   },
+   {
+    "id": "kit_07",
+    "unseen": false,
+    "ms": 4106.119041098282,
+    "model": "openai/gpt-oss-120b",
+    "cost": 0.000623,
+    "non_empty": true,
+    "valid": true,
+    "acc": [
+     0.8571428571428571,
+     0.2727272727272727,
+     1.0
+    ],
+    "fallback": null,
+    "first_call_hit": false
+   },
+   {
+    "id": "kit_08",
+    "unseen": false,
+    "ms": 5418.370167026296,
+    "model": "ministral-8b-latest",
+    "cost": 0.000197,
+    "non_empty": true,
+    "valid": true,
+    "acc": [
+     0.9,
+     1.0,
+     1.0
+    ],
+    "fallback": null,
+    "first_call_hit": false
+   },
+   {
+    "id": "kit_09",
+    "unseen": false,
+    "ms": 2405.781958019361,
+    "model": "fixflow-deterministic-v2",
+    "cost": 0.0,
+    "non_empty": true,
+    "valid": true,
+    "acc": [
+     1.0,
+     1.0,
+     1.0
+    ],
+    "fallback": null,
+    "first_call_hit": false
+   },
+   {
+    "id": "kit_10",
+    "unseen": false,
+    "ms": 5142.6055419724435,
+    "model": "ministral-8b-latest",
+    "cost": 0.000214,
+    "non_empty": true,
+    "valid": true,
+    "acc": [
+     1.0,
+     0.0,
+     1.0
+    ],
+    "fallback": null,
+    "first_call_hit": true
+   },
+   {
+    "id": "kit_11",
+    "unseen": false,
+    "ms": 3495.1892090030015,
+    "model": "ministral-8b-latest",
+    "cost": 0.000336,
+    "non_empty": true,
+    "valid": true,
+    "acc": [
+     0.8571428571428571,
+     0.25,
+     1.0
+    ],
+    "fallback": null,
+    "first_call_hit": false
+   },
+   {
+    "id": "kit_12",
+    "unseen": false,
+    "ms": 4953.359624836594,
+    "model": "openai/gpt-oss-120b",
+    "cost": 0.000571,
+    "non_empty": true,
+    "valid": true,
+    "acc": [
+     1.0,
+     0.8,
+     1.0
+    ],
+    "fallback": null,
+    "first_call_hit": true
+   },
+   {
+    "id": "kit_13",
+    "unseen": false,
+    "ms": 4073.1103750877082,
+    "model": "ministral-8b-latest",
+    "cost": 0.000158,
+    "non_empty": true,
+    "valid": true,
+    "acc": [
+     1.0,
+     0.42857142857142855,
+     1.0
+    ],
+    "fallback": null,
+    "first_call_hit": false
+   },
+   {
+    "id": "kit_14",
+    "unseen": false,
+    "ms": 5278.420499991626,
+    "model": "openai/gpt-oss-120b",
+    "cost": 0.000623,
+    "non_empty": true,
+    "valid": true,
+    "acc": [
+     1.0,
+     0.8,
+     1.0
+    ],
+    "fallback": null,
+    "first_call_hit": true
+   },
+   {
+    "id": "kit_15",
+    "unseen": false,
+    "ms": 4028.509625000879,
+    "model": "ministral-8b-latest",
+    "cost": 0.0002,
+    "non_empty": true,
+    "valid": true,
+    "acc": [
+     1.0,
+     0.8,
+     1.0
+    ],
+    "fallback": null,
+    "first_call_hit": false
+   },
+   {
+    "id": "kit_16",
+    "unseen": false,
+    "ms": 5716.981790959835,
+    "model": "openai/gpt-oss-120b",
+    "cost": 0.000604,
+    "non_empty": true,
+    "valid": true,
+    "acc": [
+     0.8461538461538461,
+     0.0,
+     1.0
+    ],
+    "fallback": null,
+    "first_call_hit": true
+   },
+   {
+    "id": "kit_17",
+    "unseen": false,
+    "ms": 3078.963082982227,
+    "model": "ministral-8b-latest",
+    "cost": 0.000161,
+    "non_empty": true,
+    "valid": true,
+    "acc": [
+     1.0,
+     0.7142857142857143,
+     1.0
+    ],
+    "fallback": null,
+    "first_call_hit": false
+   },
+   {
+    "id": "kit_18",
+    "unseen": false,
+    "ms": 6083.474250044674,
+    "model": "ministral-8b-latest",
+    "cost": 0.000209,
+    "non_empty": true,
+    "valid": true,
+    "acc": [
+     0.9166666666666666,
+     0.875,
+     1.0
+    ],
+    "fallback": null,
+    "first_call_hit": false
+   },
+   {
+    "id": "kit_19",
+    "unseen": false,
+    "ms": 5760.885958792642,
+    "model": "ministral-8b-latest",
+    "cost": 0.000259,
+    "non_empty": true,
+    "valid": true,
+    "acc": [
+     0.9523809523809523,
+     0.4444444444444444,
+     1.0
+    ],
+    "fallback": null,
+    "first_call_hit": false
+   },
+   {
+    "id": "kit_20",
+    "unseen": false,
+    "ms": 4900.1056659035385,
+    "model": "ministral-8b-latest",
+    "cost": 0.000204,
+    "non_empty": true,
+    "valid": true,
+    "acc": [
+     1.0,
+     0.8,
+     1.0
+    ],
+    "fallback": null,
+    "first_call_hit": false
+   },
+   {
+    "id": "unseen_camera_blurry",
+    "unseen": true,
+    "ms": 4218.269791919738,
+    "model": "ministral-8b-latest",
+    "cost": 0.000141,
+    "non_empty": true,
+    "valid": true,
+    "acc": [
+     0.9,
+     1.0,
+     1.0
+    ],
+    "fallback": null,
+    "first_call_hit": false
+   },
+   {
+    "id": "unseen_camera_failed_warning",
+    "unseen": true,
+    "ms": 3963.0410000681877,
+    "model": "ministral-8b-latest",
+    "cost": 0.000145,
+    "non_empty": true,
+    "valid": true,
+    "acc": [
+     1.0,
+     1.0,
+     1.0
+    ],
+    "fallback": null,
+    "first_call_hit": false
+   },
+   {
+    "id": "unseen_battery_drain_night",
+    "unseen": true,
+    "ms": 5250.3891659434885,
+    "model": "ministral-8b-latest",
+    "cost": 0.000142,
+    "non_empty": true,
+    "valid": true,
+    "acc": [
+     1.0,
+     1.0,
+     1.0
+    ],
+    "fallback": null,
+    "first_call_hit": false
+   },
+   {
+    "id": "unseen_battery_slow_charging",
+    "unseen": true,
+    "ms": 4023.251166101545,
+    "model": "ministral-8b-latest",
+    "cost": 0.000142,
+    "non_empty": true,
+    "valid": true,
+    "acc": [
+     1.0,
+     1.0,
+     1.0
+    ],
+    "fallback": null,
+    "first_call_hit": false
+   },
+   {
+    "id": "unseen_perf_phone_slow",
+    "unseen": true,
+    "ms": 3359.3339170329273,
+    "model": "ministral-8b-latest",
+    "cost": 0.000141,
+    "non_empty": true,
+    "valid": true,
+    "acc": [
+     1.0,
+     1.0,
+     1.0
+    ],
+    "fallback": null,
+    "first_call_hit": false
+   },
+   {
+    "id": "unseen_perf_app_crash",
+    "unseen": true,
+    "ms": 4048.0623750481755,
+    "model": "ministral-8b-latest",
+    "cost": 0.000139,
+    "non_empty": true,
+    "valid": true,
+    "acc": [
+     1.0,
+     1.0,
+     1.0
+    ],
+    "fallback": null,
+    "first_call_hit": false
+   },
+   {
+    "id": "unseen_display_dim",
+    "unseen": true,
+    "ms": 4058.487458853051,
+    "model": "ministral-8b-latest",
+    "cost": 0.000137,
+    "non_empty": true,
+    "valid": true,
+    "acc": [
+     1.0,
+     1.0,
+     1.0
+    ],
+    "fallback": null,
+    "first_call_hit": false
+   },
+   {
+    "id": "unseen_display_blue_tint",
+    "unseen": true,
+    "ms": 3714.244249975309,
+    "model": "ministral-8b-latest",
+    "cost": 0.000131,
+    "non_empty": true,
+    "valid": true,
+    "acc": [
+     1.0,
+     1.0,
+     1.0
+    ],
+    "fallback": null,
+    "first_call_hit": false
+   },
+   {
+    "id": "unseen_touch_ghost",
+    "unseen": true,
+    "ms": 4791.045292047784,
+    "model": "ministral-8b-latest",
+    "cost": 0.000141,
+    "non_empty": true,
+    "valid": true,
+    "acc": [
+     1.0,
+     1.0,
+     1.0
+    ],
+    "fallback": null,
+    "first_call_hit": false
+   },
+   {
+    "id": "unseen_bluetooth_earbuds",
+    "unseen": true,
+    "ms": 5963.673499878496,
+    "model": "ministral-8b-latest",
+    "cost": 0.000146,
+    "non_empty": true,
+    "valid": true,
+    "acc": [
+     1.0,
+     1.0,
+     1.0
+    ],
+    "fallback": null,
+    "first_call_hit": false
+   }
+  ],
+  "exact": [
+   {
+    "ms": 1.8099171575158834,
+    "hit": true,
+    "cost": 0.0
+   },
+   {
+    "ms": 2.59450008161366,
+    "hit": true,
+    "cost": 0.0
+   },
+   {
+    "ms": 3.3862078562378883,
+    "hit": true,
+    "cost": 0.0
+   },
+   {
+    "ms": 4.503791918978095,
+    "hit": true,
+    "cost": 0.0
+   },
+   {
+    "ms": 2.6853331364691257,
+    "hit": true,
+    "cost": 0.0
+   },
+   {
+    "ms": 1.6633751802146435,
+    "hit": true,
+    "cost": 0.0
+   },
+   {
+    "ms": 2.860124921426177,
+    "hit": true,
+    "cost": 0.0
+   },
+   {
+    "ms": 3.6236250307410955,
+    "hit": true,
+    "cost": 0.0
+   },
+   {
+    "ms": 4.247999982908368,
+    "hit": true,
+    "cost": 0.0
+   },
+   {
+    "ms": 7.001416990533471,
+    "hit": true,
+    "cost": 0.0
+   },
+   {
+    "ms": 3.0892910435795784,
+    "hit": true,
+    "cost": 0.0
+   },
+   {
+    "ms": 9.39808296971023,
+    "hit": true,
+    "cost": 0.0
+   },
+   {
+    "ms": 4.638750106096268,
+    "hit": true,
+    "cost": 0.0
+   },
+   {
+    "ms": 10.546540841460228,
+    "hit": true,
+    "cost": 0.0
+   },
+   {
+    "ms": 2.8704588767141104,
+    "hit": true,
+    "cost": 0.0
+   },
+   {
+    "ms": 10.117166908457875,
+    "hit": true,
+    "cost": 0.0
+   },
+   {
+    "ms": 5.174708086997271,
+    "hit": true,
+    "cost": 0.0
+   },
+   {
+    "ms": 2.8958749026060104,
+    "hit": true,
+    "cost": 0.0
+   },
+   {
+    "ms": 2.692375099286437,
+    "hit": true,
+    "cost": 0.0
+   },
+   {
+    "ms": 4.839208908379078,
+    "hit": true,
+    "cost": 0.0
+   },
+   {
+    "ms": 3.723874920979142,
+    "hit": true,
+    "cost": 0.0
+   },
+   {
+    "ms": 4.137667128816247,
+    "hit": true,
+    "cost": 0.0
+   },
+   {
+    "ms": 2.8414588887244463,
+    "hit": true,
+    "cost": 0.0
+   },
+   {
+    "ms": 4.162291996181011,
+    "hit": true,
+    "cost": 0.0
+   },
+   {
+    "ms": 2.9478329233825207,
+    "hit": true,
+    "cost": 0.0
+   },
+   {
+    "ms": 2.9812918510288,
+    "hit": true,
+    "cost": 0.0
+   },
+   {
+    "ms": 2.9599170666188,
+    "hit": true,
+    "cost": 0.0
+   },
+   {
+    "ms": 2.4933749809861183,
+    "hit": true,
+    "cost": 0.0
+   },
+   {
+    "ms": 3.3364170230925083,
+    "hit": true,
+    "cost": 0.0
+   },
+   {
+    "ms": 2.8362919110804796,
+    "hit": true,
+    "cost": 0.0
+   }
+  ],
+  "para": [
+   {
+    "ms": 2.8774579986929893,
+    "hit": true,
+    "right": true,
+    "query": "My Samsung A115G tablet flickers and then the screen goes black every time I tap an email in Gmail\u2014works briefly then dies again.",
+    "of": "kit_01"
+   },
+   {
+    "ms": 2.8654171619564295,
+    "hit": true,
+    "right": true,
+    "query": "I am experiencing an issue with my Samsung A115G tablet wherein the display flashes and subsequently becomes entirely blank whenever I attempt to open an email in the Gmail application; after a short period of functionality, the screen blanks out again.",
+    "of": "kit_01"
+   },
+   {
+    "ms": 2.932208124548197,
+    "hit": true,
+    "right": true,
+    "query": "Why does my Samsung A115G tablet screen flash and then turn completely blank whenever I open an email in Gmail, only to work for a short time before going blank again?",
+    "of": "kit_01"
+   },
+   {
+    "ms": 4.679791862145066,
+    "hit": true,
+    "right": true,
+    "query": "My Galaxy S22 just goes blank or white and nothing shows up when I look up a stock price or open Smart Tutor \u2013 same thing with other apps.",
+    "of": "kit_02"
+   },
+   {
+    "ms": 4.537292057648301,
+    "hit": true,
+    "right": true,
+    "query": "I am experiencing an issue where the display on my Galaxy S22 becomes entirely blank or white, and no text is rendered when searching for a stock price or using the Smart Tutor application; this also occurs with additional apps.",
+    "of": "kit_02"
+   },
+   {
+    "ms": 5.081165814772248,
+    "hit": true,
+    "right": true,
+    "query": "Why does my Galaxy S22 screen turn completely blank or white and fail to display any text when I search for a stock price or use the Smart Tutor app, and why does it happen with other apps as well?",
+    "of": "kit_02"
+   },
+   {
+    "ms": 7.093041902408004,
+    "hit": true,
+    "right": true,
+    "query": "My Galaxy Z Flip 7 just went black\u2014nothing shows up and I can\u2019t use it or move any data with Smart Switch.",
+    "of": "kit_03"
+   },
+   {
+    "ms": 6.531791063025594,
+    "hit": true,
+    "right": true,
+    "query": "I am experiencing a total screen failure on my Galaxy Z Flip 7; the display is completely black, rendering the device unusable and preventing any data transfer via Smart Switch or alternative methods.",
+    "of": "kit_03"
+   },
+   {
+    "ms": 4.1455000173300505,
+    "hit": true,
+    "right": true,
+    "query": "Why is my Galaxy Z Flip 7 screen completely black, making the phone unresponsive and stopping me from using Smart Switch or any other way to transfer my data?",
+    "of": "kit_03"
+   },
+   {
+    "ms": 5.034958012402058,
+    "hit": true,
+    "right": true,
+    "query": "My Samsung Galaxy A15/A16 just went black out of nowhere after a month\u2014nothing shows up, even when I power it on.",
+    "of": "kit_04"
+   },
+   {
+    "ms": 8.42533283866942,
+    "hit": true,
+    "right": true,
+    "query": "I am writing to report that my Samsung Galaxy A15/A16 device's display has become entirely black after approximately one month of usage; the screen remains unresponsive and no visual output is visible upon attempting to power the device.",
+    "of": "kit_04"
+   },
+   {
+    "ms": 3.1221250537782907,
+    "hit": true,
+    "right": true,
+    "query": "Why did my Samsung Galaxy A15/A16 screen turn completely black after only a month of use, and why won't anything display even when I try to turn it on?",
+    "of": "kit_04"
+   },
+   {
+    "ms": 5.3992499597370625,
+    "hit": true,
+    "right": true,
+    "query": "My Galaxy tablet just shows a black screen when I open Smart Switch to scan the QR code from my Galaxy S25, so I can\u2019t transfer anything.",
+    "of": "kit_05"
+   },
+   {
+    "ms": 2.919208025559783,
+    "hit": true,
+    "right": true,
+    "query": "I am experiencing an issue where the display on my Galaxy tablet remains entirely blank while attempting to utilize Smart Switch to scan the QR code for data migration from my Galaxy S25 phone, thereby preventing the transfer process from proceeding.",
+    "of": "kit_05"
+   },
+   {
+    "ms": 2.5217500515282154,
+    "hit": true,
+    "right": true,
+    "query": "Why does my Galaxy tablet's screen stay completely blank when I try to use Smart Switch to scan the QR code from my Galaxy S25 for data transfer?",
+    "of": "kit_05"
+   },
+   {
+    "ms": 2.7823338750749826,
+    "hit": true,
+    "right": true,
+    "query": "My tablet screen is just black except for three icons that stay lit\u2014nothing else works or opens, so I can\u2019t use it.",
+    "of": "kit_06"
+   },
+   {
+    "ms": 5.000874865800142,
+    "hit": true,
+    "right": true,
+    "query": "I am experiencing an issue where the tablet's display remains dark, with only three application icons illuminated; the remaining icons are unresponsive and the device fails to load any content, rendering it unusable.",
+    "of": "kit_06"
+   },
+   {
+    "ms": 3.238791134208441,
+    "hit": true,
+    "right": true,
+    "query": "Why does my tablet only show three lit app icons while the rest of the screen stays dark and nothing loads?",
+    "of": "kit_06"
+   },
+   {
+    "ms": 6.4517909195274115,
+    "hit": true,
+    "right": true,
+    "query": "My new Samsung's home screen is tiny and won't stretch to full size\u2014never seen this before.",
+    "of": "kit_07"
+   },
+   {
+    "ms": 5.695374915376306,
+    "hit": true,
+    "right": true,
+    "query": "I am experiencing an issue where the primary display on my newly acquired Samsung device remains reduced in size and does not occupy the entire screen; I am unable to expand it to full dimensions, which is unprecedented for me.",
+    "of": "kit_07"
+   },
+   {
+    "ms": 2.7559171430766582,
+    "hit": true,
+    "right": true,
+    "query": "Why does the main screen on my new Samsung phone stay small and refuse to fill the whole display?",
+    "of": "kit_07"
+   },
+   {
+    "ms": 8.955500088632107,
+    "hit": true,
+    "right": true,
+    "query": "My Galaxy Flip 7's inner screen just died\u2014no picture, no touch, but the outer cover still works.",
+    "of": "kit_08"
+   },
+   {
+    "ms": 4.183916840702295,
+    "hit": true,
+    "right": true,
+    "query": "I am experiencing a malfunction with my Samsung Galaxy Flip 7: the internal display no longer shows any image nor responds to touch inputs, although the external cover screen remains functional.",
+    "of": "kit_08"
+   },
+   {
+    "ms": 5.395082989707589,
+    "hit": true,
+    "right": true,
+    "query": "Could you help me understand why the inner screen of my Galaxy Flip 7 is blank and unresponsive while the outer screen still works?",
+    "of": "kit_08"
+   },
+   {
+    "ms": 7.258749799802899,
+    "hit": true,
+    "right": true,
+    "query": "My Galaxy Z Flip 6 just flickers and goes black every time I open it\u2014can't see anything or get into settings, so the phone\u2019s useless.",
+    "of": "kit_09"
+   },
+   {
+    "ms": 7.1450830437242985,
+    "hit": true,
+    "right": true,
+    "query": "I am experiencing a persistent issue with my Samsung Galaxy Z Flip 6: the display intermittently flickers and becomes completely blank upon opening the device, preventing access to any settings or functionality.",
+    "of": "kit_09"
+   },
+   {
+    "ms": 4.955374868586659,
+    "hit": true,
+    "right": true,
+    "query": "Why does my Samsung Galaxy Z Flip 6 screen flicker and turn blank whenever I open it, making it impossible to view anything or access the settings?",
+    "of": "kit_09"
+   },
+   {
+    "ms": 4.141541896387935,
+    "hit": true,
+    "right": true,
+    "query": "My Galaxy Flip 6 has half the screen black\u2014one side is dead, the other works, so I can\u2019t use it normally.",
+    "of": "kit_10"
+   },
+   {
+    "ms": 3161.6750420071185,
+    "hit": false,
+    "right": false,
+    "query": "I am experiencing a display issue with my Galaxy Flip 6: the left/right half of the screen remains completely black while the opposite half functions correctly, preventing normal device access.",
+    "of": "kit_10"
+   },
+   {
+    "ms": 6.808749865740538,
+    "hit": true,
+    "right": false,
+    "query": "Is there a way to fix my Galaxy Flip 6 where one side of the screen is completely black and I can\u2019t access the device?",
+    "of": "kit_10"
+   },
+   {
+    "ms": 6.590750068426132,
+    "hit": true,
+    "right": true,
+    "query": "My Galaxy S25 keeps showing a floating circle with shortcuts\u2014home, back, recent apps, volume, etc.\u2014can I get rid of it?",
+    "of": "kit_11"
+   },
+   {
+    "ms": 7.2788328398019075,
+    "hit": true,
+    "right": true,
+    "query": "I am experiencing an issue with my Galaxy S25 wherein a persistent floating circle appears on the display, providing quick access to recent applications, home, back, screen off, volume controls, and additional functions. I would like assistance in disabling or removing this feature.",
+    "of": "kit_11"
+   },
+   {
+    "ms": 4.434249829500914,
+    "hit": true,
+    "right": true,
+    "query": "How do I remove the floating shortcut circle that constantly appears on my Galaxy S25 screen, offering quick access to recent apps, home, back, screen off, volume control, and more?",
+    "of": "kit_11"
+   },
+   {
+    "ms": 4939.532042015344,
+    "hit": false,
+    "right": false,
+    "query": "My Galaxy S22 just shows a black screen, no activation info, after the carrier shut down my old phone.",
+    "of": "kit_12"
+   },
+   {
+    "ms": 7.267999928444624,
+    "hit": true,
+    "right": false,
+    "query": "I am experiencing an issue where my Samsung Galaxy S22 displays a blank screen without any activation message upon powering on, following the carrier's deactivation of my previous device.",
+    "of": "kit_12"
+   },
+   {
+    "ms": 3.736417042091489,
+    "hit": true,
+    "right": false,
+    "query": "Why does my Galaxy S22 remain blank with no activation prompt after the carrier deactivated my old phone?",
+    "of": "kit_12"
+   },
+   {
+    "ms": 9.211125085130334,
+    "hit": true,
+    "right": true,
+    "query": "My Galaxy screen is shattered, can't use it at all.",
+    "of": "kit_13"
+   },
+   {
+    "ms": 4.309624899178743,
+    "hit": true,
+    "right": true,
+    "query": "I am writing to report that the display of my Galaxy smartphone is fully cracked, rendering the device inoperable.",
+    "of": "kit_13"
+   },
+   {
+    "ms": 3.75987496227026,
+    "hit": true,
+    "right": true,
+    "query": "Is there any way to get help with a completely cracked screen on my Galaxy phone?",
+    "of": "kit_13"
+   },
+   {
+    "ms": 7079.247917048633,
+    "hit": false,
+    "right": false,
+    "query": "My Galaxy S26 Ultra just boots to a tiny blue/black screen with little text and won\u2019t start\u2014pressing power does nothing.",
+    "of": "kit_14"
+   },
+   {
+    "ms": 13.913749950006604,
+    "hit": true,
+    "right": false,
+    "query": "I am experiencing an issue with my Galaxy S26 Ultra: upon attempting to power it on, the device displays only a small amount of text on a blue or black screen and fails to boot. Pressing and holding the power button yields no result.",
+    "of": "kit_14"
+   },
+   {
+    "ms": 7.620458956807852,
+    "hit": true,
+    "right": false,
+    "query": "Why does my Galaxy S26 Ultra only show a tiny blue/black screen with text when I try to turn it on, and why doesn\u2019t holding the power button start it up?",
+    "of": "kit_14"
+   },
+   {
+    "ms": 8.38204100728035,
+    "hit": true,
+    "right": true,
+    "query": "My Samsung S***** Ultra screen flickers super fast every time I plug in the charger, so I can\u2019t use it for a sec.",
+    "of": "kit_15"
+   },
+   {
+    "ms": 5.317082861438394,
+    "hit": true,
+    "right": true,
+    "query": "I am experiencing an issue with my Samsung S***** Ultra: the display flashes in rapid milliseconds whenever a charger is connected, rendering the screen temporarily unusable. Could you assist?",
+    "of": "kit_15"
+   },
+   {
+    "ms": 4.558374872431159,
+    "hit": true,
+    "right": true,
+    "query": "Why does my Samsung S***** Ultra screen flash extremely quickly when I connect a charger, making the display unusable for a short time?",
+    "of": "kit_15"
+   },
+   {
+    "ms": 5.0165001302957535,
+    "hit": true,
+    "right": true,
+    "query": "My Galaxy S24 just shows a black screen, sometimes it scrolls a bit but I can\u2019t see anything, so I can\u2019t use Smart Switch to move my data.",
+    "of": "kit_16"
+   },
+   {
+    "ms": 6.338041974231601,
+    "hit": true,
+    "right": false,
+    "query": "I am experiencing an issue where the display of my Samsung Galaxy S24 becomes entirely blank, with only occasional scrolling and no visible content, preventing me from utilizing the Smart Switch application for data transfer.",
+    "of": "kit_16"
+   },
+   {
+    "ms": 3.7220418453216553,
+    "hit": true,
+    "right": true,
+    "query": "Why does my Galaxy S24 display only a dark, blank screen with occasional scrolling, making it impossible to view anything or use Smart Switch for data transfer?",
+    "of": "kit_16"
+   },
+   {
+    "ms": 19.226750126108527,
+    "hit": true,
+    "right": true,
+    "query": "My Galaxy Z Flip 7 screen cracked again right at the hinge and the touch is dead in spots, plus the display is super dim.",
+    "of": "kit_17"
+   },
+   {
+    "ms": 4199.287249939516,
+    "hit": false,
+    "right": false,
+    "query": "I am writing to report that the screen of my Galaxy Z Flip 7 has fractured again at the folding area, resulting in unresponsive touch zones and severely reduced visibility of the display.",
+    "of": "kit_17"
+   },
+   {
+    "ms": 21.25216694548726,
+    "hit": true,
+    "right": true,
+    "query": "Is my Galaxy Z Flip 7\u2019s screen cracked again at the fold, causing touch failures in certain areas and making the display almost unreadable?",
+    "of": "kit_17"
+   },
+   {
+    "ms": 6.9972078781574965,
+    "hit": true,
+    "right": true,
+    "query": "My new Galaxy A17 screen is all weird right after I got it\u2014need a diagnostic test ASAP.",
+    "of": "kit_18"
+   },
+   {
+    "ms": 5.551625043153763,
+    "hit": true,
+    "right": true,
+    "query": "I have received a Galaxy A17 whose display appears distorted immediately upon receipt; I request a diagnostic examination.",
+    "of": "kit_18"
+   },
+   {
+    "ms": 3.158499952405691,
+    "hit": true,
+    "right": true,
+    "query": "Can you run a diagnostic test on my Galaxy A17? The screen looks distorted right after I received the phone.",
+    "of": "kit_18"
+   },
+   {
+    "ms": 10.260374983772635,
+    "hit": true,
+    "right": true,
+    "query": "My Galaxy S22 screen is lagging\u2014touches are delayed and it feels sluggish when I try to use it.",
+    "of": "kit_19"
+   },
+   {
+    "ms": 3.573083085939288,
+    "hit": true,
+    "right": true,
+    "query": "I am experiencing delayed input and laggy touch responsiveness on my Samsung Galaxy S22, which results in a noticeable delay during interaction with the device.",
+    "of": "kit_19"
+   },
+   {
+    "ms": 4.551625112071633,
+    "hit": true,
+    "right": true,
+    "query": "Is there a way to fix the delayed screen inputs and laggy touch responsiveness on my Galaxy S22?",
+    "of": "kit_19"
+   },
+   {
+    "ms": 16.782415797933936,
+    "hit": true,
+    "right": true,
+    "query": "My Galaxy S24 Ultra screen is just black, but the phone still powers up and rings\u2014no cracks or anything.",
+    "of": "kit_20"
+   },
+   {
+    "ms": 7.494042161852121,
+    "hit": true,
+    "right": true,
+    "query": "I am experiencing an issue where the display of my Galaxy S24 Ultra remains completely black despite the device powering on, ringing, and functioning otherwise, with no apparent physical damage.",
+    "of": "kit_20"
+   },
+   {
+    "ms": 5.1842909306287766,
+    "hit": true,
+    "right": true,
+    "query": "Why is the screen on my Galaxy S24 Ultra staying black even though the phone powers on, rings, and seems to work fine, and there is no visible damage?",
+    "of": "kit_20"
+   },
+   {
+    "ms": 6.5316250547766685,
+    "hit": true,
+    "right": true,
+    "query": "My Galaxy camera pics are blurry even when I keep it still.",
+    "of": "unseen_camera_blurry"
+   },
+   {
+    "ms": 3.900500014424324,
+    "hit": true,
+    "right": true,
+    "query": "I am experiencing persistent blurriness in photographs taken with the camera on my Galaxy device, despite maintaining a steady hold.",
+    "of": "unseen_camera_blurry"
+   },
+   {
+    "ms": 3.391958074644208,
+    "hit": true,
+    "right": true,
+    "query": "Why are the photos taken with my Galaxy's camera coming out blurry even when I hold the phone still?",
+    "of": "unseen_camera_blurry"
+   },
+   {
+    "ms": 11.212500045076013,
+    "hit": true,
+    "right": true,
+    "query": "Camera app keeps popping up 'Warning Camera failed' and then crashes.",
+    "of": "unseen_camera_failed_warning"
+   },
+   {
+    "ms": 6.5408749505877495,
+    "hit": true,
+    "right": true,
+    "query": "I am experiencing an issue where the camera application displays a 'Warning Camera failed' message and subsequently terminates unexpectedly.",
+    "of": "unseen_camera_failed_warning"
+   },
+   {
+    "ms": 5.305625032633543,
+    "hit": true,
+    "right": true,
+    "query": "Why does the camera app show a 'Warning Camera failed' error and then close?",
+    "of": "unseen_camera_failed_warning"
+   },
+   {
+    "ms": 8.363707922399044,
+    "hit": true,
+    "right": true,
+    "query": "My phone loses about 30% battery overnight while I sleep.",
+    "of": "unseen_battery_drain_night"
+   },
+   {
+    "ms": 3.6562499590218067,
+    "hit": true,
+    "right": true,
+    "query": "I am experiencing a significant battery drain of approximately thirty percent during the night while the device is idle.",
+    "of": "unseen_battery_drain_night"
+   },
+   {
+    "ms": 2.8284580912441015,
+    "hit": true,
+    "right": true,
+    "query": "Why does the battery drop roughly 30% overnight when the phone is sleeping?",
+    "of": "unseen_battery_drain_night"
+   },
+   {
+    "ms": 70.08629199117422,
+    "hit": true,
+    "right": true,
+    "query": "My phone charges super slow now, fast charge is dead.",
+    "of": "unseen_battery_slow_charging"
+   },
+   {
+    "ms": 2.196999965235591,
+    "hit": true,
+    "right": true,
+    "query": "I am experiencing significantly prolonged charging times on my device; the fast charging feature appears to be non\u2011functional.",
+    "of": "unseen_battery_slow_charging"
+   },
+   {
+    "ms": 2.108749933540821,
+    "hit": true,
+    "right": true,
+    "query": "Is there a reason why my phone is taking so long to charge and the fast charging isn\u2019t working?",
+    "of": "unseen_battery_slow_charging"
+   },
+   {
+    "ms": 7.805041037499905,
+    "hit": true,
+    "right": true,
+    "query": "my phone's super laggy after the update, it's so slow now",
+    "of": "unseen_perf_phone_slow"
+   },
+   {
+    "ms": 7.7547908294945955,
+    "hit": true,
+    "right": true,
+    "query": "I am experiencing significant performance degradation on my device following the recent software update; the phone has become noticeably slow and laggy.",
+    "of": "unseen_perf_phone_slow"
+   },
+   {
+    "ms": 5908.441500039771,
+    "hit": false,
+    "right": false,
+    "query": "Why is my phone running so slowly and lagging after the latest update?",
+    "of": "unseen_perf_phone_slow"
+   },
+   {
+    "ms": 2.1923331078141928,
+    "hit": true,
+    "right": true,
+    "query": "instagram keeps crashing every time I open it",
+    "of": "unseen_perf_app_crash"
+   },
+   {
+    "ms": 4170.136125059798,
+    "hit": false,
+    "right": false,
+    "query": "I am experiencing repeated crashes with Instagram whenever I launch the application on my device.",
+    "of": "unseen_perf_app_crash"
+   },
+   {
+    "ms": 6.83387485332787,
+    "hit": true,
+    "right": true,
+    "query": "Why does Instagram crash every time I try to open it?",
+    "of": "unseen_perf_app_crash"
+   },
+   {
+    "ms": 13.240499887615442,
+    "hit": true,
+    "right": true,
+    "query": "Screen's super dim outdoors, can't read anything!",
+    "of": "unseen_display_dim"
+   },
+   {
+    "ms": 3514.9290000554174,
+    "hit": false,
+    "right": false,
+    "query": "I am experiencing insufficient screen brightness when using the device outdoors, which prevents me from reading the display.",
+    "of": "unseen_display_dim"
+   },
+   {
+    "ms": 6.929416907951236,
+    "hit": true,
+    "right": false,
+    "query": "Is there a way to increase the screen brightness on my device for outdoor use?",
+    "of": "unseen_display_dim"
+   },
+   {
+    "ms": 9.618208045139909,
+    "hit": true,
+    "right": true,
+    "query": "The whites on my screen are turning yellow, any fix?",
+    "of": "unseen_display_blue_tint"
+   },
+   {
+    "ms": 4058.4966249298304,
+    "hit": false,
+    "right": false,
+    "query": "I have noticed that the white areas of my display appear yellowish. Could you please advise on how to correct the color calibration?",
+    "of": "unseen_display_blue_tint"
+   },
+   {
+    "ms": 9.895167080685496,
+    "hit": true,
+    "right": true,
+    "query": "How can I resolve the issue where the white portions of my screen display a yellow tint?",
+    "of": "unseen_display_blue_tint"
+   },
+   {
+    "ms": 11.019541881978512,
+    "hit": true,
+    "right": true,
+    "query": "My phone keeps tapping stuff on its own, like ghost touches.",
+    "of": "unseen_touch_ghost"
+   },
+   {
+    "ms": 5435.6569580268115,
+    "hit": false,
+    "right": false,
+    "query": "I am experiencing unintended input on my device; the screen registers phantom touches without user interaction.",
+    "of": "unseen_touch_ghost"
+   },
+   {
+    "ms": 34.36304093338549,
+    "hit": true,
+    "right": true,
+    "query": "Why is my device's screen registering ghost touches and tapping items automatically?",
+    "of": "unseen_touch_ghost"
+   },
+   {
+    "ms": 11.411916930228472,
+    "hit": true,
+    "right": true,
+    "query": "My Galaxy Buds keep dropping the connection to my phone, it's super annoying.",
+    "of": "unseen_bluetooth_earbuds"
+   },
+   {
+    "ms": 8.20958404801786,
+    "hit": true,
+    "right": true,
+    "query": "I am experiencing frequent disconnections between my Galaxy Buds and my smartphone, which is affecting usage.",
+    "of": "unseen_bluetooth_earbuds"
+   },
+   {
+    "ms": 4.85558295622468,
+    "hit": true,
+    "right": true,
+    "query": "Why do my Galaxy Buds keep disconnecting from my phone?",
+    "of": "unseen_bluetooth_earbuds"
+   }
+  ],
+  "para_no_siis": [
+   {
+    "ms": 45.07524985820055,
+    "hit": true,
+    "right": true,
+    "query": "My Samsung A115G tablet flickers and then the screen goes black every time I tap an email in Gmail\u2014works briefly then dies again.",
+    "of": "kit_01"
+   },
+   {
+    "ms": 14.517250005155802,
+    "hit": false,
+    "right": false,
+    "query": "I am experiencing an issue with my Samsung A115G tablet wherein the display flashes and subsequently becomes entirely blank whenever I attempt to open an email in the Gmail application; after a short period of functionality, the screen blanks out again.",
+    "of": "kit_01"
+   },
+   {
+    "ms": 11.207083007320762,
+    "hit": false,
+    "right": false,
+    "query": "Why does my Samsung A115G tablet screen flash and then turn completely blank whenever I open an email in Gmail, only to work for a short time before going blank again?",
+    "of": "kit_01"
+   },
+   {
+    "ms": 9.652792010456324,
+    "hit": true,
+    "right": true,
+    "query": "My Galaxy S22 just goes blank or white and nothing shows up when I look up a stock price or open Smart Tutor \u2013 same thing with other apps.",
+    "of": "kit_02"
+   },
+   {
+    "ms": 11.950750136747956,
+    "hit": true,
+    "right": true,
+    "query": "I am experiencing an issue where the display on my Galaxy S22 becomes entirely blank or white, and no text is rendered when searching for a stock price or using the Smart Tutor application; this also occurs with additional apps.",
+    "of": "kit_02"
+   },
+   {
+    "ms": 8.430958027020097,
+    "hit": true,
+    "right": true,
+    "query": "Why does my Galaxy S22 screen turn completely blank or white and fail to display any text when I search for a stock price or use the Smart Tutor app, and why does it happen with other apps as well?",
+    "of": "kit_02"
+   },
+   {
+    "ms": 6.343791028484702,
+    "hit": true,
+    "right": true,
+    "query": "My Galaxy Z Flip 7 just went black\u2014nothing shows up and I can\u2019t use it or move any data with Smart Switch.",
+    "of": "kit_03"
+   },
+   {
+    "ms": 7.262707920745015,
+    "hit": true,
+    "right": true,
+    "query": "I am experiencing a total screen failure on my Galaxy Z Flip 7; the display is completely black, rendering the device unusable and preventing any data transfer via Smart Switch or alternative methods.",
+    "of": "kit_03"
+   },
+   {
+    "ms": 6.327999988570809,
+    "hit": true,
+    "right": true,
+    "query": "Why is my Galaxy Z Flip 7 screen completely black, making the phone unresponsive and stopping me from using Smart Switch or any other way to transfer my data?",
+    "of": "kit_03"
+   },
+   {
+    "ms": 3.7943748757243156,
+    "hit": true,
+    "right": true,
+    "query": "My Samsung Galaxy A15/A16 just went black out of nowhere after a month\u2014nothing shows up, even when I power it on.",
+    "of": "kit_04"
+   },
+   {
+    "ms": 7.248792098835111,
+    "hit": false,
+    "right": false,
+    "query": "I am writing to report that my Samsung Galaxy A15/A16 device's display has become entirely black after approximately one month of usage; the screen remains unresponsive and no visual output is visible upon attempting to power the device.",
+    "of": "kit_04"
+   },
+   {
+    "ms": 2.5960002094507217,
+    "hit": true,
+    "right": true,
+    "query": "Why did my Samsung Galaxy A15/A16 screen turn completely black after only a month of use, and why won't anything display even when I try to turn it on?",
+    "of": "kit_04"
+   },
+   {
+    "ms": 3.7812090013176203,
+    "hit": true,
+    "right": true,
+    "query": "My Galaxy tablet just shows a black screen when I open Smart Switch to scan the QR code from my Galaxy S25, so I can\u2019t transfer anything.",
+    "of": "kit_05"
+   },
+   {
+    "ms": 4.530667094513774,
+    "hit": true,
+    "right": true,
+    "query": "I am experiencing an issue where the display on my Galaxy tablet remains entirely blank while attempting to utilize Smart Switch to scan the QR code for data migration from my Galaxy S25 phone, thereby preventing the transfer process from proceeding.",
+    "of": "kit_05"
+   },
+   {
+    "ms": 5.2681248635053635,
+    "hit": true,
+    "right": true,
+    "query": "Why does my Galaxy tablet's screen stay completely blank when I try to use Smart Switch to scan the QR code from my Galaxy S25 for data transfer?",
+    "of": "kit_05"
+   },
+   {
+    "ms": 4.42341691814363,
+    "hit": true,
+    "right": true,
+    "query": "My tablet screen is just black except for three icons that stay lit\u2014nothing else works or opens, so I can\u2019t use it.",
+    "of": "kit_06"
+   },
+   {
+    "ms": 7.486332906410098,
+    "hit": true,
+    "right": true,
+    "query": "I am experiencing an issue where the tablet's display remains dark, with only three application icons illuminated; the remaining icons are unresponsive and the device fails to load any content, rendering it unusable.",
+    "of": "kit_06"
+   },
+   {
+    "ms": 7.943917065858841,
+    "hit": true,
+    "right": true,
+    "query": "Why does my tablet only show three lit app icons while the rest of the screen stays dark and nothing loads?",
+    "of": "kit_06"
+   },
+   {
+    "ms": 7.186040980741382,
+    "hit": false,
+    "right": false,
+    "query": "My new Samsung's home screen is tiny and won't stretch to full size\u2014never seen this before.",
+    "of": "kit_07"
+   },
+   {
+    "ms": 9.11800004541874,
+    "hit": false,
+    "right": false,
+    "query": "I am experiencing an issue where the primary display on my newly acquired Samsung device remains reduced in size and does not occupy the entire screen; I am unable to expand it to full dimensions, which is unprecedented for me.",
+    "of": "kit_07"
+   },
+   {
+    "ms": 4.095667041838169,
+    "hit": true,
+    "right": true,
+    "query": "Why does the main screen on my new Samsung phone stay small and refuse to fill the whole display?",
+    "of": "kit_07"
+   },
+   {
+    "ms": 6.004333030432463,
+    "hit": true,
+    "right": true,
+    "query": "My Galaxy Flip 7's inner screen just died\u2014no picture, no touch, but the outer cover still works.",
+    "of": "kit_08"
+   },
+   {
+    "ms": 4.034959012642503,
+    "hit": false,
+    "right": false,
+    "query": "I am experiencing a malfunction with my Samsung Galaxy Flip 7: the internal display no longer shows any image nor responds to touch inputs, although the external cover screen remains functional.",
+    "of": "kit_08"
+   },
+   {
+    "ms": 6.8604168482124805,
+    "hit": true,
+    "right": true,
+    "query": "Could you help me understand why the inner screen of my Galaxy Flip 7 is blank and unresponsive while the outer screen still works?",
+    "of": "kit_08"
+   },
+   {
+    "ms": 2.677166135981679,
+    "hit": true,
+    "right": true,
+    "query": "My Galaxy Z Flip 6 just flickers and goes black every time I open it\u2014can't see anything or get into settings, so the phone\u2019s useless.",
+    "of": "kit_09"
+   },
+   {
+    "ms": 6.586834089830518,
+    "hit": false,
+    "right": false,
+    "query": "I am experiencing a persistent issue with my Samsung Galaxy Z Flip 6: the display intermittently flickers and becomes completely blank upon opening the device, preventing access to any settings or functionality.",
+    "of": "kit_09"
+   },
+   {
+    "ms": 6.208417005836964,
+    "hit": true,
+    "right": true,
+    "query": "Why does my Samsung Galaxy Z Flip 6 screen flicker and turn blank whenever I open it, making it impossible to view anything or access the settings?",
+    "of": "kit_09"
+   },
+   {
+    "ms": 4.019124899059534,
+    "hit": true,
+    "right": false,
+    "query": "My Galaxy Flip 6 has half the screen black\u2014one side is dead, the other works, so I can\u2019t use it normally.",
+    "of": "kit_10"
+   },
+   {
+    "ms": 1.3733748346567154,
+    "hit": true,
+    "right": false,
+    "query": "I am experiencing a display issue with my Galaxy Flip 6: the left/right half of the screen remains completely black while the opposite half functions correctly, preventing normal device access.",
+    "of": "kit_10"
+   },
+   {
+    "ms": 6.735292030498385,
+    "hit": true,
+    "right": false,
+    "query": "Is there a way to fix my Galaxy Flip 6 where one side of the screen is completely black and I can\u2019t access the device?",
+    "of": "kit_10"
+   },
+   {
+    "ms": 4.68166614882648,
+    "hit": true,
+    "right": true,
+    "query": "My Galaxy S25 keeps showing a floating circle with shortcuts\u2014home, back, recent apps, volume, etc.\u2014can I get rid of it?",
+    "of": "kit_11"
+   },
+   {
+    "ms": 9.60862496867776,
+    "hit": false,
+    "right": false,
+    "query": "I am experiencing an issue with my Galaxy S25 wherein a persistent floating circle appears on the display, providing quick access to recent applications, home, back, screen off, volume controls, and additional functions. I would like assistance in disabling or removing this feature.",
+    "of": "kit_11"
+   },
+   {
+    "ms": 2.85933306440711,
+    "hit": true,
+    "right": true,
+    "query": "How do I remove the floating shortcut circle that constantly appears on my Galaxy S25 screen, offering quick access to recent apps, home, back, screen off, volume control, and more?",
+    "of": "kit_11"
+   },
+   {
+    "ms": 1.187042100355029,
+    "hit": true,
+    "right": false,
+    "query": "My Galaxy S22 just shows a black screen, no activation info, after the carrier shut down my old phone.",
+    "of": "kit_12"
+   },
+   {
+    "ms": 3.8474579341709614,
+    "hit": true,
+    "right": false,
+    "query": "I am experiencing an issue where my Samsung Galaxy S22 displays a blank screen without any activation message upon powering on, following the carrier's deactivation of my previous device.",
+    "of": "kit_12"
+   },
+   {
+    "ms": 3.3535000402480364,
+    "hit": true,
+    "right": false,
+    "query": "Why does my Galaxy S22 remain blank with no activation prompt after the carrier deactivated my old phone?",
+    "of": "kit_12"
+   },
+   {
+    "ms": 3.6720840726047754,
+    "hit": true,
+    "right": true,
+    "query": "My Galaxy screen is shattered, can't use it at all.",
+    "of": "kit_13"
+   },
+   {
+    "ms": 3.571832785382867,
+    "hit": true,
+    "right": false,
+    "query": "I am writing to report that the display of my Galaxy smartphone is fully cracked, rendering the device inoperable.",
+    "of": "kit_13"
+   },
+   {
+    "ms": 3.3831659238785505,
+    "hit": true,
+    "right": true,
+    "query": "Is there any way to get help with a completely cracked screen on my Galaxy phone?",
+    "of": "kit_13"
+   },
+   {
+    "ms": 1.3924168888479471,
+    "hit": true,
+    "right": false,
+    "query": "My Galaxy S26 Ultra just boots to a tiny blue/black screen with little text and won\u2019t start\u2014pressing power does nothing.",
+    "of": "kit_14"
+   },
+   {
+    "ms": 7.446624804288149,
+    "hit": true,
+    "right": false,
+    "query": "I am experiencing an issue with my Galaxy S26 Ultra: upon attempting to power it on, the device displays only a small amount of text on a blue or black screen and fails to boot. Pressing and holding the power button yields no result.",
+    "of": "kit_14"
+   },
+   {
+    "ms": 6.015750113874674,
+    "hit": true,
+    "right": false,
+    "query": "Why does my Galaxy S26 Ultra only show a tiny blue/black screen with text when I try to turn it on, and why doesn\u2019t holding the power button start it up?",
+    "of": "kit_14"
+   },
+   {
+    "ms": 4.028332885354757,
+    "hit": true,
+    "right": true,
+    "query": "My Samsung S***** Ultra screen flickers super fast every time I plug in the charger, so I can\u2019t use it for a sec.",
+    "of": "kit_15"
+   },
+   {
+    "ms": 2.15545785613358,
+    "hit": true,
+    "right": true,
+    "query": "I am experiencing an issue with my Samsung S***** Ultra: the display flashes in rapid milliseconds whenever a charger is connected, rendering the screen temporarily unusable. Could you assist?",
+    "of": "kit_15"
+   },
+   {
+    "ms": 2.560083055868745,
+    "hit": true,
+    "right": true,
+    "query": "Why does my Samsung S***** Ultra screen flash extremely quickly when I connect a charger, making the display unusable for a short time?",
+    "of": "kit_15"
+   },
+   {
+    "ms": 4.171042004600167,
+    "hit": false,
+    "right": false,
+    "query": "My Galaxy S24 just shows a black screen, sometimes it scrolls a bit but I can\u2019t see anything, so I can\u2019t use Smart Switch to move my data.",
+    "of": "kit_16"
+   },
+   {
+    "ms": 6.869583856314421,
+    "hit": false,
+    "right": false,
+    "query": "I am experiencing an issue where the display of my Samsung Galaxy S24 becomes entirely blank, with only occasional scrolling and no visible content, preventing me from utilizing the Smart Switch application for data transfer.",
+    "of": "kit_16"
+   },
+   {
+    "ms": 4.473709035664797,
+    "hit": true,
+    "right": false,
+    "query": "Why does my Galaxy S24 display only a dark, blank screen with occasional scrolling, making it impossible to view anything or use Smart Switch for data transfer?",
+    "of": "kit_16"
+   },
+   {
+    "ms": 6.196875125169754,
+    "hit": true,
+    "right": false,
+    "query": "My Galaxy Z Flip 7 screen cracked again right at the hinge and the touch is dead in spots, plus the display is super dim.",
+    "of": "kit_17"
+   },
+   {
+    "ms": 1.1205419432371855,
+    "hit": true,
+    "right": false,
+    "query": "I am writing to report that the screen of my Galaxy Z Flip 7 has fractured again at the folding area, resulting in unresponsive touch zones and severely reduced visibility of the display.",
+    "of": "kit_17"
+   },
+   {
+    "ms": 5.6663749273866415,
+    "hit": true,
+    "right": false,
+    "query": "Is my Galaxy Z Flip 7\u2019s screen cracked again at the fold, causing touch failures in certain areas and making the display almost unreadable?",
+    "of": "kit_17"
+   },
+   {
+    "ms": 3.5077091306447983,
+    "hit": true,
+    "right": true,
+    "query": "My new Galaxy A17 screen is all weird right after I got it\u2014need a diagnostic test ASAP.",
+    "of": "kit_18"
+   },
+   {
+    "ms": 5.63350017182529,
+    "hit": true,
+    "right": true,
+    "query": "I have received a Galaxy A17 whose display appears distorted immediately upon receipt; I request a diagnostic examination.",
+    "of": "kit_18"
+   },
+   {
+    "ms": 1.9010829273611307,
+    "hit": true,
+    "right": true,
+    "query": "Can you run a diagnostic test on my Galaxy A17? The screen looks distorted right after I received the phone.",
+    "of": "kit_18"
+   },
+   {
+    "ms": 5.498624872416258,
+    "hit": false,
+    "right": false,
+    "query": "My Galaxy S22 screen is lagging\u2014touches are delayed and it feels sluggish when I try to use it.",
+    "of": "kit_19"
+   },
+   {
+    "ms": 1.93575001321733,
+    "hit": true,
+    "right": true,
+    "query": "I am experiencing delayed input and laggy touch responsiveness on my Samsung Galaxy S22, which results in a noticeable delay during interaction with the device.",
+    "of": "kit_19"
+   },
+   {
+    "ms": 5.468292161822319,
+    "hit": true,
+    "right": true,
+    "query": "Is there a way to fix the delayed screen inputs and laggy touch responsiveness on my Galaxy S22?",
+    "of": "kit_19"
+   },
+   {
+    "ms": 6.4463329035788774,
+    "hit": true,
+    "right": true,
+    "query": "My Galaxy S24 Ultra screen is just black, but the phone still powers up and rings\u2014no cracks or anything.",
+    "of": "kit_20"
+   },
+   {
+    "ms": 5.847209133207798,
+    "hit": false,
+    "right": false,
+    "query": "I am experiencing an issue where the display of my Galaxy S24 Ultra remains completely black despite the device powering on, ringing, and functioning otherwise, with no apparent physical damage.",
+    "of": "kit_20"
+   },
+   {
+    "ms": 1.8450829666107893,
+    "hit": true,
+    "right": true,
+    "query": "Why is the screen on my Galaxy S24 Ultra staying black even though the phone powers on, rings, and seems to work fine, and there is no visible damage?",
+    "of": "kit_20"
+   },
+   {
+    "ms": 3.210624912753701,
+    "hit": true,
+    "right": true,
+    "query": "My Galaxy camera pics are blurry even when I keep it still.",
+    "of": "unseen_camera_blurry"
+   },
+   {
+    "ms": 3.3890409395098686,
+    "hit": false,
+    "right": false,
+    "query": "I am experiencing persistent blurriness in photographs taken with the camera on my Galaxy device, despite maintaining a steady hold.",
+    "of": "unseen_camera_blurry"
+   },
+   {
+    "ms": 3.2731671817600727,
+    "hit": true,
+    "right": true,
+    "query": "Why are the photos taken with my Galaxy's camera coming out blurry even when I hold the phone still?",
+    "of": "unseen_camera_blurry"
+   },
+   {
+    "ms": 5.052292020991445,
+    "hit": true,
+    "right": true,
+    "query": "Camera app keeps popping up 'Warning Camera failed' and then crashes.",
+    "of": "unseen_camera_failed_warning"
+   },
+   {
+    "ms": 5.3273329976946115,
+    "hit": true,
+    "right": true,
+    "query": "I am experiencing an issue where the camera application displays a 'Warning Camera failed' message and subsequently terminates unexpectedly.",
+    "of": "unseen_camera_failed_warning"
+   },
+   {
+    "ms": 5.404290976002812,
+    "hit": true,
+    "right": true,
+    "query": "Why does the camera app show a 'Warning Camera failed' error and then close?",
+    "of": "unseen_camera_failed_warning"
+   },
+   {
+    "ms": 3.2167499884963036,
+    "hit": true,
+    "right": true,
+    "query": "My phone loses about 30% battery overnight while I sleep.",
+    "of": "unseen_battery_drain_night"
+   },
+   {
+    "ms": 3.3026670571416616,
+    "hit": false,
+    "right": false,
+    "query": "I am experiencing a significant battery drain of approximately thirty percent during the night while the device is idle.",
+    "of": "unseen_battery_drain_night"
+   },
+   {
+    "ms": 3.250416833907366,
+    "hit": true,
+    "right": true,
+    "query": "Why does the battery drop roughly 30% overnight when the phone is sleeping?",
+    "of": "unseen_battery_drain_night"
+   },
+   {
+    "ms": 3.2836671452969313,
+    "hit": true,
+    "right": true,
+    "query": "My phone charges super slow now, fast charge is dead.",
+    "of": "unseen_battery_slow_charging"
+   },
+   {
+    "ms": 3.425249829888344,
+    "hit": false,
+    "right": false,
+    "query": "I am experiencing significantly prolonged charging times on my device; the fast charging feature appears to be non\u2011functional.",
+    "of": "unseen_battery_slow_charging"
+   },
+   {
+    "ms": 3.369000041857362,
+    "hit": true,
+    "right": true,
+    "query": "Is there a reason why my phone is taking so long to charge and the fast charging isn\u2019t working?",
+    "of": "unseen_battery_slow_charging"
+   },
+   {
+    "ms": 3.073166823014617,
+    "hit": true,
+    "right": true,
+    "query": "my phone's super laggy after the update, it's so slow now",
+    "of": "unseen_perf_phone_slow"
+   },
+   {
+    "ms": 6.118083139881492,
+    "hit": true,
+    "right": false,
+    "query": "I am experiencing significant performance degradation on my device following the recent software update; the phone has become noticeably slow and laggy.",
+    "of": "unseen_perf_phone_slow"
+   },
+   {
+    "ms": 0.9508749935775995,
+    "hit": true,
+    "right": false,
+    "query": "Why is my phone running so slowly and lagging after the latest update?",
+    "of": "unseen_perf_phone_slow"
+   },
+   {
+    "ms": 0.9155420120805502,
+    "hit": true,
+    "right": true,
+    "query": "instagram keeps crashing every time I open it",
+    "of": "unseen_perf_app_crash"
+   },
+   {
+    "ms": 0.9737908840179443,
+    "hit": true,
+    "right": false,
+    "query": "I am experiencing repeated crashes with Instagram whenever I launch the application on my device.",
+    "of": "unseen_perf_app_crash"
+   },
+   {
+    "ms": 3.23750008828938,
+    "hit": true,
+    "right": true,
+    "query": "Why does Instagram crash every time I try to open it?",
+    "of": "unseen_perf_app_crash"
+   },
+   {
+    "ms": 3.268458181992173,
+    "hit": true,
+    "right": true,
+    "query": "Screen's super dim outdoors, can't read anything!",
+    "of": "unseen_display_dim"
+   },
+   {
+    "ms": 0.9480419103056192,
+    "hit": true,
+    "right": false,
+    "query": "I am experiencing insufficient screen brightness when using the device outdoors, which prevents me from reading the display.",
+    "of": "unseen_display_dim"
+   },
+   {
+    "ms": 3.28224990516901,
+    "hit": true,
+    "right": false,
+    "query": "Is there a way to increase the screen brightness on my device for outdoor use?",
+    "of": "unseen_display_dim"
+   },
+   {
+    "ms": 3.125583054497838,
+    "hit": true,
+    "right": true,
+    "query": "The whites on my screen are turning yellow, any fix?",
+    "of": "unseen_display_blue_tint"
+   },
+   {
+    "ms": 0.9390830527991056,
+    "hit": true,
+    "right": false,
+    "query": "I have noticed that the white areas of my display appear yellowish. Could you please advise on how to correct the color calibration?",
+    "of": "unseen_display_blue_tint"
+   },
+   {
+    "ms": 3.148165997117758,
+    "hit": false,
+    "right": false,
+    "query": "How can I resolve the issue where the white portions of my screen display a yellow tint?",
+    "of": "unseen_display_blue_tint"
+   },
+   {
+    "ms": 3.1048329547047615,
+    "hit": true,
+    "right": true,
+    "query": "My phone keeps tapping stuff on its own, like ghost touches.",
+    "of": "unseen_touch_ghost"
+   },
+   {
+    "ms": 2.24004196934402,
+    "hit": true,
+    "right": false,
+    "query": "I am experiencing unintended input on my device; the screen registers phantom touches without user interaction.",
+    "of": "unseen_touch_ghost"
+   },
+   {
+    "ms": 4.970375215634704,
+    "hit": false,
+    "right": false,
+    "query": "Why is my device's screen registering ghost touches and tapping items automatically?",
+    "of": "unseen_touch_ghost"
+   },
+   {
+    "ms": 3.2254161778837442,
+    "hit": true,
+    "right": true,
+    "query": "My Galaxy Buds keep dropping the connection to my phone, it's super annoying.",
+    "of": "unseen_bluetooth_earbuds"
+   },
+   {
+    "ms": 3.2262089662253857,
+    "hit": false,
+    "right": false,
+    "query": "I am experiencing frequent disconnections between my Galaxy Buds and my smartphone, which is affecting usage.",
+    "of": "unseen_bluetooth_earbuds"
+   },
+   {
+    "ms": 1.7290418036282063,
+    "hit": true,
+    "right": true,
+    "query": "Why do my Galaxy Buds keep disconnecting from my phone?",
+    "of": "unseen_bluetooth_earbuds"
+   }
+  ]
+ },
+ "ablation": {
+  "hybrid": [
+   [
+    true,
+    1.581791089847684,
+    0.0
+   ],
+   [
+    true,
+    9.547749999910593,
+    0.0
+   ],
+   [
+    true,
+    8.26583313755691,
+    0.0
+   ],
+   [
+    true,
+    6.1198328621685505,
+    0.0
+   ],
+   [
+    true,
+    8.385249879211187,
+    0.0
+   ],
+   [
+    true,
+    14.88179201260209,
+    0.0
+   ],
+   [
+    true,
+    6.188708124682307,
+    0.0
+   ],
+   [
+    true,
+    7.994958199560642,
+    0.0
+   ],
+   [
+    true,
+    5.951291881501675,
+    0.0
+   ],
+   [
+    true,
+    6.3829580321908,
+    0.0
+   ],
+   [
+    true,
+    5.559124983847141,
+    0.0
+   ],
+   [
+    true,
+    7.474957965314388,
+    0.0
+   ],
+   [
+    true,
+    5.371792009100318,
+    0.0
+   ],
+   [
+    true,
+    5.351624917238951,
+    0.0
+   ],
+   [
+    true,
+    5.4578329436481,
+    0.0
+   ],
+   [
+    true,
+    8.384000044316053,
+    0.0
+   ],
+   [
+    true,
+    6.624625064432621,
+    0.0
+   ],
+   [
+    false,
+    5.734291858971119,
+    0.0
+   ],
+   [
+    true,
+    5.4501250851899385,
+    0.0
+   ],
+   [
+    true,
+    6.340499967336655,
+    0.0
+   ],
+   [
+    true,
+    4.77187498472631,
+    0.0
+   ],
+   [
+    true,
+    5.419583059847355,
+    0.0
+   ]
+  ],
+  "rules": [
+   [
+    true,
+    1.051916042342782,
+    0.0
+   ],
+   [
+    false,
+    7.558832876384258,
+    0.0
+   ],
+   [
+    true,
+    7.2730418760329485,
+    0.0
+   ],
+   [
+    true,
+    6.689124973490834,
+    0.0
+   ],
+   [
+    true,
+    6.407791981473565,
+    0.0
+   ],
+   [
+    true,
+    4.854416940361261,
+    0.0
+   ],
+   [
+    false,
+    3.5092090256512165,
+    0.0
+   ],
+   [
+    true,
+    4.126542015001178,
+    0.0
+   ],
+   [
+    true,
+    4.9187911208719015,
+    0.0
+   ],
+   [
+    true,
+    4.757708171382546,
+    0.0
+   ],
+   [
+    false,
+    5.579374963417649,
+    0.0
+   ],
+   [
+    false,
+    3.9433748461306095,
+    0.0
+   ],
+   [
+    false,
+    3.9049580227583647,
+    0.0
+   ],
+   [
+    false,
+    3.585084108635783,
+    0.0
+   ],
+   [
+    true,
+    4.870790988206863,
+    0.0
+   ],
+   [
+    true,
+    3.91241698525846,
+    0.0
+   ],
+   [
+    false,
+    3.988875076174736,
+    0.0
+   ],
+   [
+    true,
+    4.436375107616186,
+    0.0
+   ],
+   [
+    false,
+    4.908083938062191,
+    0.0
+   ],
+   [
+    true,
+    8.979750098660588,
+    0.0
+   ],
+   [
+    false,
+    3.504999913275242,
+    0.0
+   ],
+   [
+    false,
+    4.389041801914573,
+    0.0
+   ]
+  ],
+  "llm": [
+   [
+    true,
+    1947.0860408619046,
+    0.0001189
+   ],
+   [
+    true,
+    539.1260830219835,
+    0.00012330000000000002
+   ],
+   [
+    true,
+    619.0192089416087,
+    0.0001221
+   ],
+   [
+    true,
+    500.4775410052389,
+    0.00011780000000000002
+   ],
+   [
+    true,
+    690.7290001399815,
+    0.00012000000000000002
+   ],
+   [
+    true,
+    566.6732091922313,
+    0.00011760000000000001
+   ],
+   [
+    true,
+    578.9979170076549,
+    0.0001218
+   ],
+   [
+    true,
+    530.3314998745918,
+    0.00011900000000000002
+   ],
+   [
+    true,
+    589.7897500544786,
+    0.00012130000000000001
+   ],
+   [
+    true,
+    1243.8259159680456,
+    0.0001142
+   ],
+   [
+    true,
+    633.6988748516887,
+    0.00011800000000000001
+   ],
+   [
+    true,
+    485.4789588134736,
+    0.0001167
+   ],
+   [
+    true,
+    696.8692089430988,
+    0.00011850000000000002
+   ],
+   [
+    true,
+    582.2818749584258,
+    0.00011530000000000001
+   ],
+   [
+    true,
+    543.8911658711731,
+    0.00011960000000000001
+   ],
+   [
+    true,
+    645.717625040561,
+    0.00011430000000000001
+   ],
+   [
+    true,
+    3145.695458864793,
+    0.00019725
+   ],
+   [
+    true,
+    602.9332499019802,
+    0.00011130000000000001
+   ],
+   [
+    true,
+    641.90399996005,
+    0.0001112
+   ],
+   [
+    true,
+    592.8489579819143,
+    0.00012020000000000001
+   ],
+   [
+    false,
+    591.813167091459,
+    0.0001146
+   ],
+   [
+    true,
+    514.9298750329763,
+    0.0001167
+   ]
+  ]
+ }
+}

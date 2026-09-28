@@ -1,0 +1,85 @@
+{
+  "_readme": "Unseen generalization probe (FAQ A4). 10 scenarios NOT in the student kit, written by the team in the style of the kit's SIIS articles to cover the brief's domains the kit barely touches (Camera, Battery, Performance). Used by scripts/benchmark.py for the cold-path latency sample (N=30 with the 20 kit rows) and to check that unseen SIIS payloads produce valid, non-empty plans. Not used for training or prompt examples.",
+  "scenarios": [
+    {
+      "id": "unseen_camera_blurry",
+      "query": "my galaxy camera photos come out blurry even when I hold still",
+      "siis_response": {
+        "title": "Blurry photos on Galaxy camera",
+        "content": "If photos from your Galaxy camera look blurry, try the following.\n\nClean the camera lens\nWipe the rear camera lens with a soft, lint-free cloth. Remove any case or film that covers the lens.\n\nTurn on Scene optimizer\nOpen the Camera app. Tap the Settings icon. Turn on Scene optimizer so the camera adjusts focus and exposure automatically.\n\nClear the Camera app cache\nOpen Settings. Tap Apps. Select Camera. Tap Storage, then tap Clear cache.\n\nRestart your phone\nPress and hold the Side key and Volume down key, then tap Restart."
+      }
+    },
+    {
+      "id": "unseen_camera_failed_warning",
+      "query": "camera app says Warning Camera failed and closes",
+      "siis_response": {
+        "title": "Camera failed error message",
+        "content": "When the Camera app shows 'Warning: Camera failed', follow these steps.\n\nForce stop the Camera app\nOpen Settings, tap Apps, select Camera, and tap Force stop. Open the Camera app again.\n\nReset camera settings\nOpen the Camera app, tap the Settings icon, scroll down and tap Reset settings, then tap Reset.\n\nBoot into Safe mode\nPress and hold the Side key, touch and hold Power off, then tap Safe mode. If the camera works in Safe mode, a downloaded app is causing the issue.\n\nVisit a service center\nIf the error continues, contact Samsung Support or visit an authorized service center."
+      }
+    },
+    {
+      "id": "unseen_battery_drain_night",
+      "query": "battery drops like 30 percent overnight while I'm sleeping",
+      "siis_response": {
+        "title": "Battery drains overnight",
+        "content": "If your battery drains quickly while the phone is idle, check the following.\n\nTurn on Power saving\nOpen Settings. Tap Battery. Turn on Power saving.\n\nPut unused apps to sleep\nOpen Settings, tap Battery, tap Background usage limits, then turn on Put unused apps to sleep.\n\nTurn off Wi-Fi scanning\nOpen Settings, tap Connections, tap More connection settings, tap Nearby device scanning and turn it off.\n\nUpdate your software\nOpen Settings, tap Software update, then tap Download and install."
+      }
+    },
+    {
+      "id": "unseen_battery_slow_charging",
+      "query": "phone takes forever to charge now, fast charging not working",
+      "siis_response": {
+        "title": "Fast charging not working",
+        "content": "If fast charging stops working, try these steps.\n\nCheck the charger and cable\nUse the original Samsung charger and USB cable. Inspect the cable for damage and try a different wall outlet.\n\nClean the charging port\nTurn off the device and gently remove dust or lint from the USB port with a soft brush.\n\nTurn on Fast charging\nOpen Settings. Tap Battery. Tap Charging settings. Turn on Fast charging.\n\nRestart the device\nPress and hold the Side key and Volume down key, then tap Restart."
+      }
+    },
+    {
+      "id": "unseen_perf_phone_slow",
+      "query": "my phone got really slow and laggy after the update",
+      "siis_response": {
+        "title": "Device running slowly",
+        "content": "If your Galaxy phone is slow after an update, try these solutions.\n\nClose apps running in the background\nTap the Recent apps button and tap Close all.\n\nFree up storage\nOpen Settings, tap Battery and device care, tap Storage, and delete files you no longer need.\n\nOptimize your device\nOpen Settings, tap Battery and device care, then tap Optimize now.\n\nWipe the cache partition\nTurn off the phone. Press and hold Volume up and Side key to enter Recovery mode, select Wipe cache partition, then select Reboot system now."
+      }
+    },
+    {
+      "id": "unseen_perf_app_crash",
+      "query": "instagram keeps crashing every time I open it",
+      "siis_response": {
+        "title": "App keeps stopping",
+        "content": "If an app keeps closing or shows 'App has stopped', try the following.\n\nClear the app cache\nOpen Settings, tap Apps, select the app, tap Storage, and tap Clear cache.\n\nUpdate the app\nOpen Galaxy Store or Play Store, search for the app, and tap Update.\n\nReinstall the app\nTouch and hold the app icon, tap Uninstall, then install it again from the store.\n\nRestart the phone\nPress and hold the Side key and Volume down key, then tap Restart."
+      }
+    },
+    {
+      "id": "unseen_display_dim",
+      "query": "screen is too dim outside and I can't read anything",
+      "siis_response": {
+        "title": "Screen too dark in sunlight",
+        "content": "If the screen is hard to read outdoors, adjust these display settings.\n\nAdjust brightness\nOpen Settings, tap Display, and drag the Brightness slider to the right.\n\nTurn on Adaptive brightness\nOpen Settings, tap Display, and turn on Adaptive brightness so the screen adjusts to your surroundings.\n\nTurn on Extra brightness\nOpen Settings, tap Display, and turn on Extra brightness.\n\nTurn off Power saving\nPower saving can limit brightness. Open Settings, tap Battery, and turn off Power saving."
+      }
+    },
+    {
+      "id": "unseen_display_blue_tint",
+      "query": "whites on my screen look yellow, how do I fix the colors",
+      "siis_response": {
+        "title": "Screen colors look warm or yellow",
+        "content": "If the screen looks yellow or the colors seem off, check these settings.\n\nTurn off Eye comfort shield\nOpen Settings, tap Display, and turn off Eye comfort shield.\n\nChange the Screen mode\nOpen Settings, tap Display, tap Screen mode, and select Vivid. Drag the White balance slider toward Cool.\n\nTurn off Dark mode\nOpen Settings, tap Display, and select Light."
+      }
+    },
+    {
+      "id": "unseen_touch_ghost",
+      "query": "screen is tapping things by itself, ghost touches",
+      "siis_response": {
+        "title": "Screen responds without touching",
+        "content": "If the screen registers touches you did not make, try the following.\n\nRemove the screen protector\nTake off any screen protector or case that presses on the edges of the screen, and clean the display with a soft cloth.\n\nTurn off Touch sensitivity\nOpen Settings, tap Display, and turn off Touch sensitivity.\n\nTurn on Accidental touch protection\nOpen Settings, tap Display, and turn on Accidental touch protection.\n\nFactory reset\nBack up your data, then open Settings, tap General management, tap Reset, and tap Factory data reset."
+      }
+    },
+    {
+      "id": "unseen_bluetooth_earbuds",
+      "query": "galaxy buds keep disconnecting from my phone",
+      "siis_response": {
+        "title": "Bluetooth device keeps disconnecting",
+        "content": "If your Bluetooth earbuds or speaker keep disconnecting, try these steps.\n\nTurn Bluetooth off and on\nOpen Settings, tap Connections, tap Bluetooth, turn it off, wait a few seconds, and turn it on again.\n\nForget and pair again\nOpen Settings, tap Connections, tap Bluetooth, tap the Settings icon next to the device, tap Unpair, then pair the device again.\n\nTurn off Power saving\nOpen Settings, tap Battery, and turn off Power saving.\n\nCharge the earbuds\nPlace the earbuds in the charging case and charge them fully."
+      }
+    }
+  ]
+}

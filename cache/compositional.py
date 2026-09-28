@@ -1,4 +1,7 @@
 """Novelty N1: Compositional Multi-Intent Cache and Goal Combiner."""
+import hashlib
+import re
+import threading
 import time
 from typing import Any, Callable, Dict, List, Optional, Tuple
 
@@ -7,8 +10,21 @@ from pydantic import BaseModel, Field
 from cache.gated_cache import GatedSemanticCache
 from cache.store import CacheStore
 from enrichment.clause_splitter import decompose_query_intents
-from enrichment.intent_signature import IntentSignature
+from cache import lexical
+from cache.semantic_cache import cosine_similarity
+from enrichment.intent_signature import IntentSignature, extract_intent_signature, signatures_compatible
 from schema import Action, Goal, actionCategory
+
+
+_ENABLE_RE = re.compile(r"\b(turn(ing)? on|switch(ing)? on|enable|enabling|activate)\b", re.I)
+_DISABLE_RE = re.compile(r"\b(turn(ing)? off|switch(ing)? off|disable|disabling|deactivate)\b", re.I)
+
+
+def _command_polarity(text: str) -> Optional[str]:
+    on, off = bool(_ENABLE_RE.search(text)), bool(_DISABLE_RE.search(text))
+    if on == off:
+        return None
+    return "on" if on else "off"
 
 
 class CompositionalCacheResult(BaseModel):
@@ -71,6 +87,145 @@ class CompositionalCache(GatedSemanticCache):
         embed_fn: Optional[Callable[[str], List[float]]] = None,
     ):
         super().__init__(store=store, similarity_threshold=similarity_threshold, embed_fn=embed_fn)
+        # SIIS-article index: fingerprint -> [(query, signature, goals)]. See get_by_article().
+        self._articles: Dict[str, List[Tuple[str, IntentSignature, List[dict]]]] = {}
+        self._articles_lock = threading.Lock()
+        # Pre-warmed paraphrase keys (brief roadmap, Phase 3): each cold plan is
+        # indexed under its query AND its 8-10 query_variations -> [(text, plan_id)].
+        self._variant_keys: List[Tuple[str, int, List[float]]] = []  # (text, plan_id, hashed vec)
+        self._variant_lex: List[Dict[str, float]] = []
+        self._variant_plans: List[List[dict]] = []
+        self._variant_idf: Optional[Dict[str, float]] = None
+
+    # Lowest blended similarity at which a same-article request counts as a
+    # paraphrase. The kit reuses one article for different complaints (six
+    # rows share "Blank or black display"): those pairs score <= 0.49 except
+    # two near-identical "screen completely black" complaints (0.63), while
+    # true paraphrases (eval/paraphrases.json) score >= 0.50.
+    ARTICLE_MIN_SIMILARITY = 0.50
+
+    @staticmethod
+    def article_fingerprint(title: str, content: str) -> str:
+        text = re.sub(r"\s+", " ", f"{title}\n{content}".strip().lower())
+        return hashlib.sha256(text.encode("utf-8")).hexdigest()
+
+    # Blended similarity a no-article paraphrase needs against some indexed key.
+    # eval/paraphrases.json sweep with offline (template) variations: 0.60 -> 60% hit,
+    # 49/54 hits the right plan; LLM-written variations lift recall further.
+    VARIANT_MIN_SIMILARITY = 0.60
+
+    def put_article(self, fingerprint: str, query: str, goals: List[Goal],
+                    variations: Optional[List[str]] = None) -> None:
+        payload = [g.model_dump() for g in goals]
+        entry = (query, extract_intent_signature(query), payload)
+        with self._articles_lock:
+            self._articles.setdefault(fingerprint, []).append(entry)
+            plan_id = len(self._variant_plans)
+            self._variant_plans.append(payload)
+            for text in [query] + [v for v in (variations or []) if isinstance(v, str)]:
+                self._variant_keys.append((text, plan_id, self.embed_fn(text)))
+            self._variant_idf = None  # IDF + word vectors recomputed lazily on next lookup
+
+    def _current_idf(self) -> Dict[str, float]:
+        with self._articles_lock:
+            if self._variant_idf is None:
+                by_plan: Dict[int, List[str]] = {}
+                for text, plan_id, _ in self._variant_keys:
+                    by_plan.setdefault(plan_id, []).append(text)
+                self._variant_idf = lexical.idf_table(by_plan.values())
+                self._variant_lex = [lexical.vector(k[0], self._variant_idf) for k in self._variant_keys]
+            return self._variant_idf
+
+    def _blended_similarity(self, a: str, b: str) -> float:
+        """Hashed n-gram cosine and synonym-aware IDF word cosine, averaged."""
+        idf = self._current_idf()
+        return 0.5 * cosine_similarity(self.embed_fn(a), self.embed_fn(b)) + 0.5 * lexical.cosine(
+            lexical.vector(a, idf), lexical.vector(b, idf))
+
+    def get_by_variants(self, query: str) -> CompositionalCacheResult:
+        """No-article paraphrase lookup over each plan's query + variations.
+
+        Similarity blends the hashed n-gram embedding with synonym-aware IDF
+        word overlap (cache/lexical.py). Candidates must pass the intent gate
+        (minus its "negated complaint" rule, which splits "won't turn on" from
+        "went black"), must not flip an on/off command, and must not name a
+        different Settings feature ("timeout" vs "brightness").
+        """
+        start = time.perf_counter()
+        idf = self._current_idf()
+        with self._articles_lock:
+            keys = list(self._variant_keys)
+            plans = list(self._variant_plans)
+            lex_vecs = list(self._variant_lex)
+        query_vec = self.embed_fn(query)
+        query_lex = lexical.vector(query, idf)
+        query_sig = extract_intent_signature(query)
+        query_pol = _command_polarity(query)
+        best_plan, best_sim = None, 0.0
+        for (text, plan_id, text_vec), text_lex in zip(keys, lex_vecs):
+            sim = 0.5 * cosine_similarity(query_vec, text_vec) + 0.5 * lexical.cosine(query_lex, text_lex)
+            if sim < self.VARIANT_MIN_SIMILARITY or sim <= best_sim:
+                continue
+            text_pol = _command_polarity(text)
+            if query_pol and text_pol and query_pol != text_pol:
+                continue
+            compatible, why = signatures_compatible(query_sig, extract_intent_signature(text))
+            if not (compatible or why.startswith("Polarity mismatch")):
+                continue
+            if lexical.setting_conflict(query, text):
+                continue
+            best_plan, best_sim = plan_id, sim
+        latency_ms = (time.perf_counter() - start) * 1000.0
+        if best_plan is None:
+            return CompositionalCacheResult(hit=False, hit_type=None, goals=[], missing_clauses=[],
+                                            latency_ms=round(latency_ms, 2))
+        return CompositionalCacheResult(hit=True, hit_type="variant",
+                                        goals=[Goal.model_validate(g) for g in plans[best_plan]],
+                                        missing_clauses=[], latency_ms=round(latency_ms, 2))
+
+    def get_by_article(self, query: str, fingerprint: str) -> CompositionalCacheResult:
+        """Paraphrase hit keyed on the knowledge article, not just the wording.
+
+        The hashed n-gram embedding only reaches 0.82 similarity for ~1 in 9
+        real paraphrases (measured on eval/paraphrases.json), and lowering the
+        threshold instead makes paraphrases of one "black screen" complaint
+        hit another scenario's plan. When the caller sends the same SIIS
+        article, the scenario is already pinned down: a compatible intent
+        signature plus loose wording overlap is enough, and it can never
+        serve a plan built from a different article.
+        """
+        start = time.perf_counter()
+        with self._articles_lock:
+            entries = list(self._articles.get(fingerprint, []))
+        query_polarity = _command_polarity(query)
+        best, best_sim = None, 0.0
+        for cached_query, cached_sig, goals in entries:
+            # The full signature gate is too strict here: it reads "won't turn
+            # on" as negated and "went black" as normal, which rejected 36 of
+            # 90 true paraphrases. The article already pins the scenario, so
+            # only an explicit on/off command conflict ("turn on Dark mode" vs
+            # "turn off Dark mode") marks a different question.
+            cached_polarity = _command_polarity(cached_query)
+            if query_polarity and cached_polarity and query_polarity != cached_polarity:
+                continue
+            sim = self._blended_similarity(query, cached_query)
+            if sim >= self.ARTICLE_MIN_SIMILARITY and sim > best_sim:
+                best, best_sim = goals, sim
+        latency_ms = (time.perf_counter() - start) * 1000.0
+        if best is None:
+            return CompositionalCacheResult(hit=False, hit_type=None, goals=[], missing_clauses=[],
+                                            latency_ms=round(latency_ms, 2))
+        return CompositionalCacheResult(hit=True, hit_type="article", goals=[Goal.model_validate(g) for g in best],
+                                        missing_clauses=[], latency_ms=round(latency_ms, 2))
+
+    def clear(self) -> None:
+        super().clear()
+        with self._articles_lock:
+            self._articles.clear()
+            self._variant_keys.clear()
+            self._variant_plans.clear()
+            self._variant_lex = []
+            self._variant_idf = None
 
     def get_compound(self, query: str) -> CompositionalCacheResult:
         """
