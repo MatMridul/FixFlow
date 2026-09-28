@@ -9,6 +9,7 @@ from fastapi.responses import JSONResponse
 from api.models import (
     ContextDeeplinkResponse,
     MetaBlock,
+    SIISResponse,
     TroubleshootRequest,
     TroubleshootResponse,
 )
@@ -155,7 +156,44 @@ def _troubleshoot(payload: TroubleshootRequest, request: Request, trace: Dict[st
                 ),
             )
 
-    # 2. Cache Miss: Check SIIS availability
+    # 2. Knowledge Auto-Retrieval: if no explicit SIIS article provided, retrieve matching article from corpus
+    siis_retriever = getattr(request.app.state, "siis_retriever", None)
+    retrieved_article_title: Optional[str] = None
+    if payload.siis_response is None and siis_retriever is not None:
+        match = siis_retriever.retrieve(payload.query)
+        if match is not None:
+            payload.siis_response = SIISResponse(title=match.title, content=match.content)
+            retrieved_article_title = match.title
+            trace["siis_retrieval"] = {
+                "auto_retrieved": True,
+                "article_id": match.id,
+                "title": match.title,
+                "score": match.score,
+                "bm25_score": match.bm25_score,
+                "cosine_score": match.cosine_score,
+            }
+            # Check article cache now that we have the auto-matched article
+            if isinstance(cache, CompositionalCache):
+                fingerprint = cache.article_fingerprint(match.title, match.content)
+                art = cache.get_by_article(payload.query, fingerprint)
+                if art.hit and art.goals:
+                    trace.update(path="cache", cache_hit_type="article_auto_retrieved")
+                    latency = (time.perf_counter() - start_time) * 1000.0
+                    return TroubleshootResponse(
+                        query=payload.query,
+                        query_variations=_cached_variations(payload.query),
+                        response=ContextDeeplinkResponse(contexts=art.goals),
+                        meta=MetaBlock(
+                            latency_ms=round(latency, 2),
+                            cache_hit=True,
+                            model="cache-article-auto-retrieved-v1",
+                            cost_usd=0.0,
+                            fallback=None,
+                            retrieved_article=retrieved_article_title,
+                        ),
+                    )
+
+    # 3. Cache Miss: Check SIIS availability (if still None, it was an ungrounded / out-of-domain query)
     if payload.siis_response is None:
         trace["path"] = "no_siis"
         latency = (time.perf_counter() - start_time) * 1000.0
@@ -171,6 +209,9 @@ def _troubleshoot(payload: TroubleshootRequest, request: Request, trace: Dict[st
                 fallback="no_siis_context",
             ),
         )
+
+    if fingerprint is None and isinstance(cache, CompositionalCache) and payload.siis_response is not None:
+        fingerprint = cache.article_fingerprint(payload.siis_response.title or "", payload.siis_response.content or "")
 
     # 3. Cold Path: Extract intermediate Goal from SIIS documentation
     if extractor is None:
@@ -283,6 +324,7 @@ def _troubleshoot(payload: TroubleshootRequest, request: Request, trace: Dict[st
             model=outcome.model,
             cost_usd=outcome.cost_usd,
             fallback=fallback,
+            retrieved_article=retrieved_article_title,
         ),
     )
 

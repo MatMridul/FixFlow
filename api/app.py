@@ -1,5 +1,5 @@
 """FastAPI application factory and server configuration for FixFlow."""
-from typing import Callable, Optional
+from typing import Any, Callable, Optional
 
 from pathlib import Path
 
@@ -19,6 +19,7 @@ def create_app(
     cache: Optional[SemanticCache] = None,
     extractor: Optional[StructureExtractor] = None,
     resolver_fn: Optional[Callable] = None,
+    siis_retriever: Optional[Any] = None,
 ) -> FastAPI:
     """Create and configure FixFlow FastAPI application instance."""
     app = FastAPI(
@@ -48,6 +49,14 @@ def create_app(
         from resolution import resolve_goal_deeplinks_with_stats
         resolver_fn = resolve_goal_deeplinks_with_stats
     app.state.resolver_fn = resolver_fn
+
+    if siis_retriever is None:
+        try:
+            from resolution.siis_retriever import SIISRetriever
+            siis_retriever = SIISRetriever.default()
+        except Exception:
+            siis_retriever = None
+    app.state.siis_retriever = siis_retriever
 
 
     # Register routers

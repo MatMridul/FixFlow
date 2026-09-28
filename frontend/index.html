@@ -40,28 +40,29 @@
       </label>
       <label class="field">
         <span>What the user said</span>
-        <textarea id="query" rows="5" placeholder="e.g. Galaxy S24 display flickers when opening Camera, and battery drains rapidly..."></textarea>
+        <textarea id="query" rows="5" placeholder="e.g. My Galaxy screen flickers and dims when opening Camera, or phone won't turn on..."></textarea>
       </label>
       <details class="source" id="source">
-        <summary>Reference Knowledge Base (SIIS) <small id="source-hint">optional for repeat questions</small></summary>
+        <summary>Reference Knowledge Base (SIIS) <small id="source-hint">Auto-retrieved if left blank</small></summary>
         <label class="field">
           <span>Article Title</span>
           <input id="siis-title" type="text" placeholder="e.g. Screen flickering or battery drain troubleshooting">
         </label>
         <label class="field">
           <span>Article Content</span>
-          <textarea id="siis-content" rows="9" placeholder="Paste official troubleshooting guidance or select a kit scenario above..."></textarea>
+          <input id="siis-content-hidden" type="hidden" />
+          <textarea id="siis-content" rows="9" placeholder="Leave empty to auto-retrieve from Samsung knowledge base, or paste custom guidance..."></textarea>
         </label>
       </details>
       <button class="primary" id="build" type="button">Build plan</button>
-      <p class="hint" id="hint">Ask the same thing twice to see it answered instantly from semantic cache.</p>
+      <p class="hint" id="hint">Enter any custom device problem or pick a kit scenario. Ask twice to see instant cache hits.</p>
     </section>
 
     <!-- Plan Section -->
     <section class="plan" id="section-plan" aria-live="polite" aria-labelledby="plan-title">
       <div class="empty" id="empty">
         <h2 id="plan-title">No plan generated yet</h2>
-        <p>Pick a scenario on the left, or enter a colloquial problem and reference article, then click <b>Build plan</b>.</p>
+        <p>Type any colloquial problem or pick a benchmark scenario on the left, then click <b>Build plan</b>. FixFlow automatically retrieves the right Samsung knowledge article and binds One UI deeplinks.</p>
       </div>
       <div id="result" hidden>
         <p class="goal" id="goal"></p>

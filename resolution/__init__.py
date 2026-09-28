@@ -15,4 +15,8 @@ __all__ = [
     "resolve_goal_deeplinks",
     "resolve_goal_deeplinks_with_stats",
     "ResolutionStats",
+    "SIISRetriever",
+    "SIISArticleMatch",
 ]
+
+from resolution.siis_retriever import SIISRetriever, SIISArticleMatch

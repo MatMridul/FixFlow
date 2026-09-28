@@ -59,6 +59,10 @@ class MetaBlock(BaseModel):
         default=None,
         description="Fallback reason code if no match or error ('no_match', 'no_siis_context', etc.)"
     )
+    retrieved_article: Optional[str] = Field(
+        default=None,
+        description="Title of auto-retrieved SIIS knowledge article if retrieved without manual payload"
+    )
 
 
 class TroubleshootResponse(BaseModel):

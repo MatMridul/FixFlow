@@ -119,6 +119,8 @@ async function buildPlan() {
       ? data.response.contexts[0].actions.length : 0;
     if (data.meta && data.meta.cache_hit) {
       showToast(`Instant Cache Hit: Served in ${Math.round(data.meta.latency_ms)}ms`, "success");
+    } else if (data.meta && data.meta.retrieved_article) {
+      showToast(`Auto-matched: ${data.meta.retrieved_article} (${count} actions)`, "success");
     } else {
       showToast(`Generated ${count}-action guided troubleshooting plan`, "success");
     }
@@ -162,6 +164,9 @@ function renderPlan(data) {
   if (goal) fact("Confidence", `${Math.round(goal.score * 100)}%`);
   fact("Answered in", `${Math.round(data.meta.latency_ms)} ms`);
   fact("Source", sourceLabel(data.meta));
+  if (data.meta && data.meta.retrieved_article) {
+    fact("Knowledge Base", `${data.meta.retrieved_article} (Auto-retrieved)`);
+  }
   fact("Cost", `$${data.meta.cost_usd.toFixed(4)}`);
 
   const list = $("#actions");
@@ -209,10 +214,15 @@ function renderTrace(t) {
 
   const pathText = {
     cache: `Answered from cache (${(t.cache_hit_type || "").replace(/_/g, " ")}), zero latency overhead.`,
-    cold: "Extracted from the reference article.",
-    no_siis: "Not in cache and no article was provided.",
+    cold: t.siis_retrieval && t.siis_retrieval.auto_retrieved
+      ? `Auto-retrieved Samsung troubleshooting article: "${t.siis_retrieval.title}" (Relevance: ${(t.siis_retrieval.score * 100).toFixed(0)}%).`
+      : "Extracted from the reference article.",
+    no_siis: "Not in cache and no relevant article found in Samsung troubleshooting corpus.",
   };
   body.append(el("p", {}, pathText[t.path] || ""));
+  if (t.siis_retrieval && t.siis_retrieval.auto_retrieved) {
+    body.append(el("p", {}, `🔍 Auto-matched Knowledge Base: "${t.siis_retrieval.title}" (Hybrid score: ${t.siis_retrieval.score}, BM25: ${t.siis_retrieval.bm25_score}, Cosine: ${t.siis_retrieval.cosine_score})`));
+  }
   if (t.extraction && t.extraction.replaced_ungrounded_llm_output) {
     body.append(el("p", {}, "Unverified steps filtered to guarantee strict SIIS grounding."));
   }

@@ -83,8 +83,8 @@ class TestApiEndpoints:
         assert data2["meta"]["fallback"] is None
 
     def test_troubleshoot_cache_miss_without_siis_returns_fallback(self, test_client):
-        # Query not in cache and no SIIS provided
-        payload = {"query": "Completely unseen complaint about camera"}
+        # Out-of-domain query with no SIIS match and no cache -> fallback no_siis_context
+        payload = {"query": "How do I bake chocolate chip pancakes in an oven?"}
         response = test_client.post("/v1/troubleshoot", json=payload)
 
         assert response.status_code == 200
@@ -92,6 +92,23 @@ class TestApiEndpoints:
         assert len(data["response"]["contexts"]) == 0
         assert data["meta"]["cache_hit"] is False
         assert data["meta"]["fallback"] == "no_siis_context"
+
+    def test_troubleshoot_auto_retrieves_siis_for_freeform_query(self, test_client):
+        # Freeform user query without manual SIIS payload auto-retrieves relevant knowledge
+        payload = {"query": "My camera flickers and shows lines when shooting video indoors"}
+        response = test_client.post("/v1/troubleshoot", json=payload)
+
+        assert response.status_code == 200
+        data = response.json()
+        assert len(data["response"]["contexts"]) >= 1
+        assert data["meta"]["cache_hit"] is False
+        assert data["meta"]["fallback"] is None
+        assert data["meta"]["retrieved_article"] == "Screen flickers when using the Camera on a Galaxy phone"
+
+        # Subsequent query hits the cache
+        resp_cache = test_client.post("/v1/troubleshoot", json=payload)
+        data_cache = resp_cache.json()
+        assert data_cache["meta"]["cache_hit"] is True
 
     def test_troubleshoot_missing_required_query_field(self, test_client):
         response = test_client.post("/v1/troubleshoot", json={})
