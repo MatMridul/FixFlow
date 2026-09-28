@@ -4,6 +4,7 @@ import time
 from typing import Any, Callable, Dict, Optional
 
 from fastapi import APIRouter, Request, status
+from fastapi.responses import JSONResponse
 
 from api.models import (
     ContextDeeplinkResponse,
@@ -15,6 +16,7 @@ from cache import CompositionalCache, SemanticCache
 from extraction import ExtractionOutcome, StructureExtractor, filter_provenance
 from extraction.deterministic import extract_goal_deterministic, topic_and_title
 from extraction.query_variations import generate_query_variations
+from enrichment import decompose_query_intents
 from validation import calibrate_score, programmatic_repair_goal, repair_goal_or_json, validate_goal
 
 router = APIRouter()
@@ -34,6 +36,8 @@ def health_check(request: Request) -> Dict[str, Any]:
     cache_count = cache.count() if cache else 0
     extractor: Optional[StructureExtractor] = getattr(request.app.state, "extractor", None)
     model_ready = extractor is not None
+    chain = getattr(extractor, "llm_callable", None)
+    llm_models = chain.active_models() if hasattr(chain, "active_models") else []
 
     return {
         # FAQ gate G2 requires exactly {"status": "ok"} — any other value
@@ -43,11 +47,13 @@ def health_check(request: Request) -> Dict[str, Any]:
         "version": "1.0.0",
         "cache_entries": cache_count,
         "model_readiness": model_ready,
+        # Models currently in the Gemini -> Mistral chain (quota-benched ones
+        # drop out); empty means deterministic extraction only.
+        "llm_models": llm_models,
     }
 
 
-@router.post("/v1/troubleshoot", response_model=TroubleshootResponse, status_code=status.HTTP_200_OK)
-def troubleshoot(payload: TroubleshootRequest, request: Request) -> TroubleshootResponse:
+def _troubleshoot(payload: TroubleshootRequest, request: Request, trace: Dict[str, Any]) -> TroubleshootResponse:
     """
     Orchestrate request across Cache -> Extractor -> Resolver -> Validator -> Response.
     - Level 1 & 2 Cache lookup (including Novelty N1 Compositional lookup).
@@ -60,12 +66,19 @@ def troubleshoot(payload: TroubleshootRequest, request: Request) -> Troubleshoot
     cache: Optional[SemanticCache] = getattr(request.app.state, "cache", None)
     extractor: Optional[StructureExtractor] = getattr(request.app.state, "extractor", None)
     resolver_fn: Optional[Callable] = getattr(request.app.state, "resolver_fn", None)
+    try:
+        trace["clauses"] = [
+            {"text": text, "signature": sig.to_dict()} for text, sig in decompose_query_intents(payload.query)
+        ]
+    except Exception:
+        trace["clauses"] = []
 
     # 1. Cache Fast Path Lookup (Novelty N1 Compositional & Gated Fast-Path)
     if cache is not None:
         if isinstance(cache, CompositionalCache):
             comp_res = cache.get_compound(payload.query)
             if comp_res.hit and comp_res.goals:
+                trace.update(path="cache", cache_hit_type=comp_res.hit_type)
                 latency = (time.perf_counter() - start_time) * 1000.0
                 return TroubleshootResponse(
                     query=payload.query,
@@ -82,6 +95,7 @@ def troubleshoot(payload: TroubleshootRequest, request: Request) -> Troubleshoot
         else:
             cache_res = cache.get(payload.query)
             if cache_res.hit and cache_res.goal is not None:
+                trace.update(path="cache", cache_hit_type=cache_res.hit_type)
                 latency = (time.perf_counter() - start_time) * 1000.0
                 return TroubleshootResponse(
                     query=payload.query,
@@ -98,6 +112,7 @@ def troubleshoot(payload: TroubleshootRequest, request: Request) -> Troubleshoot
 
     # 2. Cache Miss: Check SIIS availability
     if payload.siis_response is None:
+        trace["path"] = "no_siis"
         latency = (time.perf_counter() - start_time) * 1000.0
         return TroubleshootResponse(
             query=payload.query,
@@ -125,6 +140,8 @@ def troubleshoot(payload: TroubleshootRequest, request: Request) -> Troubleshoot
             goal=extractor.extract(query=payload.query, siis_title=siis_title, siis_content=siis_content)
         )
     goal = outcome.goal
+    trace["path"] = "cold"
+    trace["extraction"] = {"model": outcome.model, "llm_used": outcome.llm_used, "cost_usd": outcome.cost_usd}
     query_variations = outcome.query_variations or _cached_variations(payload.query)
 
     if goal is None or not goal.actions:
@@ -144,7 +161,7 @@ def troubleshoot(payload: TroubleshootRequest, request: Request) -> Troubleshoot
 
     # 3.1 Provenance Filtering (Novelty N5: Hallucination elimination)
     siis_text = f"{siis_title}. {siis_content}"
-    filtered, grounding_coverage, _ = filter_provenance(goal, siis_text, threshold=0.15)
+    filtered, grounding_coverage, provenance = filter_provenance(goal, siis_text, threshold=0.15)
     if filtered.actions:
         goal = filtered
     else:
@@ -153,7 +170,10 @@ def troubleshoot(payload: TroubleshootRequest, request: Request) -> Troubleshoot
         # NON-EMPTY responses), so fall back to the deterministic plan —
         # built from SIIS sentences, grounded by construction.
         goal = programmatic_repair_goal(extract_goal_deterministic(payload.query, siis_title, siis_content))
-        goal, grounding_coverage, _ = filter_provenance(goal, siis_text, threshold=0.15)
+        goal, grounding_coverage, provenance = filter_provenance(goal, siis_text, threshold=0.15)
+        trace["extraction"]["replaced_ungrounded_llm_output"] = True
+
+    trace["provenance"] = provenance
 
     # 4. Dev B Hook: Catalog Screen Resolution & Deeplink Binding + Contract 2 signals
     retrieval_margin, path_alignment = 1.0, 1.0
@@ -164,6 +184,7 @@ def troubleshoot(payload: TroubleshootRequest, request: Request) -> Troubleshoot
                 goal, stats = resolved
                 retrieval_margin = stats.retrieval_margin
                 path_alignment = stats.path_alignment
+                trace["resolution"] = stats.details
             else:
                 goal = resolved
         except Exception:
@@ -189,6 +210,13 @@ def troubleshoot(payload: TroubleshootRequest, request: Request) -> Troubleshoot
     # A weak plan is still returned (unseen scenarios must be non-empty), but
     # flagged so callers/UI can show it as low confidence.
     fallback = "low_confidence" if goal.score < 0.25 else None
+    trace["calibration"] = {
+        "grounding_coverage": grounding_coverage,
+        "validator_pass_rate": validator_pass_rate,
+        "retrieval_margin": retrieval_margin,
+        "path_alignment": path_alignment,
+        "score": goal.score,
+    }
 
     # 6. Update Cache with verified Goal
     if cache is not None:
@@ -210,3 +238,32 @@ def troubleshoot(payload: TroubleshootRequest, request: Request) -> Troubleshoot
             fallback=fallback,
         ),
     )
+
+
+@router.post("/v1/troubleshoot", response_model=TroubleshootResponse, status_code=status.HTTP_200_OK)
+def troubleshoot(payload: TroubleshootRequest, request: Request, debug: bool = False):
+    """Scored endpoint. `?debug=true` adds a `trace` (intent clauses, cache
+    path, step provenance, screen resolution, calibration inputs) for the
+    demo UI; without it the response is exactly the contract shape."""
+    trace: Dict[str, Any] = {}
+    response = _troubleshoot(payload, request, trace)
+    if debug:
+        return JSONResponse({**response.model_dump(mode="json"), "trace": trace})
+    return response
+
+
+@router.get("/v1/scenarios")
+def scenarios() -> Dict[str, Any]:
+    """The 20 student-kit scenarios (query + SIIS payload) for the demo UI."""
+    import json
+    from pathlib import Path
+
+    data = Path(__file__).resolve().parent.parent / "data"
+    queries = [q.strip() for q in (data / "input.txt").read_text(encoding="utf-8").splitlines() if q.strip()]
+    siis = json.loads((data / "siis_responses.json").read_text(encoding="utf-8"))["responses"]
+    return {
+        "scenarios": [
+            {"id": r["id"], "query": q, "siis_response": r["siis_response"]}
+            for q, r in zip(queries, siis)
+        ]
+    }

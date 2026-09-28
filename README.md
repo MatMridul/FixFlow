@@ -143,24 +143,46 @@ Requests and responses strictly conform to the Theme 02 schema:
 ## 🛠️ Quick Start
 
 ### Prerequisites
-- Python 3.10+
-- Node.js 18+ (for frontend)
+- Python 3.10+ (no Node needed: the demo UI is plain HTML/JS served by the API)
 
 ### Installation
 ```bash
-# Clone the repository
 git clone https://github.com/MatMridul/FixFlow.git
 cd FixFlow
-
-# Create and activate virtual environment
 python -m venv venv
-# On Windows:
-venv\Scripts\activate
-# On Linux/macOS:
-source venv/bin/activate
-
-# Install dependencies (once requirements.txt is configured)
+source venv/bin/activate          # Windows: venv\Scripts\activate
 pip install -r requirements.txt
+```
+
+### LLM keys (optional)
+```bash
+cp .env.example .env              # then fill GEMINI_API_KEY and/or MISTRAL_API_KEY
+```
+`.env` is gitignored; never commit keys. Models are tried in order
+gemini-3.8-flash → gemini-3.5-flash-lite → mistral-medium-latest → mistral-small-latest,
+with a 6.5 s total budget. A model that hits its quota is skipped for 15 minutes.
+With no keys, FixFlow uses its offline SIIS extractor, and every response stays schema-valid.
+
+### Run
+```bash
+uvicorn api.app:app --port 8000
+# Demo UI:      http://localhost:8000/app/
+# Health:       GET  /health
+# Troubleshoot: POST /v1/troubleshoot   (add ?debug=true for the pipeline trace)
+# Scenarios:    GET  /v1/scenarios
+```
+
+### Docker
+```bash
+docker build -t fixflow .
+docker run --env-file .env -p 8000:8000 fixflow
+```
+
+### Tests, results, eval
+```bash
+pytest -q                               # LLM disabled in tests
+python scripts/generate_results.py      # writes results.jsonl / results.json
+python -m eval.run_screen_eval          # deeplink screen accuracy -> metrics.md
 ```
 
 ---

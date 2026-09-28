@@ -16,8 +16,11 @@ COPY resolution/ resolution/
 COPY eval/ eval/
 COPY data/ data/
 COPY tests/ tests/
+COPY frontend/ frontend/
+COPY scripts/ scripts/
 
 EXPOSE 8000
 
-# FixFlow Full Engine Server
+# FixFlow Full Engine Server (demo UI at /app). Pass LLM keys at runtime:
+#   docker run --env-file .env -p 8000:8000 fixflow
 CMD ["uvicorn", "api.app:app", "--host", "0.0.0.0", "--port", "8000"]

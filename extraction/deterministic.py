@@ -124,24 +124,24 @@ _COMPONENT_TOPIC = {
 }
 
 _DESCRIPTION_RULES: List[Tuple[Tuple[str, ...], str]] = [
-    (("factory data reset", "factory reset"), "It will restore the device to factory settings"),
-    (("safe mode",), "It will isolate problems caused by downloaded apps"),
+    (("factory data reset", "factory reset"), "It will restore factory default settings"),
+    (("safe mode",), "It will isolate problems from downloaded apps"),
     (("software update", "update the software", "firmware", "updates"), "It will install the latest software fixes"),
     (("restart", "reboot"), "It will clear temporary glitches by restarting"),
-    (("liquid", "physical damage", "inspect", "examine"), "It will rule out physical or liquid damage"),
-    (("charge", "charger", "charging"), "It will restore enough battery power to start"),
-    (("screen protector", "protective film", "case"), "It will remove accessories that block touch input"),
-    (("service center", "repair", "support", "premium care", "further assistance"), "It will connect you with Samsung repair services"),
+    (("liquid", "physical damage", "inspect", "examine"), "It will rule out physical damage"),
+    (("charge", "charger", "charging"), "It will restore battery power to start"),
+    (("screen protector", "protective film", "case"), "It will remove accessories blocking touch input"),
+    (("service center", "repair", "support", "premium care", "further assistance"), "It will connect you with Samsung repair"),
     (("back up", "backup", "smart switch", "transfer"), "It will keep your personal data safe"),
-    (("touch sensitivity",), "It will improve touch response with screen protectors"),
+    (("touch sensitivity",), "It will improve touch response with protectors"),
     (("gesture", "navigation"), "It will adjust how screen gestures behave"),
     (("rotate", "rotation"), "It will control automatic screen rotation"),
-    (("brightness", "dark mode", "display"), "It will adjust display settings for clearer viewing"),
-    (("wi-fi", "wifi", "connection", "network", "mobile data"), "It will verify your network connection is working"),
+    (("brightness", "dark mode", "display"), "It will adjust display settings for clarity"),
+    (("wi-fi", "wifi", "connection", "network", "mobile data"), "It will verify your network connection works"),
     (("email", "account"), "It will reconnect your email account"),
-    (("multi window", "pop-up", "app pair", "edge panel"), "It will manage split screen and app windows"),
-    (("mouse", "keyboard", "monitor"), "It will let you control the device externally"),
-    (("power on", "power button", "turn it on"), "It will check whether the device powers on"),
+    (("multi window", "pop-up", "app pair", "edge panel"), "It will manage split screen app windows"),
+    (("mouse", "keyboard", "monitor"), "It will let you control it externally"),
+    (("power on", "power button", "turn it on"), "It will check whether the device starts"),
 ]
 
 
@@ -228,6 +228,14 @@ def _categorize(heading: str, steps: List[str]) -> actionCategory:
     return actionCategory.manual
 
 
+_HEADING_VERBS = {
+    "review", "remove", "disconnect", "check", "reset", "restart", "update", "clear", "turn",
+    "adjust", "change", "enable", "disable", "connect", "reconnect", "install", "uninstall",
+    "charge", "inspect", "clean", "back", "contact", "use", "set", "open", "close", "test",
+    "customize", "manage", "delete", "sign", "reinstall", "free", "force", "boot", "try",
+}
+
+
 def _describe(heading: str, steps: List[str]) -> str:
     text = f"{heading} {' '.join(steps)}".lower()
     head = heading.lower()
@@ -237,7 +245,11 @@ def _describe(heading: str, steps: List[str]) -> str:
     for keys, desc in _DESCRIPTION_RULES:
         if any(k in text for k in keys):
             return desc
-    return f"It will help resolve the {heading.lower()} issue"
+    words = re.sub(r"^(troubleshooting|troubleshoot|fixing|how to)\s+", "", heading.lower()).split()
+    if words and words[0] in _HEADING_VERBS:
+        # "Review device settings" -> "It will review device settings"
+        return f"It will {' '.join(words[:5])}"
+    return f"It will fix {' '.join(words[:4]) or 'this issue'}"
 
 
 def _clean_heading(raw: str) -> str:

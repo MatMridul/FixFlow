@@ -21,7 +21,7 @@
           "actions": [
             {
               "actionName": "Verify Your Phones Internet Connection",
-              "description": "It will verify your network connection is",
+              "description": "It will verify your network connection works",
               "stepGroups": [
                 {
                   "steps": [
@@ -110,7 +110,7 @@
             },
             {
               "actionName": "Restart Your Phone in Safe Mode",
-              "description": "It will isolate problems caused by downloaded",
+              "description": "It will isolate problems from downloaded apps",
               "stepGroups": [
                 {
                   "steps": [
@@ -139,7 +139,7 @@
       ]
     },
     "meta": {
-      "latency_ms": 28.82,
+      "latency_ms": 26.79,
       "cache_hit": false,
       "model": "fixflow-deterministic-v2",
       "cost_usd": 0.0,
@@ -168,7 +168,7 @@
           "actions": [
             {
               "actionName": "Check for Physical Damage and Liquid Exposure",
-              "description": "It will rule out physical or liquid",
+              "description": "It will rule out physical damage",
               "stepGroups": [
                 {
                   "steps": [
@@ -187,7 +187,7 @@
             },
             {
               "actionName": "Charge the Device",
-              "description": "It will restore enough battery power",
+              "description": "It will restore battery power to start",
               "stepGroups": [
                 {
                   "steps": [
@@ -201,7 +201,7 @@
             },
             {
               "actionName": "Attempt to Power on",
-              "description": "It will check whether the device powers",
+              "description": "It will check whether the device starts",
               "stepGroups": [
                 {
                   "steps": [
@@ -238,7 +238,7 @@
       ]
     },
     "meta": {
-      "latency_ms": 8.24,
+      "latency_ms": 6.67,
       "cache_hit": false,
       "model": "fixflow-deterministic-v2",
       "cost_usd": 0.0,
@@ -267,7 +267,7 @@
           "actions": [
             {
               "actionName": "Fingerprint Recognition Issues",
-              "description": "It will remove accessories that block touch",
+              "description": "It will remove accessories blocking touch input",
               "stepGroups": [
                 {
                   "steps": [
@@ -288,7 +288,7 @@
             },
             {
               "actionName": "Connect a USB Mouse and Keyboard",
-              "description": "It will let you control the device",
+              "description": "It will let you control it externally",
               "stepGroups": [
                 {
                   "steps": [
@@ -303,7 +303,7 @@
             },
             {
               "actionName": "Review Device Settings",
-              "description": "It will help resolve the review device",
+              "description": "It will review device settings",
               "stepGroups": [
                 {
                   "steps": [
@@ -349,7 +349,7 @@
       ]
     },
     "meta": {
-      "latency_ms": 8.54,
+      "latency_ms": 7.2,
       "cache_hit": false,
       "model": "fixflow-deterministic-v2",
       "cost_usd": 0.0,
@@ -378,7 +378,7 @@
           "actions": [
             {
               "actionName": "Check for Physical Damage and Liquid Exposure",
-              "description": "It will rule out physical or liquid",
+              "description": "It will rule out physical damage",
               "stepGroups": [
                 {
                   "steps": [
@@ -397,7 +397,7 @@
             },
             {
               "actionName": "Charge the Device",
-              "description": "It will restore enough battery power",
+              "description": "It will restore battery power to start",
               "stepGroups": [
                 {
                   "steps": [
@@ -411,7 +411,7 @@
             },
             {
               "actionName": "Attempt to Power on",
-              "description": "It will check whether the device powers",
+              "description": "It will check whether the device starts",
               "stepGroups": [
                 {
                   "steps": [
@@ -448,7 +448,7 @@
       ]
     },
     "meta": {
-      "latency_ms": 5.92,
+      "latency_ms": 5.99,
       "cache_hit": false,
       "model": "fixflow-deterministic-v2",
       "cost_usd": 0.0,
@@ -503,7 +503,7 @@
       ]
     },
     "meta": {
-      "latency_ms": 4.58,
+      "latency_ms": 3.58,
       "cache_hit": false,
       "model": "fixflow-deterministic-v2",
       "cost_usd": 0.0,
@@ -532,7 +532,7 @@
           "actions": [
             {
               "actionName": "Customize the Edge Panel",
-              "description": "It will manage split screen and app",
+              "description": "It will manage split screen app windows",
               "stepGroups": [
                 {
                   "steps": [
@@ -554,7 +554,7 @@
             },
             {
               "actionName": "Use Multi Window",
-              "description": "It will manage split screen and app",
+              "description": "It will manage split screen app windows",
               "stepGroups": [
                 {
                   "steps": [
@@ -615,7 +615,7 @@
             },
             {
               "actionName": "Exit Multi Window",
-              "description": "It will manage split screen and app",
+              "description": "It will manage split screen app windows",
               "stepGroups": [
                 {
                   "steps": [
@@ -642,7 +642,7 @@
             },
             {
               "actionName": "Use Pop-up View",
-              "description": "It will manage split screen and app",
+              "description": "It will manage split screen app windows",
               "stepGroups": [
                 {
                   "steps": [
@@ -670,7 +670,7 @@
             },
             {
               "actionName": "Create an App Pair",
-              "description": "It will manage split screen and app",
+              "description": "It will manage split screen app windows",
               "stepGroups": [
                 {
                   "steps": [
@@ -701,7 +701,7 @@
             },
             {
               "actionName": "Remove Shortcuts from Apps Edge",
-              "description": "It will help resolve the remove shortcuts",
+              "description": "It will remove shortcuts from apps edge",
               "stepGroups": [
                 {
                   "steps": [
@@ -722,7 +722,7 @@
             },
             {
               "actionName": "Useful App Pairing Ideas",
-              "description": "It will manage split screen and app",
+              "description": "It will manage split screen app windows",
               "stepGroups": [
                 {
                   "steps": [
@@ -740,7 +740,7 @@
       ]
     },
     "meta": {
-      "latency_ms": 32.26,
+      "latency_ms": 31.59,
       "cache_hit": false,
       "model": "fixflow-deterministic-v2",
       "cost_usd": 0.0,
@@ -769,7 +769,7 @@
           "actions": [
             {
               "actionName": "What Is Casting",
-              "description": "It will verify your network connection is",
+              "description": "It will verify your network connection works",
               "stepGroups": [
                 {
                   "steps": [
@@ -799,7 +799,7 @@
             },
             {
               "actionName": "Mirror Your TV with Smart View",
-              "description": "It will verify your network connection is",
+              "description": "It will verify your network connection works",
               "stepGroups": [
                 {
                   "steps": [
@@ -824,7 +824,7 @@
             },
             {
               "actionName": "Mirror Your Screen",
-              "description": "It will adjust display settings for clearer",
+              "description": "It will adjust display settings for clarity",
               "stepGroups": [
                 {
                   "steps": [
@@ -847,7 +847,7 @@
             },
             {
               "actionName": "Disconnect the Devices",
-              "description": "It will help resolve the disconnect",
+              "description": "It will disconnect the devices",
               "stepGroups": [
                 {
                   "steps": [
@@ -890,7 +890,7 @@
             },
             {
               "actionName": "Requirements",
-              "description": "It will verify your network connection is",
+              "description": "It will verify your network connection works",
               "stepGroups": [
                 {
                   "steps": [
@@ -906,7 +906,7 @@
             },
             {
               "actionName": "Tips for Mirroring with Smart View",
-              "description": "It will restore the device to factory",
+              "description": "It will restore factory default settings",
               "stepGroups": [
                 {
                   "steps": [
@@ -929,7 +929,7 @@
       ]
     },
     "meta": {
-      "latency_ms": 26.24,
+      "latency_ms": 25.63,
       "cache_hit": false,
       "model": "fixflow-deterministic-v2",
       "cost_usd": 0.0,
@@ -958,7 +958,7 @@
           "actions": [
             {
               "actionName": "Connect a USB Mouse and Keyboard",
-              "description": "It will let you control the device",
+              "description": "It will let you control it externally",
               "stepGroups": [
                 {
                   "steps": [
@@ -995,7 +995,7 @@
       ]
     },
     "meta": {
-      "latency_ms": 3.53,
+      "latency_ms": 3.42,
       "cache_hit": false,
       "model": "fixflow-deterministic-v2",
       "cost_usd": 0.0,
@@ -1024,7 +1024,7 @@
           "actions": [
             {
               "actionName": "Troubleshooting Video Flickering",
-              "description": "It will help resolve the troubleshooting video",
+              "description": "It will fix video flickering",
               "stepGroups": [
                 {
                   "steps": [
@@ -1066,7 +1066,7 @@
       ]
     },
     "meta": {
-      "latency_ms": 5.26,
+      "latency_ms": 4.82,
       "cache_hit": false,
       "model": "fixflow-deterministic-v2",
       "cost_usd": 0.0,
@@ -1095,7 +1095,7 @@
           "actions": [
             {
               "actionName": "Fingerprint Recognition Issues",
-              "description": "It will remove accessories that block touch",
+              "description": "It will remove accessories blocking touch input",
               "stepGroups": [
                 {
                   "steps": [
@@ -1116,7 +1116,7 @@
             },
             {
               "actionName": "Connect a USB Mouse and Keyboard",
-              "description": "It will let you control the device",
+              "description": "It will let you control it externally",
               "stepGroups": [
                 {
                   "steps": [
@@ -1131,7 +1131,7 @@
             },
             {
               "actionName": "Review Device Settings",
-              "description": "It will help resolve the review device",
+              "description": "It will review device settings",
               "stepGroups": [
                 {
                   "steps": [
@@ -1177,7 +1177,7 @@
       ]
     },
     "meta": {
-      "latency_ms": 6.84,
+      "latency_ms": 6.65,
       "cache_hit": false,
       "model": "fixflow-deterministic-v2",
       "cost_usd": 0.0,
@@ -1206,7 +1206,7 @@
           "actions": [
             {
               "actionName": "Customize the Edge Panel",
-              "description": "It will manage split screen and app",
+              "description": "It will manage split screen app windows",
               "stepGroups": [
                 {
                   "steps": [
@@ -1228,7 +1228,7 @@
             },
             {
               "actionName": "Use Multi Window",
-              "description": "It will manage split screen and app",
+              "description": "It will manage split screen app windows",
               "stepGroups": [
                 {
                   "steps": [
@@ -1289,7 +1289,7 @@
             },
             {
               "actionName": "Exit Multi Window",
-              "description": "It will manage split screen and app",
+              "description": "It will manage split screen app windows",
               "stepGroups": [
                 {
                   "steps": [
@@ -1316,7 +1316,7 @@
             },
             {
               "actionName": "Use Pop-up View",
-              "description": "It will manage split screen and app",
+              "description": "It will manage split screen app windows",
               "stepGroups": [
                 {
                   "steps": [
@@ -1344,7 +1344,7 @@
             },
             {
               "actionName": "Create an App Pair",
-              "description": "It will manage split screen and app",
+              "description": "It will manage split screen app windows",
               "stepGroups": [
                 {
                   "steps": [
@@ -1375,7 +1375,7 @@
             },
             {
               "actionName": "Remove Shortcuts from Apps Edge",
-              "description": "It will help resolve the remove shortcuts",
+              "description": "It will remove shortcuts from apps edge",
               "stepGroups": [
                 {
                   "steps": [
@@ -1396,7 +1396,7 @@
             },
             {
               "actionName": "Useful App Pairing Ideas",
-              "description": "It will manage split screen and app",
+              "description": "It will manage split screen app windows",
               "stepGroups": [
                 {
                   "steps": [
@@ -1414,7 +1414,7 @@
       ]
     },
     "meta": {
-      "latency_ms": 31.4,
+      "latency_ms": 30.24,
       "cache_hit": false,
       "model": "fixflow-deterministic-v2",
       "cost_usd": 0.0,
@@ -1443,7 +1443,7 @@
           "actions": [
             {
               "actionName": "Check for Physical Damage and Liquid Exposure",
-              "description": "It will rule out physical or liquid",
+              "description": "It will rule out physical damage",
               "stepGroups": [
                 {
                   "steps": [
@@ -1462,7 +1462,7 @@
             },
             {
               "actionName": "Charge the Device",
-              "description": "It will restore enough battery power",
+              "description": "It will restore battery power to start",
               "stepGroups": [
                 {
                   "steps": [
@@ -1476,7 +1476,7 @@
             },
             {
               "actionName": "Attempt to Power on",
-              "description": "It will check whether the device powers",
+              "description": "It will check whether the device starts",
               "stepGroups": [
                 {
                   "steps": [
@@ -1513,7 +1513,7 @@
       ]
     },
     "meta": {
-      "latency_ms": 6.84,
+      "latency_ms": 6.61,
       "cache_hit": false,
       "model": "fixflow-deterministic-v2",
       "cost_usd": 0.0,
@@ -1575,7 +1575,7 @@
       ]
     },
     "meta": {
-      "latency_ms": 2.53,
+      "latency_ms": 2.41,
       "cache_hit": false,
       "model": "fixflow-deterministic-v2",
       "cost_usd": 0.0,
@@ -1604,7 +1604,7 @@
           "actions": [
             {
               "actionName": "Check for Physical Damage and Liquid Exposure",
-              "description": "It will rule out physical or liquid",
+              "description": "It will rule out physical damage",
               "stepGroups": [
                 {
                   "steps": [
@@ -1623,7 +1623,7 @@
             },
             {
               "actionName": "Charge the Device",
-              "description": "It will restore enough battery power",
+              "description": "It will restore battery power to start",
               "stepGroups": [
                 {
                   "steps": [
@@ -1637,7 +1637,7 @@
             },
             {
               "actionName": "Attempt to Power on",
-              "description": "It will check whether the device powers",
+              "description": "It will check whether the device starts",
               "stepGroups": [
                 {
                   "steps": [
@@ -1674,7 +1674,7 @@
       ]
     },
     "meta": {
-      "latency_ms": 6.96,
+      "latency_ms": 6.98,
       "cache_hit": false,
       "model": "fixflow-deterministic-v2",
       "cost_usd": 0.0,
@@ -1703,7 +1703,7 @@
           "actions": [
             {
               "actionName": "Check for Physical Damage and Liquid Exposure",
-              "description": "It will rule out physical or liquid",
+              "description": "It will rule out physical damage",
               "stepGroups": [
                 {
                   "steps": [
@@ -1722,7 +1722,7 @@
             },
             {
               "actionName": "Charge the Device",
-              "description": "It will restore enough battery power",
+              "description": "It will restore battery power to start",
               "stepGroups": [
                 {
                   "steps": [
@@ -1736,7 +1736,7 @@
             },
             {
               "actionName": "Attempt to Power on",
-              "description": "It will check whether the device powers",
+              "description": "It will check whether the device starts",
               "stepGroups": [
                 {
                   "steps": [
@@ -1773,7 +1773,7 @@
       ]
     },
     "meta": {
-      "latency_ms": 5.81,
+      "latency_ms": 5.68,
       "cache_hit": false,
       "model": "fixflow-deterministic-v2",
       "cost_usd": 0.0,
@@ -1802,7 +1802,7 @@
           "actions": [
             {
               "actionName": "Fingerprint Recognition Issues",
-              "description": "It will remove accessories that block touch",
+              "description": "It will remove accessories blocking touch input",
               "stepGroups": [
                 {
                   "steps": [
@@ -1823,7 +1823,7 @@
             },
             {
               "actionName": "Connect a USB Mouse and Keyboard",
-              "description": "It will let you control the device",
+              "description": "It will let you control it externally",
               "stepGroups": [
                 {
                   "steps": [
@@ -1838,7 +1838,7 @@
             },
             {
               "actionName": "Review Device Settings",
-              "description": "It will help resolve the review device",
+              "description": "It will review device settings",
               "stepGroups": [
                 {
                   "steps": [
@@ -1884,7 +1884,7 @@
       ]
     },
     "meta": {
-      "latency_ms": 7.96,
+      "latency_ms": 7.83,
       "cache_hit": false,
       "model": "fixflow-deterministic-v2",
       "cost_usd": 0.0,
@@ -1946,7 +1946,7 @@
       ]
     },
     "meta": {
-      "latency_ms": 2.07,
+      "latency_ms": 2.05,
       "cache_hit": false,
       "model": "fixflow-deterministic-v2",
       "cost_usd": 0.0,
@@ -2030,7 +2030,7 @@
             },
             {
               "actionName": "Check for Physical Damage",
-              "description": "It will rule out physical or liquid",
+              "description": "It will rule out physical damage",
               "stepGroups": [
                 {
                   "steps": [
@@ -2075,7 +2075,7 @@
             },
             {
               "actionName": "Perform a Factory Data Reset",
-              "description": "It will restore the device to factory",
+              "description": "It will restore factory default settings",
               "stepGroups": [
                 {
                   "steps": [
@@ -2102,7 +2102,7 @@
       ]
     },
     "meta": {
-      "latency_ms": 11.19,
+      "latency_ms": 11.39,
       "cache_hit": false,
       "model": "fixflow-deterministic-v2",
       "cost_usd": 0.0,
@@ -2153,7 +2153,7 @@
             },
             {
               "actionName": "Touch Sensitivity Setting",
-              "description": "It will improve touch response with screen",
+              "description": "It will improve touch response with protectors",
               "stepGroups": [
                 {
                   "steps": [
@@ -2179,7 +2179,7 @@
             },
             {
               "actionName": "Remove the Screen Protector",
-              "description": "It will remove accessories that block touch",
+              "description": "It will remove accessories blocking touch input",
               "stepGroups": [
                 {
                   "steps": [
@@ -2195,7 +2195,7 @@
             },
             {
               "actionName": "Charger Issues",
-              "description": "It will restore enough battery power",
+              "description": "It will restore battery power to start",
               "stepGroups": [
                 {
                   "steps": [
@@ -2248,7 +2248,7 @@
             },
             {
               "actionName": "Safe Mode",
-              "description": "It will isolate problems caused by downloaded",
+              "description": "It will isolate problems from downloaded apps",
               "stepGroups": [
                 {
                   "steps": [
@@ -2265,7 +2265,7 @@
             },
             {
               "actionName": "Factory Data Reset",
-              "description": "It will restore the device to factory",
+              "description": "It will restore factory default settings",
               "stepGroups": [
                 {
                   "steps": [
@@ -2294,7 +2294,7 @@
       ]
     },
     "meta": {
-      "latency_ms": 18.87,
+      "latency_ms": 18.85,
       "cache_hit": false,
       "model": "fixflow-deterministic-v2",
       "cost_usd": 0.0,
@@ -2323,7 +2323,7 @@
           "actions": [
             {
               "actionName": "Check for Physical Damage and Liquid Exposure",
-              "description": "It will rule out physical or liquid",
+              "description": "It will rule out physical damage",
               "stepGroups": [
                 {
                   "steps": [
@@ -2342,7 +2342,7 @@
             },
             {
               "actionName": "Charge the Device",
-              "description": "It will restore enough battery power",
+              "description": "It will restore battery power to start",
               "stepGroups": [
                 {
                   "steps": [
@@ -2356,7 +2356,7 @@
             },
             {
               "actionName": "Attempt to Power on",
-              "description": "It will check whether the device powers",
+              "description": "It will check whether the device starts",
               "stepGroups": [
                 {
                   "steps": [
@@ -2393,7 +2393,7 @@
       ]
     },
     "meta": {
-      "latency_ms": 8.24,
+      "latency_ms": 8.12,
       "cache_hit": false,
       "model": "fixflow-deterministic-v2",
       "cost_usd": 0.0,

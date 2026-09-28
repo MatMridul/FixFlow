@@ -1,8 +1,12 @@
 """FastAPI application factory and server configuration for FixFlow."""
 from typing import Callable, Optional
 
+from pathlib import Path
+
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import RedirectResponse
+from fastapi.staticfiles import StaticFiles
 
 from api.routes import router
 from cache import CacheStore, CompositionalCache, GatedSemanticCache, SemanticCache
@@ -47,6 +51,16 @@ def create_app(
 
     # Register routers
     app.include_router(router)
+
+    # Demo UI (plain HTML/JS, no build step) served from the same process so
+    # there is one thing to keep running during judging.
+    frontend_dir = Path(__file__).resolve().parent.parent / "frontend"
+    if frontend_dir.is_dir():
+        app.mount("/app", StaticFiles(directory=str(frontend_dir), html=True), name="app")
+
+        @app.get("/", include_in_schema=False)
+        def _root() -> RedirectResponse:
+            return RedirectResponse(url="/app/")
 
     return app
 

@@ -59,20 +59,32 @@ def to_title_case(text: str) -> str:
     return " ".join(titled)
 
 
-_DANGLING_END = {"the", "a", "an", "and", "or", "to", "your", "for", "of", "with", "on", "in", "by", "from", "at", "its"}
+_DANGLING_END = {"the", "a", "an", "and", "or", "to", "your", "for", "of", "with", "on", "in", "by", "from", "at", "its",
+                 "between", "into", "via", "than", "that", "which", "if", "when", "so", "as", "about", "through", "across", "over", "under"}
 
 
 def fit_description(desc: str) -> str:
     """Force 'It will ...' into 5-7 words. The FAQ scorer checks this (A1),
     even though the official sample_output.json itself uses 9 and 12 words."""
     words = desc.split()
+    # Drop filler before cutting, so meaning survives: truncating first
+    # turned "It will rule out physical or liquid damage" into "...or liquid".
+    filler = {"the", "a", "an", "your", "that", "very", "all", "any", "its"}
+    i = len(words) - 1
+    while len(words) > 7 and i >= 2:
+        if words[i].lower().strip(",.") in filler:
+            words.pop(i)
+        i -= 1
     if len(words) > 7:
-        words = words[:7]
-        while len(words) > 5 and words[-1].lower().strip(",.") in _DANGLING_END:
-            words.pop()
-    padding = ["for", "this", "issue"]
-    while len(words) < 5 and padding:
-        words.append(padding.pop(0))
+        # Prefer cutting before a trailing phrase ("... damage | to the phone")
+        # over chopping mid-phrase.
+        cut = next((j for j in range(7, 4, -1) if words[j].lower() in _DANGLING_END - {"and", "or"}), 7)
+        words = words[:cut]
+    # A truncated or LLM-written description must not end mid-phrase ("...transfer between").
+    while len(words) > 3 and words[-1].lower().strip(",.") in _DANGLING_END:
+        words.pop()
+    if len(words) < 5:
+        words += ["for", "this", "issue"]
     return " ".join(words).rstrip(",.;:")
 
 
