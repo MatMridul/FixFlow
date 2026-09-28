@@ -89,3 +89,26 @@ def test_goal_resolution_reports_contract_2_and_merges(catalog, retriever):
     assert 0.0 < stats.retrieval_margin <= 1.0
     assert 0.0 < stats.path_alignment <= 1.0
     assert stats.bound == 1
+
+
+@pytest.mark.parametrize(
+    "steps,name",
+    [
+        # LLM-style steps that cleared the raw-cosine gate but hit the wrong screen.
+        (["Open Settings.", "Tap Apps.", "Select your email app.", "Tap Storage.", "Tap Clear cache."],
+         "Clear Email App Cache"),  # was: Storage Share
+        (["Swipe down from the top right to open Quick settings.", "Tap Smart View.",
+          "Select your TV from Available devices."], "Enable Smart View"),  # was: Swipe for pop-up view
+    ],
+)
+def test_weak_match_without_label_support_falls_back_to_dummy(catalog, retriever, steps, name):
+    result = bind_actionable_deeplink(steps, "auto", catalog, retriever, action_name=name)
+    assert result.status == "dummy_positive"
+    assert result.actionable_deeplink["deeplink"] == DUMMY_POSITIVE_URI
+
+
+def test_strong_match_still_binds(catalog, retriever):
+    steps = ["Open Settings.", "Tap Display.", "Tap Navigation bar.", "Select Buttons."]
+    result = bind_actionable_deeplink(steps, "auto", catalog, retriever, action_name="Change Navigation Bar")
+    assert result.status == "matched"
+    assert "navigation bar" in result.actionable_deeplink["description"].lower()

@@ -60,12 +60,14 @@ def to_title_case(text: str) -> str:
 
 
 _DANGLING_END = {"the", "a", "an", "and", "or", "to", "your", "for", "of", "with", "on", "in", "by", "from", "at", "its",
-                 "between", "into", "via", "than", "that", "which", "if", "when", "so", "as", "about", "through", "across", "over", "under"}
+                 "between", "into", "via", "due", "because", "than", "that", "which", "if", "when", "so", "as", "about", "through", "across", "over", "under"}
 
 
 def fit_description(desc: str) -> str:
     """Force 'It will ...' into 5-7 words. The FAQ scorer checks this (A1),
     even though the official sample_output.json itself uses 9 and 12 words."""
+    # LLMs sometimes restate the prefix: "It will it may cover ..."
+    desc = re.sub(r"^It will (it|this|that) (will |may |can )?", "It will ", desc.strip())
     words = desc.split()
     # Drop filler before cutting, so meaning survives: truncating first
     # turned "It will rule out physical or liquid damage" into "...or liquid".

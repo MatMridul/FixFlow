@@ -100,3 +100,13 @@ def test_fit_description_forces_5_to_7_words(desc):
 def test_fit_title_forces_2_to_3_words():
     assert 2 <= len(fit_title("Screen display flicker issue").split()) <= 3
     assert 2 <= len(fit_title("Flicker").split()) <= 3
+
+
+def test_guard_category_corrects_llm_labels():
+    from extraction.deterministic import guard_category
+    from schema import actionCategory as C
+
+    assert guard_category("Charge the Device", ["Plug in the charger."], C.auto) == C.manual
+    assert guard_category("Force Restart Device", ["Press and hold Power and Volume down."], C.manual) == C.critical
+    # Settings-driven steps keep the LLM's auto label even with a manual-ish word.
+    assert guard_category("Check Premium Care", ["Open Settings.", "Tap Warranty."], C.auto) == C.auto

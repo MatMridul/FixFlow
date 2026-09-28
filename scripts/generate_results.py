@@ -1,5 +1,8 @@
 """Generate and rigorously validate results.jsonl and results.json for hackathon submission."""
 import json
+import logging
+import os
+import time
 from pathlib import Path
 import sys
 
@@ -24,7 +27,8 @@ def generate_and_validate():
     from cache import CacheStore, CompositionalCache
 
     tmp_db = Path(tempfile.mkdtemp()) / "results_cache.db"
-    app = create_app(cache=CompositionalCache(store=CacheStore(db_path=str(tmp_db))))
+    cache = CompositionalCache(store=CacheStore(db_path=str(tmp_db)))
+    app = create_app(cache=cache)
     client = TestClient(app)
 
     data_dir = Path("data")
@@ -42,7 +46,14 @@ def generate_and_validate():
     total_deeplinks = 0
     total_validations = 0
 
+    # Free-tier LLM keys allow only a few requests per minute; pacing the batch
+    # keeps every row on the LLM path instead of benching the whole chain.
+    pace_s = float(os.environ.get("RESULTS_PACE_S", "7"))
+    logging.basicConfig(level=logging.WARNING, format="%(name)s: %(message)s")
+
     for idx, (query, siis_entry) in enumerate(zip(input_lines, siis_list), start=1):
+        if idx > 1 and pace_s > 0 and os.environ.get("FIXFLOW_DISABLE_LLM") != "1":
+            time.sleep(pace_s)
         payload = {
             "query": query,
             "siis_response": {
@@ -54,6 +65,24 @@ def generate_and_validate():
         resp = client.post("/v1/troubleshoot", json=payload)
         assert resp.status_code == 200, f"Row {idx} failed HTTP 200"
         data = resp.json()
+
+        # Free-tier providers 503 / time out in bursts. Retry rows that fell
+        # back to the offline extractor so the file reflects the LLM path
+        # whenever a provider is reachable (each retry is still a cold,
+        # budget-bounded request).
+        retries = int(os.environ.get("RESULTS_LLM_RETRIES", "2"))
+        while (
+            retries > 0
+            and os.environ.get("FIXFLOW_DISABLE_LLM") != "1"
+            and app.state.extractor.llm_callable is not None
+            and data["meta"].get("model") == "fixflow-deterministic-v2"
+        ):
+            retries -= 1
+            time.sleep(float(os.environ.get("RESULTS_RETRY_WAIT_S", "15")))
+            cache.clear()
+            retry = client.post("/v1/troubleshoot", json=payload)
+            if retry.status_code == 200:
+                data = retry.json()
 
         # 1. Validate full TroubleshootResponse envelope
         validated_response = TroubleshootResponse.model_validate(data)

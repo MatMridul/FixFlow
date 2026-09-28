@@ -12,6 +12,7 @@ from extraction.llm_client import LLMCallRecord, LLMChain, LLMError
 def keys(monkeypatch):
     monkeypatch.setenv("GEMINI_API_KEY", "test-gemini")
     monkeypatch.setenv("MISTRAL_API_KEY", "test-mistral")
+    monkeypatch.setenv("GROQ_API_KEY", "test-groq")
 
 
 def _provider_stub(monkeypatch, behaviour: dict):
@@ -29,32 +30,33 @@ def _provider_stub(monkeypatch, behaviour: dict):
 
     monkeypatch.setitem(llm._PROVIDERS, "gemini", (fake, "GEMINI_API_KEY"))
     monkeypatch.setitem(llm._PROVIDERS, "mistral", (fake, "MISTRAL_API_KEY"))
+    monkeypatch.setitem(llm._PROVIDERS, "groq", (fake, "GROQ_API_KEY"))
     return calls
 
 
 def test_first_model_answers_when_healthy(keys, monkeypatch):
     calls = _provider_stub(monkeypatch, {})
     text, rec = LLMChain().complete("p")
-    assert rec.model == "gemini-3.8-flash"
-    assert calls == ["gemini-3.8-flash"]
+    assert rec.model == "gemini-2.5-flash"
+    assert calls == ["gemini-2.5-flash"]
     assert rec.cost_usd > 0  # list-price cost is reported, not a placeholder
 
 
 def test_falls_through_in_priority_order(keys, monkeypatch):
-    calls = _provider_stub(monkeypatch, {"gemini-3.8-flash": "quota", "gemini-3.5-flash-lite": "error"})
+    calls = _provider_stub(monkeypatch, {"gemini-2.5-flash": "quota", "mistral-small-latest": "error"})
     _, rec = LLMChain().complete("p")
-    assert rec.model == "mistral-medium-latest"
-    assert calls == ["gemini-3.8-flash", "gemini-3.5-flash-lite", "mistral-medium-latest"]
+    assert rec.model == "ministral-8b-latest"
+    assert calls == ["gemini-2.5-flash", "mistral-small-latest", "ministral-8b-latest"]
 
 
 def test_quota_hit_benches_model_for_later_requests(keys, monkeypatch):
-    calls = _provider_stub(monkeypatch, {"gemini-3.8-flash": "quota"})
+    calls = _provider_stub(monkeypatch, {"gemini-2.5-flash": "quota"})
     chain = LLMChain()
     chain.complete("p")
     calls.clear()
     _, rec = chain.complete("p")
-    assert calls == ["gemini-3.5-flash-lite"]  # benched model not retried
-    assert rec.model == "gemini-3.5-flash-lite"
+    assert calls == ["mistral-small-latest"]  # benched model not retried
+    assert rec.model == "mistral-small-latest"
 
 
 def test_all_fail_raises_so_extractor_goes_deterministic(keys, monkeypatch):
@@ -66,10 +68,11 @@ def test_all_fail_raises_so_extractor_goes_deterministic(keys, monkeypatch):
 def test_skips_providers_without_keys(monkeypatch):
     monkeypatch.delenv("GEMINI_API_KEY", raising=False)
     monkeypatch.setenv("MISTRAL_API_KEY", "test-mistral")
+    monkeypatch.setenv("GROQ_API_KEY", "test-groq")
     calls = _provider_stub(monkeypatch, {})
     _, rec = LLMChain().complete("p")
-    assert rec.model == "mistral-medium-latest"
-    assert calls == ["mistral-medium-latest"]
+    assert rec.model == "mistral-small-latest"
+    assert calls == ["mistral-small-latest"]
 
 
 def test_time_budget_stops_the_chain(keys, monkeypatch):
@@ -114,3 +117,30 @@ def test_extractor_uses_llm_output_and_variations(monkeypatch):
     assert out.goal.actions[0].actionName == "Force a Restart"
     assert out.query_variations[:3] == ["a one", "b two", "c three"]
     assert 8 <= len(out.query_variations) <= 10  # padded to the FAQ minimum
+
+
+def test_hedge_races_next_model_when_first_is_slow(keys, monkeypatch):
+    import time as _time
+
+    def fake(model, prompt, api_key, timeout):
+        if model == "gemini-2.5-flash":
+            _time.sleep(1.0)
+        return '{"ok": true}', LLMCallRecord(model=model, input_tokens=10, output_tokens=5)
+
+    monkeypatch.setitem(llm._PROVIDERS, "gemini", (fake, "GEMINI_API_KEY"))
+    monkeypatch.setitem(llm._PROVIDERS, "mistral", (fake, "MISTRAL_API_KEY"))
+    monkeypatch.setitem(llm._PROVIDERS, "groq", (fake, "GROQ_API_KEY"))
+    start = _time.monotonic()
+    _, rec = LLMChain(hedge_s=0.1).complete("p")
+    assert rec.model == "mistral-small-latest"
+    assert _time.monotonic() - start < 0.8
+
+
+def test_groq_is_last_resort(keys, monkeypatch):
+    calls = _provider_stub(
+        monkeypatch,
+        {"gemini-2.5-flash": "error", "mistral-small-latest": "quota", "ministral-8b-latest": "error"},
+    )
+    _, rec = LLMChain().complete("p")
+    assert rec.model == "openai/gpt-oss-120b"
+    assert calls[-1] == "openai/gpt-oss-120b"

@@ -34,7 +34,7 @@ from typing import Any, Optional, Tuple
 from catalog.loader import Catalog
 from catalog.models import CatalogEntry
 from resolution.retriever import HybridRetriever
-from resolution.screen_graph import merge_same_screen_actions, resolve_screen, split_steps
+from resolution.screen_graph import _LEAF_STOPWORDS, _stems, merge_same_screen_actions, resolve_screen, split_steps
 from resolution.validation_inference import infer_validation_ref
 
 # Absolute relevance floor (raw TF-IDF cosine). Measured: the official
@@ -112,6 +112,42 @@ def _path_alignment(entry: CatalogEntry, breadcrumb: Optional[str]) -> float:
     return 1.0 if needle in entry.description.lower() or needle in entry.message.lower() else 0.3
 
 
+# Gesture/navigation verbs appear in almost every step list ("Swipe down to
+# open Quick settings"), so they can't show that a label is really present.
+_GESTURE_WORDS = {"swipe", "tap", "open", "select", "touch", "hold", "press", "more", "options"}
+
+
+def _label_supported(entry: CatalogEntry, steps: list[str], action_name: Optional[str] = None) -> bool:
+    """At least two distinctive label words (or all, if the label has one) must
+    appear in the steps/action name. A label with nothing distinctive left
+    ("Enable Swipe for pop-up view") can't vouch for the match."""
+    label = _stems(entry.message) - _LEAF_STOPWORDS - _GESTURE_WORDS
+    if not label:
+        return False
+    shared = label & _stems(" ".join(steps) + " " + (action_name or ""))
+    return len(shared) >= min(2, len(label))
+
+
+def _confident(resolution, steps: list[str], action_name: Optional[str], threshold: float) -> bool:
+    """A screen match needs strong lexical overlap, or the screen's own label
+    must show up in the steps. LLM-written steps exposed weak matches that
+    cleared the 0.05 garbage gate: "Tap Clear cache" -> Storage Share (raw
+    0.12), "Tap Smart View" -> Swipe for pop-up view (0.19). The official
+    sample's backup step (raw 0.13, label "Back up data" in the steps) passes."""
+    if threshold <= 0.0:
+        return True  # callers asking for "any match" (tests, eval sweeps)
+    if resolution.raw_cosine >= _STRONG_RAW:
+        return True
+    return _label_supported(resolution.entry, steps, action_name)
+
+
+def _label_covered(entry: CatalogEntry, steps: list[str], action_name: Optional[str]) -> bool:
+    """Disruptive actions only link to a screen whose whole label is in the
+    steps: "Factory data reset" must not open "Auto factory reset"."""
+    label = _stems(entry.message) - _LEAF_STOPWORDS
+    return bool(label) and label <= _stems(" ".join(steps) + " " + (action_name or ""))
+
+
 def _mentions_settings(steps: list[str]) -> bool:
     return bool(re.search(r"\bsettings?\b", " ".join(steps), re.I))
 
@@ -134,11 +170,18 @@ def bind_actionable_deeplink(
 
     resolution = resolve_screen(retriever, steps)
     matched = resolution.status == "matched" and resolution.raw_cosine >= threshold
+    if matched and not _confident(resolution, steps, action_name, threshold):
+        matched = False
 
     if category == "critical":
         # Optional per FAQ Q7 — only link when the steps really go through
         # Settings and the screen match is solid.
-        if matched and _mentions_settings(steps) and resolution.raw_cosine >= _CRITICAL_MIN_RAW:
+        if (
+            matched
+            and _mentions_settings(steps)
+            and resolution.raw_cosine >= _CRITICAL_MIN_RAW
+            and _label_covered(resolution.entry, steps, action_name)
+        ):
             return BindResult(
                 "matched",
                 _to_actionable_deeplink(resolution.entry),

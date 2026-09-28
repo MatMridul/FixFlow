@@ -236,7 +236,21 @@ _HEADING_VERBS = {
 }
 
 
-def _describe(heading: str, steps: List[str]) -> str:
+def guard_category(name: str, steps: List[str], llm_category: actionCategory) -> actionCategory:
+    """Correct LLM categories with the same rules the offline extractor uses.
+    Small models label physical steps ("Charge the Device", "Connect USB
+    Mouse") as auto, which then earn a meaningless Settings link."""
+    rule = _categorize(name, steps)
+    if rule == actionCategory.critical:
+        return rule  # restart / reset / safe mode / update are always disruptive
+    body = " ".join(steps).lower()
+    if llm_category == actionCategory.auto and rule == actionCategory.manual and "settings" not in body:
+        return actionCategory.manual
+    return llm_category
+
+
+def known_description(heading: str, steps: List[str]) -> Optional[str]:
+    """A curated 5-7 word description when the action matches a known pattern."""
     text = f"{heading} {' '.join(steps)}".lower()
     head = heading.lower()
     for keys, desc in _DESCRIPTION_RULES:
@@ -245,6 +259,13 @@ def _describe(heading: str, steps: List[str]) -> str:
     for keys, desc in _DESCRIPTION_RULES:
         if any(k in text for k in keys):
             return desc
+    return None
+
+
+def _describe(heading: str, steps: List[str]) -> str:
+    known = known_description(heading, steps)
+    if known:
+        return known
     words = re.sub(r"^(troubleshooting|troubleshoot|fixing|how to)\s+", "", heading.lower()).split()
     if words and words[0] in _HEADING_VERBS:
         # "Review device settings" -> "It will review device settings"

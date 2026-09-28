@@ -156,11 +156,11 @@ pip install -r requirements.txt
 
 ### LLM keys (optional)
 ```bash
-cp .env.example .env              # then fill GEMINI_API_KEY and/or MISTRAL_API_KEY
+cp .env.example .env              # then fill GEMINI_API_KEY, MISTRAL_API_KEY and/or GROQ_API_KEY
 ```
 `.env` is gitignored; never commit keys. Models are tried in order
-gemini-3.8-flash → gemini-3.5-flash-lite → mistral-medium-latest → mistral-small-latest,
-with a 6.5 s total budget. A model that hits its quota is skipped for 15 minutes.
+gemini-2.5-flash (thinking off) → mistral-small-latest → ministral-8b-latest → Groq gpt-oss-120b,
+with a 7.3 s total budget (cold-path gate is 8 s). Override with `LLM_CHAIN`. A model that hits its quota is skipped for 15 minutes.
 With no keys, FixFlow uses its offline SIIS extractor, and every response stays schema-valid.
 
 ### Run
