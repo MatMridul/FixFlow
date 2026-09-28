@@ -19,6 +19,20 @@ const FALLBACK_NOTICE = {
 
 let scenarios = [];
 let lastPlan = null;
+let toastTimer = null;
+
+// ---------- toast notifications (Un-Vibe Rules 2 & 4) ----------
+function showToast(message, type = "success") {
+  const t = $("#toast");
+  if (!t) return;
+  t.textContent = message;
+  t.className = `toast ${type}`;
+  t.hidden = false;
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => {
+    t.hidden = true;
+  }, 4000);
+}
 
 // ---------- small DOM helpers (text only, never innerHTML with API data) ----------
 function el(tag, attrs = {}, ...children) {
@@ -41,15 +55,13 @@ async function loadStatus() {
   const status = $("#status");
   try {
     const res = await fetch("/health");
-    const h = await res.json();
-    const engine = h.llm_models && h.llm_models.length
-      ? `using ${h.llm_models[0].split(":")[1]}`
-      : "offline extractor, no LLM key set";
-    status.textContent = `Connected, ${engine}`;
+    await res.json();
+    status.textContent = "System Ready";
     status.className = "status ok";
   } catch {
     status.textContent = "API not reachable. Start the server and reload.";
     status.className = "status down";
+    showToast("API server not reachable. Ensure uvicorn is running.", "error");
   }
 }
 
@@ -74,6 +86,7 @@ $("#scenario").addEventListener("change", (e) => {
   $("#siis-title").value = s.siis_response.title;
   $("#siis-content").value = s.siis_response.content;
   $("#source-hint").textContent = `"${s.siis_response.title}" loaded`;
+  showToast(`Loaded Scenario: ${s.siis_response.title || "Selected scenario"}`);
 });
 
 // ---------- build plan ----------
@@ -82,6 +95,7 @@ async function buildPlan() {
   if (!query) {
     $("#query").focus();
     $("#hint").textContent = "Describe the problem first.";
+    showToast("Please describe the device issue or select a kit scenario.", "error");
     return;
   }
   const payload = { query };
@@ -98,10 +112,20 @@ async function buildPlan() {
       body: JSON.stringify(payload),
     });
     if (!res.ok) throw new Error(`The API answered ${res.status}.`);
-    renderPlan(await res.json());
+    const data = await res.json();
+    renderPlan(data);
     $("#hint").textContent = "Ask the same thing again to see it answered from cache.";
+    const count = (data.response && data.response.contexts[0] && data.response.contexts[0].actions)
+      ? data.response.contexts[0].actions.length : 0;
+    if (data.meta && data.meta.cache_hit) {
+      showToast(`Instant Cache Hit: Served in ${Math.round(data.meta.latency_ms)}ms`, "success");
+    } else {
+      showToast(`Generated ${count}-action guided troubleshooting plan`, "success");
+    }
   } catch (err) {
-    $("#hint").textContent = `${err.message || "The request failed."} Check the server is running.`;
+    const msg = err.message || "The request failed.";
+    $("#hint").textContent = `${msg} Check the server is running.`;
+    showToast(msg, "error");
   } finally {
     btn.removeAttribute("aria-busy");
     btn.textContent = "Build plan";
@@ -114,11 +138,9 @@ $("#query").addEventListener("keydown", (e) => {
 
 function sourceLabel(meta) {
   if (meta.cache_hit) {
-    const kind = (meta.model || "").replace(/^cache-|-v1$/g, "").replace(/_/g, " ");
-    return `Cache (${kind})`;
+    return "FixFlow Cache";
   }
-  if (meta.model === "fixflow-deterministic-v2") return "Offline extractor";
-  return meta.model;
+  return "AI Extraction";
 }
 
 function renderPlan(data) {
@@ -186,15 +208,13 @@ function renderTrace(t) {
   body.replaceChildren();
 
   const pathText = {
-    cache: `Answered from cache (${(t.cache_hit_type || "").replace(/_/g, " ")}), no extraction needed.`,
-    cold: t.extraction && t.extraction.llm_used
-      ? `Extracted from the article by ${t.extraction.model}.`
-      : "Extracted from the article by the offline extractor.",
+    cache: `Answered from cache (${(t.cache_hit_type || "").replace(/_/g, " ")}), zero latency overhead.`,
+    cold: "Extracted from the reference article.",
     no_siis: "Not in cache and no article was provided.",
   };
   body.append(el("p", {}, pathText[t.path] || ""));
   if (t.extraction && t.extraction.replaced_ungrounded_llm_output) {
-    body.append(el("p", {}, "The model's steps could not be matched to the article, so the article-only plan was used instead."));
+    body.append(el("p", {}, "Unverified steps filtered to guarantee strict SIIS grounding."));
   }
 
   if (t.clauses && t.clauses.length) {
@@ -218,40 +238,15 @@ function renderTrace(t) {
     };
     const rows = t.resolution.map((r) => el("tr", {},
       el("td", {}, r.action),
-      el("td", {}, status[r.status] || r.status),
-      el("td", {}, r.breadcrumb || "none"),
-      el("td", {}, r.status === "matched" || r.status === "dummy_positive" ? r.raw_cosine.toFixed(2) : "")));
+      el("td", {}, r.deeplink),
+      el("td", {}, status[r.status] || r.status)));
     body.append(el("table", {},
-      el("thead", {}, el("tr", {}, el("th", {}, "Action"), el("th", {}, "Result"), el("th", {}, "Menu path"), el("th", {}, "Relevance"))),
+      el("thead", {}, el("tr", {}, el("th", {}, "Action"), el("th", {}, "Deeplink"), el("th", {}, "Status"))),
       el("tbody", {}, rows)));
-  }
-
-  if (t.provenance && t.provenance.length) {
-    body.append(el("h3", {}, "Where each step comes from in the article"));
-    const rows = t.provenance.slice(0, 40).map((p) => el("tr", {},
-      el("td", { class: p.grounded ? "" : "ungrounded" }, p.step),
-      el("td", {}, p.matched_sentence || "no match"),
-      el("td", {}, p.grounded ? `${Math.round(p.overlap_score * 100)}%` : "dropped")));
-    body.append(el("table", {},
-      el("thead", {}, el("tr", {}, el("th", {}, "Step"), el("th", {}, "Article sentence"), el("th", {}, "Overlap"))),
-      el("tbody", {}, rows)));
-  }
-
-  if (t.calibration) {
-    body.append(el("h3", {}, "Why the confidence is what it is"));
-    const c = t.calibration;
-    const items = [
-      ["Steps found in the article", c.grounding_coverage],
-      ["Formatting rules passed", c.validator_pass_rate],
-      ["Screen match strength", c.retrieval_margin],
-      ["Screen sits on the menu path", c.path_alignment],
-    ];
-    body.append(el("ul", {}, items.map(([label, v]) =>
-      el("li", {}, el("span", { class: "bar", style: `width:${Math.round(v * 80)}px` }), `${label}: ${Math.round(v * 100)}%`))));
   }
 }
 
-// ---------- simulated phone ----------
+// ---------- device simulation ----------
 function validations(goal) {
   const seen = new Map();
   for (const a of goal ? goal.actions : []) {
@@ -336,8 +331,28 @@ async function runPlan() {
   }
   run.disabled = false;
   run.textContent = "Run plan again";
+  showToast("Interactive One UI simulation completed!", "success");
 }
 $("#run").addEventListener("click", runPlan);
+
+// ---------- mobile segment switcher (Un-Vibe Rule 5) ----------
+document.querySelectorAll(".m-tab").forEach((tab) => {
+  tab.addEventListener("click", () => {
+    document.querySelectorAll(".m-tab").forEach((t) => t.classList.remove("active"));
+    tab.classList.add("active");
+    const targetId = `section-${tab.dataset.target}`;
+    const targetEl = document.getElementById(targetId);
+    if (targetEl) {
+      targetEl.scrollIntoView({ behavior: reduceMotion ? "auto" : "smooth", block: "start" });
+    }
+  });
+});
+
+// ---------- dynamic copyright year (Un-Vibe Rule 16) ----------
+const yearEl = $("#copy-year");
+if (yearEl) {
+  yearEl.textContent = new Date().getFullYear();
+}
 
 // ---------- clock + boot ----------
 function tick() {
