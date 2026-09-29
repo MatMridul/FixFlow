@@ -26,6 +26,15 @@
 | **Reproducible Setup** | Setup instructions, requirements, & Dockerfile | [Quick Start Guide](#️-quick-start) & [`Dockerfile`](Dockerfile) | **VERIFIED** |
 | **Test & Eval Metrics** | Full test suite, results, & ablation metrics | `results.json`, `results.jsonl`, [`metrics.md`](metrics.md) (168/168 tests) | **VERIFIED** |
 
+### 📋 Google Form Submission Checklist
+- [x] **Source Code:** Complete modular source code (`api/`, `cache/`, `catalog/`, `enrichment/`, `extraction/`, `resolution/`, `validation/`, `frontend/`, `tests/`)
+- [x] **Presentation:** [`SRMIST_FixFlow_Submission.pptx`](SRMIST_FixFlow_Submission.pptx) & [`SRMIST_FixFlow_Submission.pdf`](SRMIST_FixFlow_Submission.pdf) (12 slides fully populated)
+- [x] **Video:** [`demo-video/FixFlow_Live_Walkthrough_1080p.mp4`](demo-video/FixFlow_Live_Walkthrough_1080p.mp4) (1080p Full HD live execution, 41.4s, 2.39 MB)
+- [x] **AI Disclosure:** [`SRMIST_FixFlow_AI_Disclosure.docx`](SRMIST_FixFlow_AI_Disclosure.docx)
+- [x] **README:** [`README.md`](README.md) with quickstart, API documentation, architecture diagram, and reproducible Docker steps
+- [x] **APK/SDK (if any):** N/A for Theme 02 (Theme 02 requires a REST API service returning structured JSON; One UI 6.1 interactive web simulator provided; Docker containerization via [`Dockerfile`](Dockerfile))
+- [x] **TAG:** [`PRISM_GENAI_HACKATHON_Y2026`](https://github.com/MatMridul/FixFlow/releases/tag/PRISM_GENAI_HACKATHON_Y2026)
+
 ---
 
 ## 🧠 Key Novelties & Architecture
