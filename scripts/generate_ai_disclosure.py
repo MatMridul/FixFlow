@@ -45,7 +45,7 @@ p.add_run("FixFlow — Smart Guided Troubleshooting Engine (Theme 02)\n")
 p.add_run("Organization / Institution: ").bold = True
 p.add_run("SRM (SRM Institute of Science and Technology)\n")
 p.add_run("Team Members: ").bold = True
-p.add_run("Hemish Jain (Team Lead & Primary Member), Mridul Mathur\n")
+p.add_run("Hemish Jain (Team Lead & Primary Member - hj0012@srmist.edu.in), Mridul Mathur (mm4956@srmist.edu.in)\n")
 p.add_run("Submission Date: ").bold = True
 p.add_run("September 29, 2026\n")
 p.add_run("GitHub Repository: ").bold = True
@@ -135,6 +135,8 @@ h6.runs[0].font.color.rgb = RGBColor(26, 75, 140)
 p = doc.add_paragraph()
 p.add_run("Name of Team Representative: ").bold = True
 p.add_run("Hemish Jain\n")
+p.add_run("Email: ").bold = True
+p.add_run("hj0012@srmist.edu.in\n")
 p.add_run("Role: ").bold = True
 p.add_run("Team Lead & Primary Representative\n")
 p.add_run("Institution: ").bold = True

@@ -63,8 +63,8 @@ for shape in s1.shapes:
                 ("Team Name: ", "Claude's Plan"),
                 ("Submission Code: ", "SRM_Claude's Plan_02"),
                 ("College Name: ", "SRM (SRM Institute of Science and Technology)"),
-                ("Team Lead & Primary Member: ", "Hemish Jain"),
-                ("Team Member: ", "Mridul Mathur"),
+                ("Team Lead & Primary Member: ", "Hemish Jain (hj0012@srmist.edu.in)"),
+                ("Team Member: ", "Mridul Mathur (mm4956@srmist.edu.in)"),
                 ("GitHub Repo: ", "https://github.com/MatMridul/FixFlow"),
                 ("Official Release Tag: ", "PRISM_GENAI_HACKATHON_Y2026"),
             ]

@@ -13,8 +13,8 @@
 | **Team Name** | **Claude's Plan** |
 | **College / Institution** | **SRM** *(SRM Institute of Science and Technology)* |
 | **Theme Track** | **Theme 02 — Smart Guided Troubleshooting Engine** |
-| **Team Lead & Primary Member** | **Hemish Jain** (`hemishjain@gmail.com` / Lead Architect & Core Systems) |
-| **Team Member** | **Mridul Mathur** (`mridulmathur2004@gmail.com` / Pipeline & Intelligence Engineer) |
+| **Team Lead & Primary Member** | **Hemish Jain** (`hj0012@srmist.edu.in` / Lead Architect & Core Systems) |
+| **Team Member** | **Mridul Mathur** (`mm4956@srmist.edu.in` / Pipeline & Intelligence Engineer) |
 | **GitHub Repository** | [https://github.com/MatMridul/FixFlow](https://github.com/MatMridul/FixFlow) |
 | **Official Release Tag** | [`PRISM_GENAI_HACKATHON_Y2026`](https://github.com/MatMridul/FixFlow/releases/tag/PRISM_GENAI_HACKATHON_Y2026) |
 
