@@ -3,6 +3,12 @@
 > **Samsung PRISM GenAI Hackathon · Theme 02**  
 > *Turning vague, compound device complaints into grounded, self-verifying, one-tap troubleshooting plans.*
 
+### 👥 Team Details (`SRMIST_FixFlow`)
+- **Institution:** SRM Institute of Science and Technology (SRMIST)
+- **Theme ID:** Theme 02 — Smart Guided Troubleshooting Engine
+- **Team Lead & Primary Member:** **Hemish Jain** (Lead Architect & Core Systems)
+- **Team Member:** **Mridul Mathur** (Pipeline & Intelligence Engineer)
+
 ---
 
 ## 🚀 Overview

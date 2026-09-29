@@ -1,12 +1,13 @@
-# FixFlow — Team Implementation Plan: Mridul (Dev A) & Hemish (Dev B) + Jules (CI/Test Worker)
+# FixFlow — Team Implementation Plan: Hemish (Team Lead) & Mridul (Co-Developer) + Jules (CI/Test Worker)
 
 **Samsung PRISM GenAI Hackathon · Theme 02**  
-**Companion to `FixFlow_Idea_v3.md`** (the source-of-truth idea doc). This document outlines the division of work across **Mridul (Dev A)** and **Hemish (Dev B)**, augmented by **Google Jules (Autonomous Cloud AI)** for continuous testing, bug fixing, and CI/CD.
+**Companion to `FixFlow_Idea_v3.md`** (the source-of-truth idea doc). This document outlines the division of work across **Hemish Jain (Team Lead & Primary Member)** and **Mridul Mathur (Core Co-Developer)**, augmented by **Google Jules (Autonomous Cloud AI)** for continuous testing, bug fixing, and CI/CD.
 
+> **Team Leadership:** **Hemish Jain** serves as the **Team Lead & Primary Member** overseeing overall architecture, resolution systems, and hackathon submission.  
 > **Core Split Principle:** FixFlow's pipeline has two halves that meet at the `Goal` contract object.  
-> * **Mridul (Dev A)** owns the **Input → Intelligence** half (enrichment, cache, extraction, scoring, API lead).  
-> * **Hemish (Dev B)** owns the **Catalog → Resolution** half (catalog, screen graph, retrieval, deeplink binding, eval lead, UI).  
-> * **Jules (Google AI Agent)** acts as the **Autonomous QA/CI Worker** to absorb repetitive tasks (test suites, regression bug fixes, CI/CD pipelines, boilerplate, and linting) so Mridul and Hemish can focus entirely on high-leverage architecture and novelty implementation.
+> * **Hemish Jain (Team Lead / Dev A)** owns the **Catalog → Resolution & Evaluation** half (catalog, screen graph, retrieval, deeplink binding, eval lead, UI architecture).  
+> * **Mridul Mathur (Dev B)** owns the **Input → Intelligence** half (enrichment, cache, extraction, scoring, API orchestrator).  
+> * **Jules (Google AI Agent)** acts as the **Autonomous QA/CI Worker** to absorb repetitive tasks (test suites, regression bug fixes, CI/CD pipelines, boilerplate, and linting) so Hemish and Mridul can focus entirely on high-leverage architecture and novelty implementation.
 
 ---
 
@@ -64,14 +65,15 @@ Jules takes care of recurring engineering toil via GitHub Issues and PRs so Mrid
 
 ## 4. Phased Implementation Plan
 
-### Mridul (Dev A) — Input & Intelligence
+### Hemish Jain (Team Lead / Dev A) — Catalog, Resolution & Release
+* **P0:** Catalog compiler over `deeplinks.json` (metadata matching, verbatim URI copy) · BM25 + FAISS hybrid retrieval · Safe → critical ordering · `manual` no-deeplink · `dummy_positive` handling.
+* **P1:** **N3** Settings Screen Graph + path-alignment reranker + one-action-one-screen merge → **N4** `validationDeeplink` binding (derive result/condition/value from SIIS + control types).
+* **P2:** Eval harness + `metrics.md` generator + ablation tables · React demo frontend with simulated device panel · Dockerfile + `results.jsonl`.
+
+### Mridul Mathur (Dev B) — Input, Pipeline & Intelligence
 * **P0:** Schema & text-rule validators (soft word-count target per finding C) · URL regex scrubber · repair loop · exact + cosine cache · LLM extraction prompt · API response + `meta` block.
 * **P1:** **N2** Intent-signature gate (Display-skewed lexicon from `input.txt`) → **N5** Step-SIIS provenance filter + calibrated scoring → **N1** Compositional multi-intent cache.
 * **P2:** Adversarial near-miss test set (~50 pairs) · Calibration dataset · `no_match` & `no_siis_context` fallback handling.
-
-### Hemish (Dev B) — Catalog & Resolution
-* **P0:** Catalog compiler over `deeplinks.json` (metadata matching, verbatim URI copy) · BM25 + FAISS hybrid retrieval · Safe → critical ordering · `manual` no-deeplink · `dummy_positive` handling.
-* **P1:** **N3** Settings Screen Graph + path-alignment reranker + one-action-one-screen merge → **N4** `validationDeeplink` binding (derive result/condition/value from SIIS + control types).
 * **P2:** Eval harness + `metrics.md` generator + ablation tables · React demo frontend with simulated device panel · Dockerfile + `results.jsonl`.
 
 ---

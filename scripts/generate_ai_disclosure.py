@@ -41,6 +41,8 @@ p.add_run("Project / Product Name: ").bold = True
 p.add_run("FixFlow — Smart Guided Troubleshooting Engine (Theme 02)\n")
 p.add_run("Organization / Institution: ").bold = True
 p.add_run("SRM Institute of Science and Technology (SRMIST)\n")
+p.add_run("Team Members: ").bold = True
+p.add_run("Hemish Jain (Team Lead & Primary Member), Mridul Mathur\n")
 p.add_run("Submission Date: ").bold = True
 p.add_run("September 29, 2026\n")
 p.add_run("GitHub Repository: ").bold = True
@@ -129,15 +131,15 @@ h6 = doc.add_heading("6. Declaration & Sign-Off", level=2)
 h6.runs[0].font.color.rgb = RGBColor(26, 75, 140)
 p = doc.add_paragraph()
 p.add_run("Name of Team Representative: ").bold = True
-p.add_run("Mridul Mathur\n")
+p.add_run("Hemish Jain\n")
 p.add_run("Role: ").bold = True
-p.add_run("Team Lead & Full-Stack AI Engineer\n")
+p.add_run("Team Lead & Primary Representative\n")
 p.add_run("Institution: ").bold = True
 p.add_run("SRM Institute of Science and Technology\n")
 p.add_run("Date: ").bold = True
 p.add_run("September 29, 2026\n")
 p.add_run("Signature: ").bold = True
-p.add_run("Mridul Mathur")
+p.add_run("Hemish Jain")
 
 doc.save(str(OUTPUT_PATH_1))
 doc.save(str(OUTPUT_PATH_2))

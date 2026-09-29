@@ -1,7 +1,7 @@
 # Google Jules — Autonomous CI, Testing & QA Strategy
 
 **Project:** FixFlow (Samsung PRISM GenAI Hackathon · Theme 02)  
-**Developers:** Mridul (Dev A) & Hemish (Dev B)  
+**Team Lead & Primary Developer:** Hemish Jain | **Core Developer:** Mridul Mathur  
 **Autonomous Worker:** Google Jules (Google AI Pro Plan · 100 Tasks/Day Quota)
 
 ---
@@ -11,7 +11,7 @@
 **Google Jules** is an asynchronous cloud AI coding agent that interfaces directly with our GitHub repository ([`MatMridul/FixFlow`](https://github.com/MatMridul/FixFlow)). 
 
 ### Core Operating Principle
-> **Mridul & Hemish + Antigravity architect and build the platform. Jules absorbs the repetitive engineering toil (test suites, regression fixes, CI/CD automation, and linting/formatting).**
+> **Hemish & Mridul + Antigravity architect and build the platform. Jules absorbs the repetitive engineering toil (test suites, regression fixes, CI/CD automation, and linting/formatting).**
 
 ---
 

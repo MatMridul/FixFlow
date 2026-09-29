@@ -61,7 +61,8 @@ for shape in s1.shapes:
                 ("Project Title: ", "FixFlow — Smart Guided Troubleshooting Engine"),
                 ("Team Name: ", "SRMIST_FixFlow"),
                 ("College Name: ", "SRM Institute of Science and Technology (SRMIST)"),
-                ("Team Lead: ", "Mridul Mathur (mridul.mat@outlook.com)"),
+                ("Team Lead & Primary Member: ", "Hemish Jain"),
+                ("Team Member: ", "Mridul Mathur"),
                 ("GitHub Repo: ", "https://github.com/MatMridul/FixFlow"),
                 ("Official Release Tag: ", "PRISM_GENAI_HACKATHON_Y2026"),
             ]

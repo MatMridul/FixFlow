@@ -1,8 +1,8 @@
 # FixFlow — Engineering Tasks & Implementation Checklist
 
 **Samsung PRISM GenAI Hackathon · Theme 02**  
-**Lead Developer (Dev A):** Mridul  
-**Collaborator (Dev B):** Hemish  
+**Team Lead & Primary Member:** Hemish Jain  
+**Core Developer:** Mridul Mathur  
 **Autonomous Worker:** Google Jules  
 **Status:** In Progress (Spec-First Mode)
 
