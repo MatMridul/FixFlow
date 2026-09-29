@@ -6,7 +6,8 @@ from docx.shared import Inches, Pt, RGBColor
 from docx.enum.text import WD_ALIGN_PARAGRAPH
 from pathlib import Path
 
-OUTPUT_PATH_1 = Path(r"C:\Mridul\Programs\FixFlow\SRMIST_FixFlow_AI_Disclosure.docx")
+OUTPUT_PATH_1 = Path(r"C:\Mridul\Programs\FixFlow\SRM_Claude's Plan_02_AI_Disclosure.docx")
+OUTPUT_PATH_SAFE = Path(r"C:\Mridul\Programs\FixFlow\SRM_Claudes_Plan_02_AI_Disclosure.docx")
 OUTPUT_PATH_2 = Path(r"C:\Mridul\Programs\FixFlow\LangAI3.0_AI_Disclosure.docx")
 
 doc = Document()
@@ -36,11 +37,13 @@ h1.runs[0].font.color.rgb = RGBColor(26, 75, 140)
 
 p = doc.add_paragraph()
 p.add_run("Team Name: ").bold = True
-p.add_run("SRMIST_FixFlow\n")
+p.add_run("Claude's Plan\n")
+p.add_run("Submission Code: ").bold = True
+p.add_run("SRM_Claude's Plan_02\n")
 p.add_run("Project / Product Name: ").bold = True
 p.add_run("FixFlow — Smart Guided Troubleshooting Engine (Theme 02)\n")
 p.add_run("Organization / Institution: ").bold = True
-p.add_run("SRM Institute of Science and Technology (SRMIST)\n")
+p.add_run("SRM (SRM Institute of Science and Technology)\n")
 p.add_run("Team Members: ").bold = True
 p.add_run("Hemish Jain (Team Lead & Primary Member), Mridul Mathur\n")
 p.add_run("Submission Date: ").bold = True
@@ -142,7 +145,9 @@ p.add_run("Signature: ").bold = True
 p.add_run("Hemish Jain")
 
 doc.save(str(OUTPUT_PATH_1))
+doc.save(str(OUTPUT_PATH_SAFE))
 doc.save(str(OUTPUT_PATH_2))
 print("SUCCESS: Generated AI Disclosure forms at:")
 print(f"  1. {OUTPUT_PATH_1}")
-print(f"  2. {OUTPUT_PATH_2}")
+print(f"  2. {OUTPUT_PATH_SAFE}")
+print(f"  3. {OUTPUT_PATH_2}")

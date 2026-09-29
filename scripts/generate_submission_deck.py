@@ -9,7 +9,8 @@ from pathlib import Path
 import copy
 
 TEMPLATE_PATH = Path(r"C:\Users\mridu\Downloads\samsungprismgenaihackathon3_0finalsubmission\CollegeName_TeamName_Submission.pptx")
-OUTPUT_PATH = Path(r"C:\Mridul\Programs\FixFlow\SRMIST_FixFlow_Submission.pptx")
+OUTPUT_PATH_1 = Path(r"C:\Mridul\Programs\FixFlow\SRM_Claude's Plan_02.pptx")
+OUTPUT_PATH_SAFE = Path(r"C:\Mridul\Programs\FixFlow\SRM_Claudes_Plan_02.pptx")
 OUTPUT_PATH_COPY = Path(r"C:\Mridul\Programs\FixFlow\CollegeName_TeamName_Submission.pptx")
 
 prs = Presentation(str(TEMPLATE_PATH))
@@ -59,8 +60,9 @@ for shape in s1.shapes:
             lines = [
                 ("Theme ID: ", "Theme 02 — Smart Guided Troubleshooting Engine"),
                 ("Project Title: ", "FixFlow — Smart Guided Troubleshooting Engine"),
-                ("Team Name: ", "SRMIST_FixFlow"),
-                ("College Name: ", "SRM Institute of Science and Technology (SRMIST)"),
+                ("Team Name: ", "Claude's Plan"),
+                ("Submission Code: ", "SRM_Claude's Plan_02"),
+                ("College Name: ", "SRM (SRM Institute of Science and Technology)"),
                 ("Team Lead & Primary Member: ", "Hemish Jain"),
                 ("Team Member: ", "Mridul Mathur"),
                 ("GitHub Repo: ", "https://github.com/MatMridul/FixFlow"),
@@ -70,14 +72,14 @@ for shape in s1.shapes:
                 p = tf.add_paragraph() if i > 0 else tf.paragraphs[0]
                 p.text = k
                 p.font.bold = True
-                p.font.size = Pt(16)
+                p.font.size = Pt(15)
                 p.font.color.rgb = COLOR_TEXT_DARK
                 run = p.add_run()
                 run.text = v
                 run.font.bold = False
-                run.font.size = Pt(16)
+                run.font.size = Pt(15)
                 run.font.color.rgb = COLOR_PRIMARY
-                p.space_after = Pt(8)
+                p.space_after = Pt(6)
 
 # --- SLIDE 2: Theme ---
 s2 = prs.slides[1]
@@ -184,7 +186,7 @@ for shape in s11.shapes:
                 ("Working prototype code — public or shared GitHub repo: ", "YES (https://github.com/MatMridul/FixFlow)"),
                 ("README with reproducible setup instructions: ", "YES (README.md with pip, Docker, API curl & test guides)"),
                 ("Demo video, max 5 minutes: ", "YES (demo-video/FixFlow_Live_Walkthrough_1080p.mp4 - 41.4s, 1080p)"),
-                ("Presentation file (PPT or PDF): ", "YES (SRMIST_FixFlow_Submission.pptx)"),
+                ("Presentation file (PPT or PDF): ", "YES (SRM_Claude's Plan_02.pptx & SRM_Claudes_Plan_02.pptx)"),
                 ("Official Git Release Tag Created & Pushed: ", "YES (tag: PRISM_GENAI_HACKATHON_Y2026)"),
                 ("Complete Test Suite & Benchmark Metrics: ", "YES (168/168 tests passing; results.json & metrics.md generated)"),
             ]
@@ -201,6 +203,7 @@ for shape in s11.shapes:
                 run.font.color.rgb = COLOR_PRIMARY
                 p.space_after = Pt(10)
 
-prs.save(str(OUTPUT_PATH))
+prs.save(str(OUTPUT_PATH_1))
+prs.save(str(OUTPUT_PATH_SAFE))
 prs.save(str(OUTPUT_PATH_COPY))
-print(f"SUCCESS: Generated submission presentation at:\n  1. {OUTPUT_PATH}\n  2. {OUTPUT_PATH_COPY}")
+print(f"SUCCESS: Generated submission presentation at:\n  1. {OUTPUT_PATH_1}\n  2. {OUTPUT_PATH_SAFE}\n  3. {OUTPUT_PATH_COPY}")
