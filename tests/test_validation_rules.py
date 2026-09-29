@@ -176,6 +176,7 @@ class TestUrlScrubber:
         assert contains_urls("Check [this link](https://samsung.com)")
         assert not contains_urls("Open Settings and tap Display.")
         assert not contains_urls("bixby://masked/act/12345")
+        assert not contains_urls("voiceassist://masked/act/12345")
 
     def test_scrub_urls(self):
         text = "Visit https://samsung.com/help or [Support](http://support.samsung.com) for details."

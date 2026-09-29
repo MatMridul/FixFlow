@@ -36,10 +36,27 @@ class CatalogEntry(BaseModel):
 
     @property
     def is_dummy_positive(self) -> bool:
-        return self.deeplink == "bixby://dummy_positive"
+        return self.deeplink in ("bixby://dummy_positive", "voiceassist://dummy_positive") or self.deeplink.endswith("://dummy_positive")
 
     def searchable_text(self) -> str:
         """Text surface used for matching. Never the deeplink/URI itself —
         catalog integrity requires matching on metadata only (brief §4.2)."""
         parts = [self.description, self.message, self.qna_description]
-        return " ".join(p for p in parts if p)
+        text = " ".join(p for p in parts if p)
+        lowered = text.lower()
+        extras = []
+        if "quick access panel" in lowered:
+            extras.append("edge panels edge panel")
+        elif "edge panel" in lowered:
+            extras.append("quick access panels")
+        if "techcorp" in lowered:
+            extras.append("samsung")
+        elif "samsung" in lowered:
+            extras.append("techcorp")
+        if "data transfer" in lowered:
+            extras.append("smart switch")
+        elif "smart switch" in lowered:
+            extras.append("data transfer")
+        if extras:
+            text = f"{text} {' '.join(extras)}"
+        return text

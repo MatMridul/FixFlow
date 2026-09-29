@@ -1,5 +1,6 @@
 """FastAPI route handlers for FixFlow troubleshooting service."""
 import logging
+import os
 import time
 from typing import Any, Callable, Dict, Optional
 
@@ -329,13 +330,40 @@ def _troubleshoot(payload: TroubleshootRequest, request: Request, trace: Dict[st
     )
 
 
+def _apply_scheme_adaptation(resp: TroubleshootResponse, target_scheme: Optional[str]) -> TroubleshootResponse:
+    if not target_scheme:
+        return resp
+    target_scheme = target_scheme.lower().strip()
+    if target_scheme not in ("bixby", "voiceassist"):
+        return resp
+
+    for goal in resp.response.contexts:
+        for action in goal.actions:
+            for sg in action.stepGroups:
+                if sg.actionableDeeplink and "://" in sg.actionableDeeplink.deeplink:
+                    _, path = sg.actionableDeeplink.deeplink.split("://", 1)
+                    sg.actionableDeeplink.deeplink = f"{target_scheme}://{path}"
+                if sg.validationDeeplink and "://" in sg.validationDeeplink.deeplink:
+                    _, path = sg.validationDeeplink.deeplink.split("://", 1)
+                    sg.validationDeeplink.deeplink = f"{target_scheme}://{path}"
+    return resp
+
+
 @router.post("/v1/troubleshoot", response_model=TroubleshootResponse, status_code=status.HTTP_200_OK)
-def troubleshoot(payload: TroubleshootRequest, request: Request, debug: bool = False):
+def troubleshoot(
+    payload: TroubleshootRequest,
+    request: Request,
+    debug: bool = False,
+    scheme: Optional[str] = None,
+):
     """Scored endpoint. `?debug=true` adds a `trace` (intent clauses, cache
     path, step provenance, screen resolution, calibration inputs) for the
     demo UI; without it the response is exactly the contract shape."""
     trace: Dict[str, Any] = {}
     response = _troubleshoot(payload, request, trace)
+    target_scheme = scheme or request.headers.get("X-Deeplink-Scheme") or os.getenv("FIXFLOW_DEEPLINK_SCHEME")
+    if target_scheme:
+        response = _apply_scheme_adaptation(response, target_scheme)
     if debug:
         return JSONResponse({**response.model_dump(mode="json"), "trace": trace})
     return response

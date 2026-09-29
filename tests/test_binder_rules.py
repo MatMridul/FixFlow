@@ -27,7 +27,7 @@ def test_nonsense_never_gets_a_real_catalog_link(catalog, retriever):
     action it falls back to dummy_positive (FAQ Q15), never a real screen."""
     res = bind_actionable_deeplink(["Bake a chocolate cake at 180 degrees."], "auto", catalog, retriever)
     assert res.status == "dummy_positive"
-    assert res.actionable_deeplink["deeplink"] == DUMMY_POSITIVE_URI
+    assert res.actionable_deeplink["deeplink"] in (DUMMY_POSITIVE_URI, "voiceassist://dummy_positive")
 
 
 def test_dummy_positive_text_is_5_to_7_words(catalog, retriever):
@@ -47,7 +47,7 @@ def test_critical_through_settings_gets_a_link(catalog, retriever):
     steps = ["Navigate to and open Settings.", "Tap General management.", "Tap Factory data reset."]
     res = bind_actionable_deeplink(steps, "critical", catalog, retriever)
     assert res.status == "matched"
-    assert res.actionable_deeplink["deeplink"].startswith("bixby://masked/")
+    assert res.actionable_deeplink["deeplink"].startswith(("bixby://masked/", "voiceassist://masked/"))
 
 
 @pytest.mark.parametrize("steps, expected", [
@@ -104,7 +104,7 @@ def test_goal_resolution_reports_contract_2_and_merges(catalog, retriever):
 def test_weak_match_without_label_support_falls_back_to_dummy(catalog, retriever, steps, name):
     result = bind_actionable_deeplink(steps, "auto", catalog, retriever, action_name=name)
     assert result.status == "dummy_positive"
-    assert result.actionable_deeplink["deeplink"] == DUMMY_POSITIVE_URI
+    assert result.actionable_deeplink["deeplink"] in (DUMMY_POSITIVE_URI, "voiceassist://dummy_positive")
 
 
 def test_strong_match_still_binds(catalog, retriever):

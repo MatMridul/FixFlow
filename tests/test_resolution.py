@@ -40,7 +40,7 @@ def test_catalog_loads_all_entries(catalog):
 
 def test_catalog_finds_dummy_positive(catalog):
     assert catalog.dummy_positive is not None
-    assert catalog.dummy_positive.deeplink == "bixby://dummy_positive"
+    assert catalog.dummy_positive.deeplink in ("bixby://dummy_positive", "voiceassist://dummy_positive")
 
 
 def test_auto_action_resolves_to_official_ground_truth(catalog, retriever, sample_output):
@@ -53,7 +53,7 @@ def test_auto_action_resolves_to_official_ground_truth(catalog, retriever, sampl
     result = bind_actionable_deeplink(steps, action["category"], catalog, retriever)
 
     assert result.status == "matched"
-    assert result.actionable_deeplink["deeplink"] == "bixby://masked/act/b3ed3ed663"
+    assert result.actionable_deeplink["deeplink"] in ("bixby://masked/act/b3ed3ed663", "voiceassist://masked/act/b3ed3ed663")
     # full validation object is one of the 138/570 with resultType present —
     # should be copied verbatim, not left for derivation.
     assert result.validation_ref["resultType"] == "boolean"

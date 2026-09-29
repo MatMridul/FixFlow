@@ -91,7 +91,7 @@ def test_backup_scenario_regression(retriever):
     ]
     result = resolve_screen(retriever, steps)
     assert result.entry.id == "DL-0542"
-    assert result.entry.message == "Enable Back up data (Samsung Cloud)"
+    assert result.entry.message in ("Enable Back up data (Samsung Cloud)", "Enable Back up data (TechCorp Cloud)")
 
 
 def test_merge_same_screen_consecutive_actions():

@@ -88,14 +88,19 @@ def _fit_words(text: str, lo: int = 5, hi: int = 7) -> str:
     return " ".join(words)
 
 
-def _dummy_positive_deeplink(steps: list[str], action_name: Optional[str]) -> dict:
+def _dummy_positive_deeplink(
+    steps: list[str],
+    action_name: Optional[str],
+    fallback_uri: Optional[str] = None,
+) -> dict:
     """FAQ Q15: dummy_positive needs our own 5-7 word description and a
     message naming the concrete Settings screen from the steps."""
     labels, _ = split_steps(steps)
     screen = labels[-1] if labels else re.sub(r"^(?:Adjust|Check|Review|Change|Turn|Use|Set)\s+", "", action_name or "Settings")
     screen = screen.strip() or "Settings"
+    uri = fallback_uri or DUMMY_POSITIVE_URI
     return {
-        "deeplink": DUMMY_POSITIVE_URI,
+        "deeplink": uri,
         "description": _fit_words(f"Opens the {screen} screen in Settings"),
         "message": _fit_words(f"Open {screen} in device Settings"),
         "originalType": "placeholder",
@@ -214,9 +219,10 @@ def bind_actionable_deeplink(
         )
 
     # auto + no confident catalog match -> dummy_positive, never empty (FAQ Q15).
+    dummy_uri = getattr(catalog, "dummy_positive_uri", DUMMY_POSITIVE_URI)
     return BindResult(
         "dummy_positive",
-        _dummy_positive_deeplink(steps, action_name),
+        _dummy_positive_deeplink(steps, action_name, fallback_uri=dummy_uri),
         None,
         resolution.score,
         resolution.entry,

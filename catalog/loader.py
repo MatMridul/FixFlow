@@ -27,6 +27,11 @@ class Catalog:
         self._dummy_positive: Optional[CatalogEntry] = next(
             (e for e in entries if e.is_dummy_positive), None
         )
+        self.scheme: str = "voiceassist"
+        for e in entries:
+            if "://" in e.deeplink:
+                self.scheme = e.deeplink.split("://")[0]
+                break
 
     def __len__(self) -> int:
         return len(self._by_id)
@@ -45,6 +50,12 @@ class Catalog:
     @property
     def dummy_positive(self) -> Optional[CatalogEntry]:
         return self._dummy_positive
+
+    @property
+    def dummy_positive_uri(self) -> str:
+        if self._dummy_positive:
+            return self._dummy_positive.deeplink
+        return f"{self.scheme}://dummy_positive"
 
 
 def load_catalog(path: Path | str = DEFAULT_CATALOG_PATH) -> Catalog:

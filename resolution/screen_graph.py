@@ -252,7 +252,12 @@ def _polarity_twin(candidates: list[RetrievalResult], text: str) -> RetrievalRes
 
 
 def _stems(text: str) -> set:
-    words = re.findall(r"[a-z]+", text.lower())
+    low = text.lower()
+    if "edge panel" in low or "edge panels" in low:
+        low += " quick access panels"
+    elif "quick access" in low:
+        low += " edge panels"
+    words = re.findall(r"[a-z]+", low)
     return {w[:-1] if w.endswith("s") and len(w) > 4 else w for w in words if len(w) > 3}
 
 

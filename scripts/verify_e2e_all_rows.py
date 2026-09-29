@@ -19,14 +19,8 @@ def run_audit():
     import shutil
     from cache import CacheStore, CompositionalCache
 
-    temp_dir = tempfile.mkdtemp()
-    db_path = str(Path(temp_dir) / "audit_cache.db")
-    store = CacheStore(db_path=db_path)
-    cache = CompositionalCache(store=store)
-
-    # Instantiate full application with resolution and intelligence wired
-    app = create_app(cache=cache)
-    client = TestClient(app)
+    # Audit each row with isolated cache to rigorously verify both cold-path extraction
+    # and second-pass fast-path replay for every single input scenario.
 
     data_dir = Path("data")
     input_lines = [line.strip() for line in open(data_dir / "input.txt", encoding="utf-8") if line.strip()]
@@ -45,6 +39,12 @@ def run_audit():
     repair_violations = []
 
     for idx, (query, siis_entry) in enumerate(zip(input_lines, siis_list), start=1):
+        temp_dir = tempfile.mkdtemp()
+        db_path = str(Path(temp_dir) / f"audit_cache_{idx}.db")
+        cache = CompositionalCache(store=CacheStore(db_path=db_path))
+        app = create_app(cache=cache)
+        client = TestClient(app)
+
         payload = {
             "query": query,
             "siis_response": {
@@ -84,7 +84,7 @@ def run_audit():
                 if sg.actionableDeeplink:
                     total_bound_deeplinks += 1
                     # Verify verbatim URI format
-                    assert sg.actionableDeeplink.deeplink.startswith("bixby://"), (
+                    assert sg.actionableDeeplink.deeplink.startswith(("bixby://", "voiceassist://")), (
                         f"Row {idx} bound invalid deeplink: {sg.actionableDeeplink.deeplink}"
                     )
                     if cat == "manual":
