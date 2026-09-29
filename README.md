@@ -14,6 +14,20 @@
 
 ---
 
+## 🏆 Official Hackathon Submission Deliverables
+
+| Deliverable | Official Requirement | Location / Reference in Tagged Commit | Status |
+|:---|:---|:---|:---:|
+| **Working Prototype Code** | Public or shared GitHub repository | [GitHub: MatMridul/FixFlow](https://github.com/MatMridul/FixFlow) | **VERIFIED** |
+| **Official Release Tag** | Release tag named `PRISM_GENAI_HACKATHON_Y2026` | `git tag PRISM_GENAI_HACKATHON_Y2026` (pushed to origin) | **VERIFIED** |
+| **Demo Walkthrough Video** | Up to 5 minutes, demonstrating working platform | [`demo-video/FixFlow_Live_Walkthrough_1080p.mp4`](demo-video/FixFlow_Live_Walkthrough_1080p.mp4) (41.4s, 1080p Full HD) | **VERIFIED** |
+| **Presentation Deck** | PPT or PDF following `CollegeName_TeamName` | [`SRMIST_FixFlow_Submission.pptx`](SRMIST_FixFlow_Submission.pptx) & [`SRMIST_FixFlow_Submission.pdf`](SRMIST_FixFlow_Submission.pdf) | **VERIFIED** |
+| **AI Disclosure Form** | Official LangAI disclosure document | [`SRMIST_FixFlow_AI_Disclosure.docx`](SRMIST_FixFlow_AI_Disclosure.docx) | **VERIFIED** |
+| **Reproducible Setup** | Setup instructions, requirements, & Dockerfile | [Quick Start Guide](#️-quick-start) & [`Dockerfile`](Dockerfile) | **VERIFIED** |
+| **Test & Eval Metrics** | Full test suite, results, & ablation metrics | `results.json`, `results.jsonl`, [`metrics.md`](metrics.md) (168/168 tests) | **VERIFIED** |
+
+---
+
 ## 🧠 Key Novelties & Architecture
 
 ```

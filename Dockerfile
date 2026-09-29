@@ -21,6 +21,8 @@ COPY scripts/ scripts/
 COPY results.json* .
 COPY metrics.md .
 COPY README.md .
+COPY SRMIST_FixFlow_* .
+COPY demo-video/ demo-video/
 
 EXPOSE 8000
 
