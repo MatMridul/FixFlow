@@ -85,3 +85,4 @@ graphify-out/
 .graphify*
 FixFlow_Conversation_*.md
 demo-video/*.webm
+~$*
